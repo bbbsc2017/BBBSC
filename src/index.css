@@ -1,0 +1,82 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-brand: #f9b000;
+  --color-brand-50: #fff8e6;
+  --color-brand-100: #ffedb8;
+  --color-brand-200: #ffe08a;
+  --color-brand-400: #ffc233;
+  --color-brand-500: #f9b000;
+  --color-brand-600: #cc8f00;
+  --color-brand-700: #996b00;
+
+  --color-ink: #1c1c1c;
+  --color-ink-800: #2a2a2a;
+  --color-ink-700: #3a3a3a;
+  --color-ink-600: #545454;
+  --color-ink-400: #8a8a8a;
+
+  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-display: 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+
+  --shadow-brand: 0 20px 45px -15px rgba(249, 176, 0, 0.45);
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-blob: blob 12s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-14px);
+  }
+}
+
+@keyframes blob {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(24px, -18px) scale(1.08);
+  }
+  66% {
+    transform: translate(-18px, 14px) scale(0.95);
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  color: var(--color-ink);
+  background-color: #ffffff;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .bg-brand-gradient {
+    background-image: linear-gradient(135deg, #f9b000 0%, #ffcf4d 100%);
+  }
+
+  .bg-ink-gradient {
+    background-image: linear-gradient(160deg, #1c1c1c 0%, #302a1f 100%);
+  }
+
+  .bg-ink-mesh {
+    background-image:
+      radial-gradient(circle at 15% 20%, rgba(249, 176, 0, 0.22), transparent 45%),
+      radial-gradient(circle at 85% 0%, rgba(249, 176, 0, 0.14), transparent 40%),
+      radial-gradient(circle at 50% 100%, rgba(255, 255, 255, 0.05), transparent 55%),
+      linear-gradient(160deg, #1c1c1c 0%, #302a1f 100%);
+  }
+}

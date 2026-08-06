@@ -1,0 +1,65 @@
+# Ejemplo de configuración Nginx para servir el sitio estático de bbbsc.com
+# Copiar a /etc/nginx/sites-available/bbbsc.com y crear symlink en sites-enabled.
+# Ajustar `root` a la ruta donde se copie el contenido de dist/ en el VPS.
+
+server {
+    listen 80;
+    listen [::]:80;
+    server_name bbbsc.com www.bbbsc.com;
+
+    # Redirigir a HTTPS (requiere certificado, ver certbot más abajo)
+    return 301 https://bbbsc.com$request_uri;
+}
+
+server {
+    listen 443 ssl http2;
+    listen [::]:443 ssl http2;
+    server_name www.bbbsc.com;
+
+    ssl_certificate     /etc/letsencrypt/live/bbbsc.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/bbbsc.com/privkey.pem;
+
+    return 301 https://bbbsc.com$request_uri;
+}
+
+server {
+    listen 443 ssl http2;
+    listen [::]:443 ssl http2;
+    server_name bbbsc.com;
+
+    root /var/www/bbbsc.com/dist;
+    index index.html;
+
+    ssl_certificate     /etc/letsencrypt/live/bbbsc.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/bbbsc.com/privkey.pem;
+
+    # Cabeceras de seguridad
+    add_header X-Frame-Options "SAMEORIGIN" always;
+    add_header X-Content-Type-Options "nosniff" always;
+    add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+    add_header Permissions-Policy "geolocation=(), microphone=(), camera=()" always;
+
+    # Compresión
+    gzip on;
+    gzip_comp_level 6;
+    gzip_types text/plain text/css application/json application/javascript text/xml application/xml application/xml+rss text/javascript image/svg+xml;
+    gzip_min_length 512;
+
+    # Assets con hash: cache larga e inmutable
+    location /assets/ {
+        expires 1y;
+        add_header Cache-Control "public, immutable";
+    }
+
+    # robots.txt, sitemap.xml y favicon: cache corta
+    location ~* \.(?:robots\.txt|sitemap\.xml|favicon\.svg)$ {
+        expires 1h;
+        add_header Cache-Control "public";
+    }
+
+    # SPA fallback: cualquier ruta que no sea un archivo real cae en index.html
+    location / {
+        try_files $uri $uri/ /index.html;
+        add_header Cache-Control "no-cache";
+    }
+}
