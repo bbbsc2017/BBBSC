@@ -2,6 +2,7 @@ import { Navigate, useParams } from 'react-router-dom'
 import { Clock, ListChecks, ShieldCheck, Sparkles } from 'lucide-react'
 import { Seo } from '../components/Seo'
 import { DetailHero } from '../components/ui/DetailHero'
+import { DestinationBanner } from '../components/ui/DestinationBanner'
 import { Container } from '../components/ui/Container'
 import { InfoList } from '../components/ui/InfoList'
 import { ContactCard } from '../components/ui/ContactCard'
@@ -42,25 +43,27 @@ export default function ProgramaCulturalDetalle() {
         ]}
       />
 
+      <DestinationBanner image={program.image} caption={`${program.title} · ${program.country}`} />
+
       <section className="py-16 sm:py-20">
         <Container className="grid grid-cols-1 gap-12 lg:grid-cols-[1.6fr_1fr]">
           <div className="flex flex-col gap-12">
             <div>
-              <h2 className="text-xl font-bold text-ink">Sobre el programa</h2>
-              <p className="mt-3 text-base leading-relaxed text-ink-600">{program.description}</p>
+              <h2 className="text-xl font-bold text-white">Sobre el programa</h2>
+              <p className="mt-3 text-base leading-relaxed text-white/70">{program.description}</p>
             </div>
 
             <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
               <div>
-                <h3 className="mb-4 flex items-center gap-2 text-base font-bold text-ink">
-                  <ListChecks className="size-5 text-brand-700" />
+                <h3 className="mb-4 flex items-center gap-2 text-base font-bold text-white">
+                  <ListChecks className="size-5 text-brand" />
                   Requisitos
                 </h3>
                 <InfoList items={program.requirements} />
               </div>
               <div>
-                <h3 className="mb-4 flex items-center gap-2 text-base font-bold text-ink">
-                  <Sparkles className="size-5 text-brand-700" />
+                <h3 className="mb-4 flex items-center gap-2 text-base font-bold text-white">
+                  <Sparkles className="size-5 text-brand" />
                   Beneficios
                 </h3>
                 <InfoList items={program.benefits} />
@@ -68,18 +71,18 @@ export default function ProgramaCulturalDetalle() {
             </div>
 
             <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-              <div className="flex items-start gap-3 rounded-2xl border border-ink/10 bg-white p-5">
-                <Clock className="mt-0.5 size-5 shrink-0 text-brand-700" />
+              <div className="flex items-start gap-3 rounded-2xl border border-white/10 bg-ink-800 p-5">
+                <Clock className="mt-0.5 size-5 shrink-0 text-brand" />
                 <div>
-                  <h4 className="text-sm font-bold text-ink">Duración</h4>
-                  <p className="mt-1 text-sm text-ink-600">{program.duration}</p>
+                  <h4 className="text-sm font-bold text-white">Duración</h4>
+                  <p className="mt-1 text-sm text-white/70">{program.duration}</p>
                 </div>
               </div>
-              <div className="flex items-start gap-3 rounded-2xl border border-ink/10 bg-white p-5">
-                <ShieldCheck className="mt-0.5 size-5 shrink-0 text-brand-700" />
+              <div className="flex items-start gap-3 rounded-2xl border border-white/10 bg-ink-800 p-5">
+                <ShieldCheck className="mt-0.5 size-5 shrink-0 text-brand" />
                 <div>
-                  <h4 className="text-sm font-bold text-ink">Datos clave</h4>
-                  <ul className="mt-1 flex flex-col gap-1 text-sm text-ink-600">
+                  <h4 className="text-sm font-bold text-white">Datos clave</h4>
+                  <ul className="mt-1 flex flex-col gap-1 text-sm text-white/70">
                     {program.keyFacts.map((fact) => (
                       <li key={fact}>• {fact}</li>
                     ))}
@@ -93,9 +96,9 @@ export default function ProgramaCulturalDetalle() {
         </Container>
       </section>
 
-      <section className="border-t border-ink/10 bg-[#faf9f6] py-16 sm:py-20">
+      <section className="border-t border-white/10 bg-black/15 py-16 sm:py-20">
         <Container className="flex flex-col gap-10">
-          <h2 className="text-2xl font-bold text-ink">Otros programas culturales</h2>
+          <h2 className="text-2xl font-bold text-white">Otros programas culturales</h2>
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-3">
             {related.map((item) => (
               <ProgramCard
@@ -105,6 +108,7 @@ export default function ProgramaCulturalDetalle() {
                 title={item.title}
                 description={item.tagline}
                 cta={item.cta}
+                image={item.image}
               />
             ))}
           </div>

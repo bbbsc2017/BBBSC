@@ -48,8 +48,8 @@ export default function TerminosCondiciones() {
         <Container className="flex max-w-3xl flex-col gap-8">
           {sections.map((section) => (
             <div key={section.title}>
-              <h2 className="text-lg font-bold text-ink">{section.title}</h2>
-              <p className="mt-2 text-sm leading-relaxed text-ink-600">{section.body}</p>
+              <h2 className="text-lg font-bold text-white">{section.title}</h2>
+              <p className="mt-2 text-sm leading-relaxed text-white/70">{section.body}</p>
             </div>
           ))}
         </Container>

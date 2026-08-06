@@ -41,18 +41,18 @@ export default function TrabajaConNosotros() {
         <Container className="flex flex-col items-center gap-12">
           <div className="grid w-full grid-cols-1 gap-5 sm:grid-cols-3">
             {reasons.map(({ Icon, title, description }) => (
-              <div key={title} className="flex flex-col items-start gap-4 rounded-3xl border border-ink/10 bg-white p-6">
+              <div key={title} className="flex flex-col items-start gap-4 rounded-3xl border border-white/10 bg-ink-800 p-6">
                 <span className="flex size-11 items-center justify-center rounded-2xl bg-ink text-brand">
                   <Icon className="size-5" />
                 </span>
-                <h3 className="text-base font-bold text-ink">{title}</h3>
-                <p className="text-sm leading-relaxed text-ink-600">{description}</p>
+                <h3 className="text-base font-bold text-white">{title}</h3>
+                <p className="text-sm leading-relaxed text-white/70">{description}</p>
               </div>
             ))}
           </div>
 
           <div className="flex flex-col items-center gap-4 text-center">
-            <p className="max-w-xl text-sm text-ink-600">
+            <p className="max-w-xl text-sm text-white/70">
               ¿Quieres formar parte del equipo? Escríbenos por WhatsApp contándonos tu perfil y en qué área te gustaría aportar.
             </p>
             <CTAButton href={whatsappLink('¡Hola! Quiero enviar mi hoja de vida para trabajar en BBB Student Center.')} icon={false}>

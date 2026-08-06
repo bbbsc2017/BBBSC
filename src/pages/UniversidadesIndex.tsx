@@ -25,14 +25,25 @@ export default function UniversidadesIndex() {
               <Link
                 key={university.slug}
                 to={`/universidades/${university.slug}`}
-                className="group flex flex-col gap-3 rounded-3xl border border-ink/10 bg-white p-6 transition-all duration-300 hover:-translate-y-1 hover:border-brand/40 hover:shadow-xl hover:shadow-brand/10"
+                className="group flex flex-col overflow-hidden rounded-3xl border border-white/10 bg-ink-800 transition-all duration-300 hover:-translate-y-1 hover:border-brand/40 hover:shadow-xl hover:shadow-brand/10"
               >
-                <span className="w-fit rounded-full bg-brand/10 px-3 py-1 text-xs font-bold uppercase tracking-wide text-brand-700">
-                  {university.country}
-                </span>
-                <h3 className="text-xl font-bold text-ink">{university.name}</h3>
-                <p className="text-sm text-ink-600">{university.city}</p>
-                <p className="text-sm leading-relaxed text-ink-600">{university.description}</p>
+                <div className="relative h-40 w-full overflow-hidden">
+                  <img
+                    src={university.image.src}
+                    alt={university.image.alt}
+                    loading="lazy"
+                    className="size-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-ink-800 via-transparent to-transparent" />
+                </div>
+                <div className="flex flex-col gap-3 p-6">
+                  <span className="w-fit rounded-full bg-brand/10 px-3 py-1 text-xs font-bold uppercase tracking-wide text-brand">
+                    {university.country}
+                  </span>
+                  <h3 className="text-xl font-bold text-white">{university.name}</h3>
+                  <p className="text-sm text-white/70">{university.city}</p>
+                  <p className="text-sm leading-relaxed text-white/70">{university.description}</p>
+                </div>
               </Link>
             ))}
           </div>

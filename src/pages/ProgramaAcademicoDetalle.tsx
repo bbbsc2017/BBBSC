@@ -2,9 +2,11 @@ import { Link, Navigate, useParams } from 'react-router-dom'
 import { BadgeDollarSign, GraduationCap, ListChecks, Sparkles } from 'lucide-react'
 import { Seo } from '../components/Seo'
 import { DetailHero } from '../components/ui/DetailHero'
+import { DestinationBanner } from '../components/ui/DestinationBanner'
 import { Container } from '../components/ui/Container'
 import { InfoList } from '../components/ui/InfoList'
 import { ContactCard } from '../components/ui/ContactCard'
+import { ImageLinkCard } from '../components/ui/ImageLinkCard'
 import { academicPrograms, getAcademicProgram } from '../data/academicPrograms'
 import { getUniversity } from '../data/universities'
 import { SITE } from '../lib/site'
@@ -43,17 +45,19 @@ export default function ProgramaAcademicoDetalle() {
         ]}
       />
 
+      <DestinationBanner image={program.image} caption={`${program.title} · ${program.country}`} />
+
       <section className="py-16 sm:py-20">
         <Container className="grid grid-cols-1 gap-12 lg:grid-cols-[1.6fr_1fr]">
           <div className="flex flex-col gap-12">
             <div>
-              <h2 className="text-xl font-bold text-ink">Sobre el destino</h2>
-              <p className="mt-3 text-base leading-relaxed text-ink-600">{program.description}</p>
+              <h2 className="text-xl font-bold text-white">Sobre el destino</h2>
+              <p className="mt-3 text-base leading-relaxed text-white/70">{program.description}</p>
             </div>
 
             <div>
-              <h3 className="mb-4 flex items-center gap-2 text-base font-bold text-ink">
-                <GraduationCap className="size-5 text-brand-700" />
+              <h3 className="mb-4 flex items-center gap-2 text-base font-bold text-white">
+                <GraduationCap className="size-5 text-brand" />
                 Tipos de programa
               </h3>
               <InfoList items={program.programTypes} />
@@ -61,15 +65,15 @@ export default function ProgramaAcademicoDetalle() {
 
             <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
               <div>
-                <h3 className="mb-4 flex items-center gap-2 text-base font-bold text-ink">
-                  <ListChecks className="size-5 text-brand-700" />
+                <h3 className="mb-4 flex items-center gap-2 text-base font-bold text-white">
+                  <ListChecks className="size-5 text-brand" />
                   Requisitos
                 </h3>
                 <InfoList items={program.requirements} />
               </div>
               <div>
-                <h3 className="mb-4 flex items-center gap-2 text-base font-bold text-ink">
-                  <Sparkles className="size-5 text-brand-700" />
+                <h3 className="mb-4 flex items-center gap-2 text-base font-bold text-white">
+                  <Sparkles className="size-5 text-brand" />
                   Beneficios
                 </h3>
                 <InfoList items={program.benefits} />
@@ -77,8 +81,8 @@ export default function ProgramaAcademicoDetalle() {
             </div>
 
             <div>
-              <h3 className="mb-4 flex items-center gap-2 text-base font-bold text-ink">
-                <BadgeDollarSign className="size-5 text-brand-700" />
+              <h3 className="mb-4 flex items-center gap-2 text-base font-bold text-white">
+                <BadgeDollarSign className="size-5 text-brand" />
                 Costos referenciales
               </h3>
               <InfoList items={program.costs} tone="ink" />
@@ -86,13 +90,13 @@ export default function ProgramaAcademicoDetalle() {
 
             {relatedUniversities.length > 0 && (
               <div>
-                <h3 className="mb-4 text-base font-bold text-ink">Universidad asociada</h3>
+                <h3 className="mb-4 text-base font-bold text-white">Universidad asociada</h3>
                 <div className="flex flex-wrap gap-3">
                   {relatedUniversities.map((university) => (
                     <Link
                       key={university!.slug}
                       to={`/universidades/${university!.slug}`}
-                      className="rounded-2xl border border-ink/10 bg-white px-5 py-4 text-sm font-semibold text-ink transition-colors hover:border-brand/40 hover:text-brand-700"
+                      className="rounded-2xl border border-white/10 bg-ink-800 px-5 py-4 text-sm font-semibold text-white transition-colors hover:border-brand/40 hover:text-brand"
                     >
                       {university!.name} — {university!.city}
                     </Link>
@@ -106,19 +110,18 @@ export default function ProgramaAcademicoDetalle() {
         </Container>
       </section>
 
-      <section className="border-t border-ink/10 bg-[#faf9f6] py-16 sm:py-20">
+      <section className="border-t border-white/10 bg-black/15 py-16 sm:py-20">
         <Container className="flex flex-col gap-10">
-          <h2 className="text-2xl font-bold text-ink">Otros destinos académicos</h2>
+          <h2 className="text-2xl font-bold text-white">Otros destinos académicos</h2>
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-3">
             {otherDestinations.map((item) => (
-              <Link
+              <ImageLinkCard
                 key={item.slug}
                 to={`/programas-academicos/${item.slug}`}
-                className="group flex flex-col gap-2 rounded-2xl border border-ink/10 bg-white p-5 transition-all hover:-translate-y-1 hover:border-brand/40 hover:shadow-lg hover:shadow-brand/10"
-              >
-                <span className="text-xs font-bold uppercase tracking-wide text-brand-700">{item.country}</span>
-                <h3 className="text-sm font-bold text-ink">{item.tagline}</h3>
-              </Link>
+                eyebrow={item.country}
+                title={item.tagline}
+                image={item.image}
+              />
             ))}
           </div>
         </Container>

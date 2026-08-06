@@ -17,8 +17,8 @@ export function CTAButton({ to, href, children, variant = 'primary', icon = true
 
   const variants: Record<string, string> = {
     primary: 'bg-brand text-ink shadow-brand hover:-translate-y-0.5 hover:bg-brand-400',
-    secondary: 'bg-ink text-white hover:-translate-y-0.5 hover:bg-ink-800',
-    ghost: 'border border-ink/15 text-ink hover:border-brand hover:text-brand-700',
+    secondary: 'bg-white text-ink hover:-translate-y-0.5 hover:bg-white/90',
+    ghost: 'border border-white/20 text-white hover:border-brand hover:text-brand',
   }
 
   const content = (

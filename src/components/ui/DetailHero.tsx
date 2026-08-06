@@ -16,9 +16,7 @@ export function DetailHero({ eyebrow, title, description, breadcrumbs, children 
     <section className="relative overflow-hidden bg-ink-mesh pb-16 pt-10 sm:pb-20 sm:pt-14">
       <GradientBlob tone="brand" className="left-[-10%] top-0 size-72" />
       <Container className="relative flex flex-col gap-6">
-        <div className="[&_a]:text-white/60 [&_a:hover]:text-brand [&_span]:text-white">
-          <Breadcrumbs items={breadcrumbs} />
-        </div>
+        <Breadcrumbs items={breadcrumbs} />
         <div className="flex flex-col gap-4">
           <span className="w-fit rounded-full border border-white/15 bg-white/5 px-4 py-1 text-xs font-bold uppercase tracking-wider text-brand backdrop-blur">
             {eyebrow}

@@ -9,6 +9,7 @@ export interface AcademicProgram {
   requirements: string[]
   costs: string[]
   universitySlugs: string[]
+  image: { src: string; alt: string }
 }
 
 export const academicPrograms: AcademicProgram[] = [
@@ -34,6 +35,10 @@ export const academicPrograms: AcademicProgram[] = [
     ],
     costs: ['Inscripción: $250.000 COP', 'Programa desde 3.000 CAD', 'Gastos extra: traducciones, exámenes médicos, vuelo y manutención'],
     universitySlugs: ['cape-breton'],
+    image: {
+      src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Toronto_Skyline_from_Olympic_Island%2C_June_20_2026_%285-3_cropped%29.jpg/1280px-Toronto_Skyline_from_Olympic_Island%2C_June_20_2026_%285-3_cropped%29.jpg',
+      alt: 'Horizonte de Toronto, Canadá',
+    },
   },
   {
     slug: 'polonia',
@@ -57,6 +62,10 @@ export const academicPrograms: AcademicProgram[] = [
     ],
     costs: ['Inscripción: $250.000 COP', 'Programa total: entre $12.000 y $14.000 USD según especialidad'],
     universitySlugs: ['vistula'],
+    image: {
+      src: 'https://upload.wikimedia.org/wikipedia/commons/3/35/Aleja_Niepdleglosci_Warsaw_2022_aerial_%28cropped%29.jpg',
+      alt: 'Vista aérea de Varsovia, Polonia',
+    },
   },
   {
     slug: 'australia',
@@ -75,6 +84,10 @@ export const academicPrograms: AcademicProgram[] = [
     requirements: ['Edad mínima de 18 años', 'Pasaporte vigente', 'Nivel de inglés avanzado', 'Ser egresado de pregrado y soporte financiero'],
     costs: ['Inscripción: $250.000 COP', 'Pago 1: 3.000 AUD (escuela + CoE)', 'Pago 2: 2.000 AUD (seguro + visa)'],
     universitySlugs: [],
+    image: {
+      src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Sydney_Australia._%2821339175489%29.jpg/1280px-Sydney_Australia._%2821339175489%29.jpg',
+      alt: 'Ópera de Sídney, Australia',
+    },
   },
   {
     slug: 'malta',
@@ -93,6 +106,10 @@ export const academicPrograms: AcademicProgram[] = [
     requirements: ['Edad mínima de 18 años', 'Pasaporte vigente', 'Soporte financiero comprobable'],
     costs: ['Inscripción: $250.000 COP', 'Programa variable según duración del curso'],
     universitySlugs: [],
+    image: {
+      src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/St_Sebastian_Curtain_%28cropped%29.jpg/1280px-St_Sebastian_Curtain_%28cropped%29.jpg',
+      alt: 'Fortificaciones de La Valeta, Malta',
+    },
   },
 ]
 

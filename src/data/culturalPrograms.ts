@@ -9,6 +9,7 @@ export interface CulturalProgram {
   benefits: string[]
   duration: string
   keyFacts: string[]
+  image: { src: string; alt: string }
 }
 
 export const culturalPrograms: CulturalProgram[] = [
@@ -39,6 +40,10 @@ export const culturalPrograms: CulturalProgram[] = [
       '32 a 40 horas de trabajo semanales',
       'Salario promedio de $10 a $15 USD/hora',
     ],
+    image: {
+      src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/View_of_Empire_State_Building_from_Rockefeller_Center_New_York_City_dllu_%28cropped%29.jpg/1280px-View_of_Empire_State_Building_from_Rockefeller_Center_New_York_City_dllu_%28cropped%29.jpg',
+      alt: 'Vista de Nueva York desde el Rockefeller Center',
+    },
   },
   {
     slug: 'trainee-and-internship',
@@ -62,6 +67,10 @@ export const culturalPrograms: CulturalProgram[] = [
     ],
     duration: '6 a 18 meses según el programa específico',
     keyFacts: ['Visa J-1', 'Sedes en Ibagué y Bucaramanga', 'Áreas: negocios, ingeniería y hotelería'],
+    image: {
+      src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/bf/Golden_Gate_Bridge_as_seen_from_Battery_East.jpg/1280px-Golden_Gate_Bridge_as_seen_from_Battery_East.jpg',
+      alt: 'Puente Golden Gate en San Francisco, Estados Unidos',
+    },
   },
   {
     slug: 'espana-ti',
@@ -85,6 +94,10 @@ export const culturalPrograms: CulturalProgram[] = [
     ],
     duration: 'Hasta 12 meses en cualquier campo ocupacional',
     keyFacts: ['Sede en Colombia (Ibagué y Bucaramanga)', 'Inscripción disponible en línea'],
+    image: {
+      src: 'https://upload.wikimedia.org/wikipedia/commons/e/ef/SF_maig_2_cropped.jpg',
+      alt: 'Sagrada Família en Barcelona, España',
+    },
   },
   {
     slug: 'asia',
@@ -107,6 +120,10 @@ export const culturalPrograms: CulturalProgram[] = [
     ],
     duration: '3 a 18 meses según la modalidad',
     keyFacts: ['Destinos: Tailandia, Emiratos Árabes, Islas Maldivas', 'Networking profesional internacional'],
+    image: {
+      src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Mal%C3%A9.jpg/1280px-Mal%C3%A9.jpg',
+      alt: 'Vista de Malé, capital de las Islas Maldivas',
+    },
   },
   {
     slug: 'teacher-exchange',
@@ -130,6 +147,10 @@ export const culturalPrograms: CulturalProgram[] = [
     ],
     duration: 'Hasta 5 años con visa J-1',
     keyFacts: ['Ubicaciones comunes: Texas, Carolina del Norte, Florida, Virginia, Arizona'],
+    image: {
+      src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Front_view_of_Statue_of_Liberty_%28cropped%29.jpg/1280px-Front_view_of_Statue_of_Liberty_%28cropped%29.jpg',
+      alt: 'Estatua de la Libertad en Nueva York',
+    },
   },
   {
     slug: 'teacher-assistant',
@@ -153,6 +174,10 @@ export const culturalPrograms: CulturalProgram[] = [
     ],
     duration: '1 a 3 años bajo visa J-1',
     keyFacts: ['Remuneración desde $14 USD/hora', 'No requiere licencia de enseñanza en EE. UU.'],
+    image: {
+      src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Chicago_River_ferry_b.jpg/1280px-Chicago_River_ferry_b.jpg',
+      alt: 'Río Chicago y horizonte de la ciudad, Estados Unidos',
+    },
   },
   {
     slug: 'aupair',
@@ -176,6 +201,10 @@ export const culturalPrograms: CulturalProgram[] = [
     ],
     duration: 'Programa bajo visa J-1',
     keyFacts: ['Familias anfitrionas seleccionadas y verificadas', 'Acompañamiento de sponsor durante la estadía'],
+    image: {
+      src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/ISH_WC_Boston4.jpg/1280px-ISH_WC_Boston4.jpg',
+      alt: 'Vista de Boston, Estados Unidos',
+    },
   },
 ]
 

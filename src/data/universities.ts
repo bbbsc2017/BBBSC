@@ -7,6 +7,7 @@ export interface University {
   undergrad: string[]
   graduate: string[]
   keyFacts: string[]
+  image: { src: string; alt: string }
 }
 
 export const universities: University[] = [
@@ -26,6 +27,10 @@ export const universities: University[] = [
       'Visa F-1 mediante formulario I-20',
       'Acceso a programas OPT y CPT',
     ],
+    image: {
+      src: 'https://upload.wikimedia.org/wikipedia/commons/1/15/Troy_square.JPG',
+      alt: 'Centro de Troy, Alabama, Estados Unidos',
+    },
   },
   {
     slug: 'gisma-university',
@@ -43,6 +48,10 @@ export const universities: University[] = [
       'Permiso de hasta 18 meses para trabajar en Alemania tras graduarse',
       'Career Center para apoyo laboral post-graduación',
     ],
+    image: {
+      src: 'https://upload.wikimedia.org/wikipedia/commons/c/c0/Havel-Park-Lake-Babelsberg-Downtown-Potsdam-Green.jpg',
+      alt: 'Potsdam, Alemania',
+    },
   },
   {
     slug: 'woosong-university',
@@ -60,6 +69,10 @@ export const universities: University[] = [
       'Becas de hasta el 100%',
       'Requisito: IELTS ≈6.0, TOEFL ≈60 o Duolingo 95',
     ],
+    image: {
+      src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Woosong_University_West_Campus_20190608_A01.jpg/1280px-Woosong_University_West_Campus_20190608_A01.jpg',
+      alt: 'Campus de Woosong University en Daejeon, Corea del Sur',
+    },
   },
   {
     slug: 'vistula',
@@ -75,6 +88,10 @@ export const universities: University[] = [
       'Carta de aceptación para solicitud de visa de estudiante',
       'Costos entre $12.000 y $14.000 USD según especialidad',
     ],
+    image: {
+      src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/Uczelnia_vistula.jpg/1280px-Uczelnia_vistula.jpg',
+      alt: 'Campus de Vistula University en Varsovia, Polonia',
+    },
   },
   {
     slug: 'cape-breton',
@@ -90,6 +107,10 @@ export const universities: University[] = [
       'Apoyo con visa de estudiante',
       'Permisos de trabajo post-graduación',
     ],
+    image: {
+      src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/Sydney%2C_Nova_Scotia_skyline.jpg/1280px-Sydney%2C_Nova_Scotia_skyline.jpg',
+      alt: 'Horizonte de Sydney, Nueva Escocia, Canadá',
+    },
   },
 ]
 

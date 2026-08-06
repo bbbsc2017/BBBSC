@@ -23,6 +23,7 @@ export function CulturalProgramsGrid() {
               title={program.title}
               description={program.tagline}
               cta={program.cta}
+              image={program.image}
             />
           ))}
         </div>

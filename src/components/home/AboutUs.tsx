@@ -39,13 +39,13 @@ export function AboutUs() {
           {pillars.map(({ Icon, title, description }) => (
             <div
               key={title}
-              className="flex flex-col items-start gap-4 rounded-3xl border border-ink/10 bg-white p-6 transition-all duration-300 hover:-translate-y-1 hover:border-brand/30 hover:shadow-lg hover:shadow-brand/10"
+              className="flex flex-col items-start gap-4 rounded-3xl border border-white/10 bg-ink-800 p-6 transition-all duration-300 hover:-translate-y-1 hover:border-brand/30 hover:shadow-lg hover:shadow-brand/10"
             >
               <span className="flex size-11 items-center justify-center rounded-2xl bg-ink text-brand">
                 <Icon className="size-5" />
               </span>
-              <h3 className="text-base font-bold text-ink">{title}</h3>
-              <p className="text-sm leading-relaxed text-ink-600">{description}</p>
+              <h3 className="text-base font-bold text-white">{title}</h3>
+              <p className="text-sm leading-relaxed text-white/70">{description}</p>
             </div>
           ))}
         </div>

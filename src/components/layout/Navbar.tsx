@@ -43,17 +43,17 @@ export function Navbar() {
   return (
     <header
       className={`sticky top-0 z-50 border-b transition-colors duration-300 ${
-        scrolled ? 'border-ink/10 bg-white/90 backdrop-blur-lg' : 'border-transparent bg-white/60 backdrop-blur-md'
+        scrolled ? 'border-white/10 bg-ink/95 backdrop-blur-lg' : 'border-transparent bg-ink/70 backdrop-blur-md'
       }`}
     >
       <div className="mx-auto flex w-full max-w-7xl items-center justify-between gap-4 px-5 py-3 sm:px-8">
         <Link to="/" className="flex items-center gap-2.5" aria-label="BBB Student Center — Inicio">
-          <span className="flex size-10 items-center justify-center rounded-xl bg-ink p-2">
+          <span className="flex size-10 items-center justify-center rounded-xl bg-ink-800 p-2">
             <img src={logoMark} alt="" className="size-full" />
           </span>
           <span className="flex flex-col leading-tight">
-            <span className="text-base font-extrabold tracking-tight text-ink">BBB Student Center</span>
-            <span className="text-[11px] font-medium text-ink-600">Work & Travel · Experiencias internacionales</span>
+            <span className="text-base font-extrabold tracking-tight text-white">BBB Student Center</span>
+            <span className="text-[11px] font-medium text-white/60">Work & Travel · Experiencias internacionales</span>
           </span>
         </Link>
 
@@ -62,7 +62,7 @@ export function Navbar() {
             to="/"
             end
             className={({ isActive }) =>
-              `rounded-full px-4 py-2 text-sm font-semibold transition-colors ${isActive ? 'text-brand-700' : 'text-ink-700 hover:text-brand-700'}`
+              `rounded-full px-4 py-2 text-sm font-semibold transition-colors ${isActive ? 'text-brand' : 'text-white/70 hover:text-brand'}`
             }
           >
             Inicio
@@ -72,18 +72,18 @@ export function Navbar() {
             <div key={group.label} className="group relative">
               <Link
                 to={group.indexTo}
-                className="flex items-center gap-1 rounded-full px-4 py-2 text-sm font-semibold text-ink-700 transition-colors hover:text-brand-700"
+                className="flex items-center gap-1 rounded-full px-4 py-2 text-sm font-semibold text-white/70 transition-colors hover:text-brand"
               >
                 {group.label}
                 <ChevronDown className="size-3.5 transition-transform group-hover:rotate-180" />
               </Link>
               <div className="invisible absolute left-0 top-full w-72 translate-y-1 opacity-0 transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
-                <div className="mt-2 overflow-hidden rounded-2xl border border-ink/10 bg-white p-2 shadow-xl shadow-ink/10">
+                <div className="mt-2 overflow-hidden rounded-2xl border border-white/10 bg-ink-800 p-2 shadow-xl shadow-black/40">
                   {group.items.map((item) => (
                     <Link
                       key={item.to}
                       to={item.to}
-                      className="block rounded-xl px-4 py-2.5 text-sm font-medium text-ink-700 transition-colors hover:bg-brand/10 hover:text-brand-700"
+                      className="block rounded-xl px-4 py-2.5 text-sm font-medium text-white/70 transition-colors hover:bg-brand/10 hover:text-brand"
                     >
                       {item.label}
                     </Link>
@@ -96,7 +96,7 @@ export function Navbar() {
           <NavLink
             to="/universidades"
             className={({ isActive }) =>
-              `rounded-full px-4 py-2 text-sm font-semibold transition-colors ${isActive ? 'text-brand-700' : 'text-ink-700 hover:text-brand-700'}`
+              `rounded-full px-4 py-2 text-sm font-semibold transition-colors ${isActive ? 'text-brand' : 'text-white/70 hover:text-brand'}`
             }
           >
             Universidades
@@ -104,7 +104,7 @@ export function Navbar() {
           <NavLink
             to="/contacto"
             className={({ isActive }) =>
-              `rounded-full px-4 py-2 text-sm font-semibold transition-colors ${isActive ? 'text-brand-700' : 'text-ink-700 hover:text-brand-700'}`
+              `rounded-full px-4 py-2 text-sm font-semibold transition-colors ${isActive ? 'text-brand' : 'text-white/70 hover:text-brand'}`
             }
           >
             Contáctanos
@@ -120,7 +120,7 @@ export function Navbar() {
         <button
           type="button"
           onClick={() => setOpen((v) => !v)}
-          className="inline-flex size-10 items-center justify-center rounded-full border border-ink/10 text-ink lg:hidden"
+          className="inline-flex size-10 items-center justify-center rounded-full border border-white/15 text-white lg:hidden"
           aria-expanded={open}
           aria-label={open ? 'Cerrar menú' : 'Abrir menú'}
         >
@@ -129,9 +129,9 @@ export function Navbar() {
       </div>
 
       {open && (
-        <div className="border-t border-ink/10 bg-white px-5 py-4 lg:hidden">
+        <div className="border-t border-white/10 bg-ink px-5 py-4 lg:hidden">
           <nav className="flex flex-col gap-1" aria-label="Principal móvil">
-            <Link to="/" onClick={() => setOpen(false)} className="rounded-lg px-3 py-2.5 text-sm font-semibold text-ink-700">
+            <Link to="/" onClick={() => setOpen(false)} className="rounded-lg px-3 py-2.5 text-sm font-semibold text-white/80">
               Inicio
             </Link>
             {groups.map((group) => (
@@ -139,7 +139,7 @@ export function Navbar() {
                 <Link
                   to={group.indexTo}
                   onClick={() => setOpen(false)}
-                  className="block rounded-lg px-3 py-2.5 text-sm font-bold text-ink"
+                  className="block rounded-lg px-3 py-2.5 text-sm font-bold text-white"
                 >
                   {group.label}
                 </Link>
@@ -149,7 +149,7 @@ export function Navbar() {
                       key={item.to}
                       to={item.to}
                       onClick={() => setOpen(false)}
-                      className="rounded-lg px-6 py-2 text-sm text-ink-600"
+                      className="rounded-lg px-6 py-2 text-sm text-white/60"
                     >
                       {item.label}
                     </Link>
@@ -157,10 +157,10 @@ export function Navbar() {
                 </div>
               </div>
             ))}
-            <Link to="/universidades" onClick={() => setOpen(false)} className="rounded-lg px-3 py-2.5 text-sm font-semibold text-ink-700">
+            <Link to="/universidades" onClick={() => setOpen(false)} className="rounded-lg px-3 py-2.5 text-sm font-semibold text-white/80">
               Universidades
             </Link>
-            <Link to="/contacto" onClick={() => setOpen(false)} className="rounded-lg px-3 py-2.5 text-sm font-semibold text-ink-700">
+            <Link to="/contacto" onClick={() => setOpen(false)} className="rounded-lg px-3 py-2.5 text-sm font-semibold text-white/80">
               Contáctanos
             </Link>
           </nav>

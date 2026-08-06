@@ -1,10 +1,12 @@
-import { Link, Navigate, useParams } from 'react-router-dom'
+import { Navigate, useParams } from 'react-router-dom'
 import { BookOpen, GraduationCap, MapPin, Star } from 'lucide-react'
 import { Seo } from '../components/Seo'
 import { DetailHero } from '../components/ui/DetailHero'
+import { DestinationBanner } from '../components/ui/DestinationBanner'
 import { Container } from '../components/ui/Container'
 import { InfoList } from '../components/ui/InfoList'
 import { ContactCard } from '../components/ui/ContactCard'
+import { ImageLinkCard } from '../components/ui/ImageLinkCard'
 import { universities, getUniversity } from '../data/universities'
 
 export default function UniversidadDetalle() {
@@ -45,20 +47,22 @@ export default function UniversidadDetalle() {
         </div>
       </DetailHero>
 
+      <DestinationBanner image={university.image} caption={`${university.name} · ${university.city}`} />
+
       <section className="py-16 sm:py-20">
         <Container className="grid grid-cols-1 gap-12 lg:grid-cols-[1.6fr_1fr]">
           <div className="flex flex-col gap-12">
             <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
               <div>
-                <h3 className="mb-4 flex items-center gap-2 text-base font-bold text-ink">
-                  <BookOpen className="size-5 text-brand-700" />
+                <h3 className="mb-4 flex items-center gap-2 text-base font-bold text-white">
+                  <BookOpen className="size-5 text-brand" />
                   Pregrado
                 </h3>
                 <InfoList items={university.undergrad} />
               </div>
               <div>
-                <h3 className="mb-4 flex items-center gap-2 text-base font-bold text-ink">
-                  <GraduationCap className="size-5 text-brand-700" />
+                <h3 className="mb-4 flex items-center gap-2 text-base font-bold text-white">
+                  <GraduationCap className="size-5 text-brand" />
                   Posgrado
                 </h3>
                 <InfoList items={university.graduate} />
@@ -66,8 +70,8 @@ export default function UniversidadDetalle() {
             </div>
 
             <div>
-              <h3 className="mb-4 flex items-center gap-2 text-base font-bold text-ink">
-                <Star className="size-5 text-brand-700" />
+              <h3 className="mb-4 flex items-center gap-2 text-base font-bold text-white">
+                <Star className="size-5 text-brand" />
                 Datos clave
               </h3>
               <InfoList items={university.keyFacts} tone="ink" />
@@ -78,20 +82,19 @@ export default function UniversidadDetalle() {
         </Container>
       </section>
 
-      <section className="border-t border-ink/10 bg-[#faf9f6] py-16 sm:py-20">
+      <section className="border-t border-white/10 bg-black/15 py-16 sm:py-20">
         <Container className="flex flex-col gap-10">
-          <h2 className="text-2xl font-bold text-ink">Otras universidades aliadas</h2>
+          <h2 className="text-2xl font-bold text-white">Otras universidades aliadas</h2>
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {others.map((item) => (
-              <Link
+              <ImageLinkCard
                 key={item.slug}
                 to={`/universidades/${item.slug}`}
-                className="group flex flex-col gap-2 rounded-2xl border border-ink/10 bg-white p-5 transition-all hover:-translate-y-1 hover:border-brand/40 hover:shadow-lg hover:shadow-brand/10"
-              >
-                <span className="text-xs font-bold uppercase tracking-wide text-brand-700">{item.country}</span>
-                <h3 className="text-sm font-bold text-ink">{item.name}</h3>
-                <span className="text-xs text-ink-600">{item.city}</span>
-              </Link>
+                eyebrow={item.country}
+                title={item.name}
+                subtitle={item.city}
+                image={item.image}
+              />
             ))}
           </div>
         </Container>

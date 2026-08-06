@@ -29,6 +29,7 @@ export default function ProgramasCulturalesIndex() {
                 title={program.title}
                 description={program.tagline}
                 cta={program.cta}
+                image={program.image}
               />
             ))}
           </div>
