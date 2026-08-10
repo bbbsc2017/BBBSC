@@ -12,20 +12,75 @@ export function LatestNewsSection() {
   const scrollerRef = useRef<HTMLDivElement>(null)
   const [index, setIndex] = useState(0)
   const [paused, setPaused] = useState(false)
+  const [dragging, setDragging] = useState(false)
+  const dragStateRef = useRef({ startX: 0, startScrollLeft: 0, moved: false })
 
   useEffect(() => {
-    if (paused) return
+    if (paused || dragging) return
     const id = setInterval(() => {
       setIndex((current) => (current + 1) % latestPosts.length)
     }, 4500)
     return () => clearInterval(id)
-  }, [paused])
+  }, [paused, dragging])
 
   useEffect(() => {
+    if (dragging) return
     const container = scrollerRef.current
     const card = container?.children[index] as HTMLElement | undefined
-    card?.scrollIntoView({ behavior: 'smooth', inline: 'start', block: 'nearest' })
-  }, [index])
+    if (!container || !card) return
+    // Se calcula manualmente en vez de usar scrollIntoView: ese método puede mover el scroll
+    // vertical de toda la página para "asegurar" visibilidad, aunque el usuario esté leyendo
+    // otra sección. scrollTo aquí solo afecta el scroll horizontal de este carrusel.
+    const delta = card.getBoundingClientRect().left - container.getBoundingClientRect().left
+    container.scrollTo({ left: container.scrollLeft + delta, behavior: 'smooth' })
+  }, [index, dragging])
+
+  function snapToClosestCard() {
+    const container = scrollerRef.current
+    if (!container) return
+    let closest = 0
+    let minDistance = Infinity
+    Array.from(container.children).forEach((child, i) => {
+      const distance = Math.abs((child as HTMLElement).offsetLeft - container.scrollLeft)
+      if (distance < minDistance) {
+        minDistance = distance
+        closest = i
+      }
+    })
+    setIndex(Math.min(closest, latestPosts.length - 1))
+  }
+
+  function handleMouseDown(event: React.MouseEvent) {
+    const container = scrollerRef.current
+    if (!container) return
+    dragStateRef.current = { startX: event.pageX, startScrollLeft: container.scrollLeft, moved: false }
+    setDragging(true)
+
+    function handleMouseMove(moveEvent: MouseEvent) {
+      if (!container) return
+      const delta = moveEvent.pageX - dragStateRef.current.startX
+      if (Math.abs(delta) > 3) dragStateRef.current.moved = true
+      container.scrollLeft = dragStateRef.current.startScrollLeft - delta
+    }
+
+    function handleMouseUp() {
+      window.removeEventListener('mousemove', handleMouseMove)
+      window.removeEventListener('mouseup', handleMouseUp)
+      setDragging(false)
+      snapToClosestCard()
+    }
+
+    window.addEventListener('mousemove', handleMouseMove)
+    window.addEventListener('mouseup', handleMouseUp)
+  }
+
+  function handleClickCapture(event: React.MouseEvent) {
+    // Evita que un arrastre termine navegando accidentalmente al link de la tarjeta.
+    if (dragStateRef.current.moved) {
+      event.preventDefault()
+      event.stopPropagation()
+    }
+  }
 
   return (
     <section className="relative py-20 sm:py-28">
@@ -41,7 +96,11 @@ export function LatestNewsSection() {
           onMouseEnter={() => setPaused(true)}
           onMouseLeave={() => setPaused(false)}
           onTouchStart={() => setPaused(true)}
-          className="flex w-full gap-5 overflow-x-auto pb-2 [scrollbar-width:none] snap-x snap-mandatory sm:gap-6"
+          onMouseDown={handleMouseDown}
+          onClickCapture={handleClickCapture}
+          className={`flex w-full items-stretch gap-5 overflow-x-auto pb-2 [scrollbar-width:none] sm:gap-6 ${
+            dragging ? 'cursor-grabbing select-none snap-none' : 'cursor-grab snap-x snap-mandatory'
+          }`}
         >
           {latestPosts.map((post) => (
             <BlogPostCard key={post.slug} post={post} className="w-[85%] shrink-0 snap-center sm:w-[45%] lg:w-[31%]" />
@@ -49,6 +108,7 @@ export function LatestNewsSection() {
 
           <Link
             to="/blog"
+            draggable={false}
             className="group flex w-[85%] shrink-0 snap-center flex-col items-center justify-center gap-3 rounded-3xl border border-dashed border-white/15 bg-white/5 p-6 text-center transition-all duration-300 hover:-translate-y-1 hover:border-brand/40 hover:bg-white/10 sm:w-[45%] lg:w-[31%]"
           >
             <span className="flex size-12 items-center justify-center rounded-full bg-brand/15 text-brand transition-transform duration-300 group-hover:translate-x-1">

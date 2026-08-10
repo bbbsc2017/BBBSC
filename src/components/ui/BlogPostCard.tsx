@@ -30,11 +30,11 @@ export function BlogPostCard({ post, className = '' }: { post: BlogPost; classNa
 
       <div className="flex flex-1 flex-col justify-between gap-4 p-6">
         <div className="flex flex-col gap-2">
-          <h3 className="text-lg font-bold leading-snug text-white">{post.title}</h3>
-          <p className="text-sm leading-relaxed text-white/70">{post.excerpt}</p>
+          <h3 className="line-clamp-2 text-lg font-bold leading-snug text-white">{post.title}</h3>
+          <p className="line-clamp-3 text-sm leading-relaxed text-white/70">{post.excerpt}</p>
         </div>
         <div className="flex flex-col gap-2 text-xs text-white/50">
-          <span>
+          <span className="truncate">
             Por <span className="text-white/70">{post.author.name}</span> · {formatDate(post.date)}
           </span>
           <div className="flex items-center justify-between gap-2">
