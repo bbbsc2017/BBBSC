@@ -22,7 +22,7 @@ export function ContactCard({ programTitle, image, pricing }: ContactCardProps) 
       <div className="sticky top-24 relative flex flex-col gap-6 overflow-hidden rounded-3xl border border-brand/40 bg-ink-800 p-6 shadow-[0_0_60px_-15px_rgba(249,176,0,0.35)]">
         <div aria-hidden="true" className="pointer-events-none absolute -right-16 -top-16 size-56 rounded-full bg-brand/15 blur-3xl" />
 
-        <div className="relative flex flex-col gap-5">
+        <div className="relative flex flex-col items-center gap-5 text-center">
           {pricing.badge && (
             <span className="w-fit rounded-full border border-brand/40 bg-brand/10 px-4 py-1 text-xs font-bold uppercase tracking-wide text-brand">
               {pricing.badge}
@@ -31,13 +31,13 @@ export function ContactCard({ programTitle, image, pricing }: ContactCardProps) 
           <h3 className="text-xl font-extrabold text-white">{pricing.headline ?? `Inversión de ${programTitle}`}</h3>
 
           {pricing.price && (
-            <div className="flex flex-wrap items-end gap-2">
+            <div className="flex flex-wrap items-end justify-center gap-2">
               <span className="text-4xl font-extrabold text-white sm:text-5xl">{pricing.price.amount}</span>
               {pricing.price.unit && <span className="pb-1 text-sm font-semibold text-white/60">{pricing.price.unit}</span>}
             </div>
           )}
 
-          <ul className="flex flex-col gap-3">
+          <ul className="flex w-full flex-col gap-3 text-left">
             {pricing.items.map((item) => (
               <li key={item} className="flex items-start gap-3 text-sm leading-relaxed text-white/80">
                 <span className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-brand text-white">

@@ -73,10 +73,10 @@ export const culturalPrograms: CulturalProgram[] = [
     pricing: {
       badge: 'Temporada 2027',
       headline: 'Work and Travel USA',
-      price: { amount: 'Desde $275', unit: 'USD por abono · 8 pagos' },
+      price: { amount: '$3,000', unit: 'USD' },
       items: [
         'Valor de la inscripción: $250.000 COP',
-        'Pagos en las fechas estipuladas en el contrato',
+        'El programa se paga en 8 abonos desde $275 USD, según las fechas del contrato',
         'Por pronto pago, descuento desde $25 USD en el abono a realizar',
       ],
       note: 'Valores de referencia; tu asesor te confirma el plan de pagos exacto según tu fecha de inscripción.',
