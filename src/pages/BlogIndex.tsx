@@ -22,15 +22,11 @@ export default function BlogIndex() {
     [sorted, featured],
   )
 
-  const excludedSlugs = useMemo(
-    () => new Set([featured.slug, ...sameCategoryPosts.map((post) => post.slug)]),
-    [featured, sameCategoryPosts],
-  )
-
   const searchTerm = search.trim().toLowerCase()
 
+  // El destacado y los de "Más de <categoría>" también aparecen aquí: al subir una entrada
+  // nueva pasa a ser el destacado, pero sigue viéndose junto con el resto más abajo.
   const gridPosts = sorted.filter((post) => {
-    if (excludedSlugs.has(post.slug)) return false
     if (activeCategory !== 'Todos los blogs' && post.category !== activeCategory) return false
     if (searchTerm && !post.title.toLowerCase().includes(searchTerm) && !post.excerpt.toLowerCase().includes(searchTerm)) {
       return false
@@ -162,6 +158,12 @@ export default function BlogIndex() {
                   <ArrowUpRight className="size-3.5" />
                 </Link>
               </div>
+            </div>
+
+            <div className="flex items-center gap-4">
+              <span className="h-px flex-1 bg-white/10" />
+              <span className="text-xs font-semibold uppercase tracking-widest text-white/40">Todas las publicaciones</span>
+              <span className="h-px flex-1 bg-white/10" />
             </div>
 
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
