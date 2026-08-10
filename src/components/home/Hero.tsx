@@ -1,8 +1,8 @@
-import { Globe2, GraduationCap, Plane, Sparkles } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
+import { ArrowRight, Globe2, GraduationCap, Plane, Sparkles } from 'lucide-react'
 import { CTAButton } from '../ui/CTAButton'
 import { Container } from '../ui/Container'
-import { GradientBlob } from '../ui/GradientBlob'
-import { HeroDestinationsGallery } from './HeroDestinationsGallery'
 
 const stats = [
   { label: 'Años de experiencia', value: '10+' },
@@ -10,13 +10,83 @@ const stats = [
   { label: 'Programas y destinos', value: '15+' },
 ]
 
-export function Hero() {
-  return (
-    <section className="relative overflow-hidden bg-ink-mesh py-16 sm:py-20 lg:py-24">
-      <GradientBlob tone="brand" className="left-[-15%] top-0 size-72 sm:size-96" />
+const destinations = [
+  {
+    to: '/programas-culturales/work-and-travel-usa',
+    country: 'Estados Unidos',
+    label: 'Work and Travel USA',
+    image: {
+      src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/View_of_Empire_State_Building_from_Rockefeller_Center_New_York_City_dllu_%28cropped%29.jpg/1280px-View_of_Empire_State_Building_from_Rockefeller_Center_New_York_City_dllu_%28cropped%29.jpg',
+      alt: 'Nueva York, Estados Unidos',
+    },
+  },
+  {
+    to: '/programas-culturales/espana-ti',
+    country: 'España',
+    label: 'Trainee & Internship',
+    image: {
+      src: 'https://upload.wikimedia.org/wikipedia/commons/e/ef/SF_maig_2_cropped.jpg',
+      alt: 'Sagrada Família, Barcelona, España',
+    },
+  },
+  {
+    to: '/programas-culturales/asia',
+    country: 'Asia',
+    label: 'Trainee & Internship',
+    image: {
+      src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Mal%C3%A9.jpg/1280px-Mal%C3%A9.jpg',
+      alt: 'Malé, Islas Maldivas',
+    },
+  },
+  {
+    to: '/programas-academicos/canada',
+    country: 'Canadá',
+    label: 'Estudia en Canadá',
+    image: {
+      src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Toronto_Skyline_from_Olympic_Island%2C_June_20_2026_%285-3_cropped%29.jpg/1280px-Toronto_Skyline_from_Olympic_Island%2C_June_20_2026_%285-3_cropped%29.jpg',
+      alt: 'Toronto, Canadá',
+    },
+  },
+  {
+    to: '/programas-academicos/australia',
+    country: 'Australia',
+    label: 'Estudia en Australia',
+    image: {
+      src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Sydney_Australia._%2821339175489%29.jpg/1280px-Sydney_Australia._%2821339175489%29.jpg',
+      alt: 'Ópera de Sídney, Australia',
+    },
+  },
+]
 
-      <Container className="relative flex flex-col gap-12">
-        <div className="flex flex-col items-start gap-7 text-left lg:max-w-2xl">
+export function Hero() {
+  const [index, setIndex] = useState(0)
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      setIndex((current) => (current + 1) % destinations.length)
+    }, 10000)
+    return () => clearInterval(id)
+  }, [])
+
+  return (
+    <section className="relative overflow-hidden bg-ink">
+      <div className="absolute inset-0" aria-hidden="true">
+        {destinations.map((dest, i) => (
+          <img
+            key={dest.image.src}
+            src={dest.image.src}
+            alt=""
+            className={`absolute inset-0 size-full object-cover transition-opacity duration-[1800ms] ease-in-out ${
+              i === index ? 'opacity-100' : 'opacity-0'
+            }`}
+          />
+        ))}
+        <div className="absolute inset-0 bg-gradient-to-r from-ink via-ink/85 to-ink/40" />
+        <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/20 to-ink/30" />
+      </div>
+
+      <Container className="relative flex flex-col gap-12 py-16 sm:py-20 lg:flex-row lg:items-center lg:justify-between lg:gap-10 lg:py-28">
+        <div className="flex flex-col items-start gap-7 text-left lg:max-w-xl">
           <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-brand backdrop-blur">
             <Sparkles className="size-3.5" />
             Expertos en Work &amp; Travel y experiencias internacionales
@@ -60,11 +130,37 @@ export function Hero() {
           </div>
         </div>
 
-        <div>
-          <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-white/40">
-            Elige tu próximo destino
-          </p>
-          <HeroDestinationsGallery />
+        <div className="w-full shrink-0 lg:w-72">
+          <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-white/50">Destinos destacados</p>
+          <ul className="flex flex-col gap-2">
+            {destinations.map((dest, i) => {
+              const active = i === index
+              return (
+                <li key={dest.to}>
+                  <Link
+                    to={dest.to}
+                    className={`flex items-center justify-between gap-3 rounded-xl border px-4 py-3 backdrop-blur transition-all duration-500 ${
+                      active
+                        ? 'border-brand/40 bg-white/10'
+                        : 'border-white/10 bg-white/5 hover:border-white/20 hover:bg-white/10'
+                    }`}
+                  >
+                    <span className="flex flex-col">
+                      <span className={`text-[11px] font-bold uppercase tracking-wide ${active ? 'text-brand' : 'text-white/40'}`}>
+                        {dest.country}
+                      </span>
+                      <span className={`text-sm font-semibold ${active ? 'text-white' : 'text-white/70'}`}>{dest.label}</span>
+                    </span>
+                    <ArrowRight
+                      className={`size-4 shrink-0 transition-all duration-300 ${
+                        active ? 'translate-x-0 text-brand opacity-100' : '-translate-x-1 text-white/30 opacity-0'
+                      }`}
+                    />
+                  </Link>
+                </li>
+              )
+            })}
+          </ul>
         </div>
       </Container>
     </section>
