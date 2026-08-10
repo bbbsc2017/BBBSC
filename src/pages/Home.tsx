@@ -5,7 +5,6 @@ import { AboutUs } from '../components/home/AboutUs'
 import { CulturalProgramsGrid } from '../components/home/CulturalProgramsGrid'
 import { AcademicProgramsGrid } from '../components/home/AcademicProgramsGrid'
 import { UniversitiesTeaser } from '../components/home/UniversitiesTeaser'
-import { BobbyAdvice } from '../components/home/BobbyAdvice'
 import { TestimonialsSection } from '../components/home/TestimonialsSection'
 import { FAQSection } from '../components/home/FAQSection'
 import { SITE } from '../lib/site'
@@ -43,7 +42,6 @@ export default function Home() {
       <CulturalProgramsGrid />
       <AcademicProgramsGrid />
       <UniversitiesTeaser />
-      <BobbyAdvice />
       <TestimonialsSection />
       <FAQSection />
     </>
