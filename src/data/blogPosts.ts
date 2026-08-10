@@ -6,8 +6,14 @@ export interface BlogPost {
   date: string
   readTime: string
   image: { src: string; alt: string }
+  author: { name: string; role: string }
   content: string[]
 }
+
+const AUTHORS = {
+  ceo: { name: 'Sebastián Eduardo Martínez Manrique', role: 'CEO' },
+  cio: { name: 'Leidy Viviana Miranda', role: 'CIO' },
+} as const
 
 export const blogPosts: BlogPost[] = [
   {
@@ -18,6 +24,7 @@ export const blogPosts: BlogPost[] = [
     category: 'Embajada',
     date: '2026-07-28',
     readTime: '6 min de lectura',
+    author: AUTHORS.ceo,
     image: {
       src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/Passports-assorted.jpg/1280px-Passports-assorted.jpg',
       alt: 'Pasaportes de distintos países',
@@ -37,6 +44,7 @@ export const blogPosts: BlogPost[] = [
     category: 'Embajada',
     date: '2026-07-15',
     readTime: '5 min de lectura',
+    author: AUTHORS.cio,
     image: {
       src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Sara_Prigan_%2841497467772%29.jpg/1280px-Sara_Prigan_%2841497467772%29.jpg',
       alt: 'Entrevista formal',
@@ -56,6 +64,7 @@ export const blogPosts: BlogPost[] = [
     category: 'Programas',
     date: '2026-07-02',
     readTime: '4 min de lectura',
+    author: AUTHORS.ceo,
     image: {
       src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/View_of_Empire_State_Building_from_Rockefeller_Center_New_York_City_dllu_%28cropped%29.jpg/1280px-View_of_Empire_State_Building_from_Rockefeller_Center_New_York_City_dllu_%28cropped%29.jpg',
       alt: 'Vista de Nueva York desde el Rockefeller Center',
@@ -75,6 +84,7 @@ export const blogPosts: BlogPost[] = [
     category: 'Programas',
     date: '2026-06-20',
     readTime: '5 min de lectura',
+    author: AUTHORS.cio,
     image: {
       src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Woosong_University_West_Campus_20190608_A01.jpg/1280px-Woosong_University_West_Campus_20190608_A01.jpg',
       alt: 'Campus de Woosong University en Daejeon, Corea del Sur',
@@ -94,6 +104,7 @@ export const blogPosts: BlogPost[] = [
     category: 'Consejos',
     date: '2026-06-05',
     readTime: '4 min de lectura',
+    author: AUTHORS.ceo,
     image: {
       src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Chicago_River_ferry_b.jpg/1280px-Chicago_River_ferry_b.jpg',
       alt: 'Río Chicago y horizonte de la ciudad, Estados Unidos',
@@ -113,6 +124,7 @@ export const blogPosts: BlogPost[] = [
     category: 'Programas',
     date: '2026-05-22',
     readTime: '5 min de lectura',
+    author: AUTHORS.cio,
     image: {
       src: 'https://upload.wikimedia.org/wikipedia/commons/9/96/El-dorado-from-air.jpg',
       alt: 'Vista aérea del Aeropuerto Internacional El Dorado, Bogotá',

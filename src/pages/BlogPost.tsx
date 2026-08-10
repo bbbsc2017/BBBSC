@@ -5,6 +5,7 @@ import { DestinationBanner } from '../components/ui/DestinationBanner'
 import { Container } from '../components/ui/Container'
 import { CTAButton } from '../components/ui/CTAButton'
 import { BlogPostCard } from '../components/ui/BlogPostCard'
+import { CommentsSection } from '../components/blog/CommentsSection'
 import { blogPosts, getBlogPost } from '../data/blogPosts'
 import { SITE, formatDate, whatsappLink } from '../lib/site'
 
@@ -31,7 +32,7 @@ export default function BlogPost() {
           description: post.excerpt,
           datePublished: post.date,
           image: post.image.src,
-          author: { '@type': 'Organization', name: SITE.name },
+          author: { '@type': 'Person', name: post.author.name, jobTitle: post.author.role },
           publisher: { '@type': 'Organization', name: SITE.name, url: SITE.url },
         }}
       />
@@ -45,7 +46,25 @@ export default function BlogPost() {
 
       <DestinationBanner image={post.image} caption={`${formatDate(post.date)} · ${post.readTime}`} />
 
-      <section className="py-16 sm:py-20">
+      <section className="pt-16 sm:pt-20">
+        <Container className="mx-auto flex max-w-3xl items-center gap-3 border-b border-white/10 pb-8">
+          <span className="flex size-11 shrink-0 items-center justify-center rounded-full bg-brand/15 text-sm font-bold text-brand">
+            {post.author.name
+              .split(' ')
+              .slice(0, 2)
+              .map((part) => part[0])
+              .join('')}
+          </span>
+          <span className="flex flex-col">
+            <span className="text-sm font-bold text-white">{post.author.name}</span>
+            <span className="text-xs text-white/50">
+              {post.author.role} · {formatDate(post.date)} · {post.readTime}
+            </span>
+          </span>
+        </Container>
+      </section>
+
+      <section className="pb-16 sm:pb-20">
         <Container className="mx-auto flex max-w-3xl flex-col gap-6">
           {post.content.map((paragraph) => (
             <p key={paragraph.slice(0, 40)} className="text-base leading-relaxed text-white/80">
@@ -62,6 +81,8 @@ export default function BlogPost() {
               Escríbenos por WhatsApp
             </CTAButton>
           </div>
+
+          <CommentsSection postSlug={post.slug} postTitle={post.title} />
         </Container>
       </section>
 

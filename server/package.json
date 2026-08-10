@@ -1,0 +1,16 @@
+{
+  "name": "bbbsc-server",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Backend mínimo para BBBSC: recibe comentarios del blog y crea/actualiza contactos en Clientify sin exponer la API key al navegador.",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node --watch index.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2"
+  }
+}

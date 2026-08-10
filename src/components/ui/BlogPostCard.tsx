@@ -33,12 +33,17 @@ export function BlogPostCard({ post, className = '' }: { post: BlogPost; classNa
           <h3 className="text-lg font-bold leading-snug text-white">{post.title}</h3>
           <p className="text-sm leading-relaxed text-white/70">{post.excerpt}</p>
         </div>
-        <div className="flex items-center justify-between gap-2 text-xs text-white/50">
-          <span>{formatDate(post.date)}</span>
-          <span className="flex items-center gap-1 font-semibold text-white transition-colors group-hover:text-brand">
-            Leer más
-            <ArrowUpRight className="size-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+        <div className="flex flex-col gap-2 text-xs text-white/50">
+          <span>
+            Por <span className="text-white/70">{post.author.name}</span> · {formatDate(post.date)}
           </span>
+          <div className="flex items-center justify-between gap-2">
+            <span>{post.readTime}</span>
+            <span className="flex items-center gap-1 font-semibold text-white transition-colors group-hover:text-brand">
+              Leer más
+              <ArrowUpRight className="size-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+            </span>
+          </div>
         </div>
       </div>
     </Link>

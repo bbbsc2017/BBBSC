@@ -1,36 +1,80 @@
-# Despliegue en VPS
+# Despliegue en VPS (OpenLiteSpeed)
 
-## 1. Build de producción
+El sitio tiene dos partes que se despliegan por separado:
+
+- **Frontend** (`dist/`): archivos estáticos generados por Vite. Los sirve OpenLiteSpeed directamente.
+- **Backend** (`server/`): proceso Node persistente que recibe los comentarios del blog y llama a Clientify con la API key (nunca expuesta al navegador). OpenLiteSpeed lo expone por detrás en `/api/`.
+
+## 1. Build del frontend
 
 ```bash
 npm ci
 npm run build
 ```
 
-Esto genera la carpeta `dist/` con los archivos estáticos optimizados (HTML, CSS, JS con hash, `robots.txt`, `sitemap.xml`, `favicon.svg`).
+Genera `dist/` con HTML, CSS, JS con hash, `robots.txt`, `sitemap.xml` y `favicon.svg`.
 
 ## 2. Copiar al VPS
 
 ```bash
 rsync -avz --delete dist/ usuario@servidor:/var/www/bbbsc.com/dist
+rsync -avz --exclude node_modules --exclude .env server/ usuario@servidor:/var/www/bbbsc.com/server
 ```
 
-## 3. Nginx
-
-Usar [`nginx.conf.example`](./nginx.conf.example) como base: incluye redirección a HTTPS, fallback de rutas para el SPA (`try_files ... /index.html`, necesario porque react-router-dom maneja el ruteo en el cliente), cache larga para `/assets/` (los archivos llevan hash en el nombre) y compresión gzip.
+En el servidor, dentro de `server/`:
 
 ```bash
-sudo cp deploy/nginx.conf.example /etc/nginx/sites-available/bbbsc.com
-sudo ln -s /etc/nginx/sites-available/bbbsc.com /etc/nginx/sites-enabled/
-sudo nginx -t && sudo systemctl reload nginx
+npm ci --omit=dev
+cp .env.example .env    # y completa CLIENTIFY_API_KEY + ALLOWED_ORIGINS=https://bbbsc.com
 ```
 
-## 4. Certificado SSL
+## 3. Backend Node como proceso persistente (pm2)
 
 ```bash
-sudo certbot --nginx -d bbbsc.com -d www.bbbsc.com
+npm install -g pm2
+cd /var/www/bbbsc.com/server
+pm2 start index.js --name bbbsc-server
+pm2 save
+pm2 startup   # sigue las instrucciones que imprime para que arranque solo al reiniciar el VPS
 ```
 
-## 5. Actualizaciones futuras
+El backend queda escuchando en `http://127.0.0.1:4000` (puerto definido en `.env`).
 
-Repetir los pasos 1 y 2 (build + rsync) en cada despliegue. No se requiere reiniciar Nginx salvo que cambie `nginx.conf.example`.
+## 4. OpenLiteSpeed: Virtual Host
+
+En el panel de administración de OpenLiteSpeed (`https://tu-ip:7080`):
+
+1. **Virtual Host → tu sitio → General**: `Document Root` apuntando a `/var/www/bbbsc.com/dist`.
+2. **Virtual Host → Rewrite**: activa `Enable Rewrite` y agrega esta regla para que las rutas de React Router (`/blog`, `/programas-culturales/...`, etc.) carguen `index.html` en vez de dar 404 — **excluyendo `/api/`**, que debe ir al backend:
+
+   ```
+   RewriteCond %{REQUEST_URI} !^/api/
+   RewriteCond %{REQUEST_FILENAME} !-f
+   RewriteCond %{REQUEST_FILENAME} !-d
+   RewriteRule ^(.*)$ /index.html [L]
+   ```
+
+3. **Virtual Host → External App**: crea una External App tipo `Web Server` (proxy) apuntando a `http://127.0.0.1:4000`.
+4. **Virtual Host → Context**: agrega un Context tipo `Proxy` con:
+   - URI: `/api/`
+   - Address: la External App creada en el paso anterior (`http://127.0.0.1:4000`)
+
+   Esto hace que cualquier request a `https://bbbsc.com/api/...` se reenvíe al proceso Node, sin exponer el puerto 4000 al exterior.
+5. Guarda y aplica los cambios (`Graceful Restart` en el panel).
+
+## 5. Certificado SSL
+
+Desde el mismo panel: **SSL → Virtual Host SSL**, o usa `certbot` con el plugin de OpenLiteSpeed:
+
+```bash
+sudo certbot --webroot -w /var/www/bbbsc.com/dist -d bbbsc.com -d www.bbbsc.com
+```
+
+## 6. Actualizaciones futuras
+
+- Frontend: repetir pasos 1 y 2 (build + rsync a `dist/`). No requiere reiniciar nada.
+- Backend: si cambia `server/index.js`, hacer rsync de `server/` y correr `pm2 restart bbbsc-server`.
+
+## Alternativa: Nginx
+
+Si en algún momento cambias de OpenLiteSpeed a Nginx, hay un ejemplo de configuración equivalente (frontend estático + proxy de `/api/` al backend Node) en [`nginx.conf.example`](./nginx.conf.example).
