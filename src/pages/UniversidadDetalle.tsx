@@ -78,7 +78,7 @@ export default function UniversidadDetalle() {
             </div>
           </div>
 
-          <ContactCard programTitle={university.name} />
+          <ContactCard programTitle={university.name} image={university.image} />
         </Container>
       </section>
 

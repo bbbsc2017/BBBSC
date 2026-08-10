@@ -7,7 +7,6 @@ import { Container } from '../components/ui/Container'
 import { InfoList } from '../components/ui/InfoList'
 import { ContactCard } from '../components/ui/ContactCard'
 import { ProgramCard } from '../components/ui/ProgramCard'
-import { PriceCard } from '../components/ui/PriceCard'
 import { ProgramFAQ } from '../components/ui/ProgramFAQ'
 import { culturalPrograms, getCulturalProgram } from '../data/culturalPrograms'
 import { SITE } from '../lib/site'
@@ -93,12 +92,10 @@ export default function ProgramaCulturalDetalle() {
               </div>
             </div>
 
-            <PriceCard programTitle={program.title} image={program.image} {...program.pricing} />
-
             <ProgramFAQ items={program.faq} />
           </div>
 
-          <ContactCard programTitle={program.title} />
+          <ContactCard programTitle={program.title} image={program.image} pricing={program.pricing} />
         </Container>
       </section>
 

@@ -7,7 +7,6 @@ import { Container } from '../components/ui/Container'
 import { InfoList } from '../components/ui/InfoList'
 import { ContactCard } from '../components/ui/ContactCard'
 import { ImageLinkCard } from '../components/ui/ImageLinkCard'
-import { PriceCard } from '../components/ui/PriceCard'
 import { ProgramFAQ } from '../components/ui/ProgramFAQ'
 import { academicPrograms, getAcademicProgram } from '../data/academicPrograms'
 import { getUniversity } from '../data/universities'
@@ -82,15 +81,6 @@ export default function ProgramaAcademicoDetalle() {
               </div>
             </div>
 
-            <PriceCard
-              programTitle={program.title}
-              image={program.image}
-              badge="Costos referenciales"
-              headline={`Inversión en ${program.title}`}
-              items={program.costs}
-              note="Valores de referencia; tu asesor te confirma el costo total actualizado."
-            />
-
             <ProgramFAQ items={program.faq} />
 
             {relatedUniversities.length > 0 && (
@@ -111,7 +101,16 @@ export default function ProgramaAcademicoDetalle() {
             )}
           </div>
 
-          <ContactCard programTitle={program.title} />
+          <ContactCard
+            programTitle={program.title}
+            image={program.image}
+            pricing={{
+              badge: 'Costos referenciales',
+              headline: `Inversión en ${program.title}`,
+              items: program.costs,
+              note: 'Valores de referencia; tu asesor te confirma el costo total actualizado.',
+            }}
+          />
         </Container>
       </section>
 
