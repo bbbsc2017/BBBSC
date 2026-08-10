@@ -1,7 +1,6 @@
 import { academicPrograms } from '../../data/academicPrograms'
 import { Container } from '../ui/Container'
 import { SectionHeading } from '../ui/SectionHeading'
-import { CTAButton } from '../ui/CTAButton'
 import { GradientBlob } from '../ui/GradientBlob'
 import { ImageLinkCard } from '../ui/ImageLinkCard'
 
@@ -27,8 +26,6 @@ export function AcademicProgramsGrid() {
             />
           ))}
         </div>
-
-        <CTAButton to="/programas-academicos">Ver programas académicos</CTAButton>
       </Container>
     </section>
   )

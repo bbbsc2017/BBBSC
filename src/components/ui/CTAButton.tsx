@@ -16,7 +16,7 @@ export function CTAButton({ to, href, children, variant = 'primary', icon = true
     'inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold transition-all duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand'
 
   const variants: Record<string, string> = {
-    primary: 'bg-brand text-ink shadow-brand hover:-translate-y-0.5 hover:bg-brand-400',
+    primary: 'bg-brand text-white shadow-brand hover:-translate-y-0.5 hover:bg-brand-400',
     secondary: 'bg-white text-ink hover:-translate-y-0.5 hover:bg-white/90',
     ghost: 'border border-white/20 text-white hover:border-brand hover:text-brand',
   }

@@ -2,6 +2,7 @@ import { Globe2, GraduationCap, Plane, Sparkles } from 'lucide-react'
 import { CTAButton } from '../ui/CTAButton'
 import { Container } from '../ui/Container'
 import { GradientBlob } from '../ui/GradientBlob'
+import { HeroBackgroundCarousel } from './HeroBackgroundCarousel'
 
 const stats = [
   { label: 'Años de experiencia', value: '10+' },
@@ -11,7 +12,8 @@ const stats = [
 
 export function Hero() {
   return (
-    <section className="relative overflow-hidden bg-ink-mesh pb-20 pt-16 sm:pb-28 sm:pt-24">
+    <section className="relative overflow-hidden bg-ink pb-20 pt-16 sm:pb-28 sm:pt-24">
+      <HeroBackgroundCarousel />
       <GradientBlob tone="brand" className="left-[-10%] top-10 size-72 sm:size-96" />
       <GradientBlob tone="brand" className="bottom-[-10%] right-[-5%] size-64 sm:size-80" />
 
@@ -31,7 +33,7 @@ export function Hero() {
         </p>
 
         <div className="flex flex-wrap items-center justify-center gap-4">
-          <CTAButton to="/programas-culturales">Viaja y Aprende</CTAButton>
+          <CTAButton to="/contacto">Viaja y Aprende</CTAButton>
           <CTAButton to="/contacto" variant="ghost" className="!border-white/20 !text-white hover:!border-brand hover:!text-brand">
             Habla con un asesor
           </CTAButton>

@@ -10,6 +10,8 @@ export interface CulturalProgram {
   duration: string
   keyFacts: string[]
   image: { src: string; alt: string }
+  faq: { question: string; answer: string }[]
+  pricing?: { badge?: string; headline?: string; items: string[]; note?: string }
 }
 
 export const culturalPrograms: CulturalProgram[] = [
@@ -44,6 +46,34 @@ export const culturalPrograms: CulturalProgram[] = [
       src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/View_of_Empire_State_Building_from_Rockefeller_Center_New_York_City_dllu_%28cropped%29.jpg/1280px-View_of_Empire_State_Building_from_Rockefeller_Center_New_York_City_dllu_%28cropped%29.jpg',
       alt: 'Vista de Nueva York desde el Rockefeller Center',
     },
+    faq: [
+      {
+        question: '¿Necesito hablar inglés avanzado?',
+        answer: 'No. Basta con un nivel B1 conversacional; lo perfeccionarás en el día a día trabajando en Estados Unidos.',
+      },
+      {
+        question: '¿Puedo aplicar si estudio una carrera virtual?',
+        answer: 'No, el programa exige ser estudiante universitario de tiempo completo en modalidad presencial y jornada diurna.',
+      },
+      {
+        question: '¿Cuánto dura la experiencia en total?',
+        answer: 'Cerca de 4 meses de trabajo (15 de mayo a 30 de agosto) más 30 días adicionales para viajar como turista.',
+      },
+      {
+        question: '¿Qué tipo de empleos voy a conseguir?',
+        answer: 'Tienes acceso a más de 100 opciones laborales en hoteles, restaurantes, parques acuáticos y de diversiones, y resorts.',
+      },
+    ],
+    pricing: {
+      badge: 'Inscripción y pagos',
+      headline: 'Inversión de Work and Travel USA',
+      items: [
+        'Valor de la inscripción: $250.000 COP',
+        'El programa se paga en 8 abonos desde $275 USD, en las fechas estipuladas en el contrato',
+        'Por pronto pago se aplica un descuento desde $25 USD en el abono a realizar',
+      ],
+      note: 'Valores de referencia; tu asesor te confirma el plan de pagos exacto según tu fecha de inscripción.',
+    },
   },
   {
     slug: 'trainee-and-internship',
@@ -71,6 +101,25 @@ export const culturalPrograms: CulturalProgram[] = [
       src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/bf/Golden_Gate_Bridge_as_seen_from_Battery_East.jpg/1280px-Golden_Gate_Bridge_as_seen_from_Battery_East.jpg',
       alt: 'Puente Golden Gate en San Francisco, Estados Unidos',
     },
+    faq: [
+      {
+        question: '¿Cuál es la diferencia entre Internship y Trainee?',
+        answer:
+          'Internship es para estudiantes en último semestre o recién graduados (máximo 12 meses post-graduación). Trainee es para profesionales con mínimo 1 año de experiencia con título, o 5 años sin título.',
+      },
+      {
+        question: '¿En qué áreas puedo aplicar?',
+        answer: 'Principalmente en negocios, ingeniería y hotelería, según tu perfil académico o profesional.',
+      },
+      {
+        question: '¿Cuánto dura el programa?',
+        answer: 'Entre 6 y 18 meses, dependiendo del programa específico al que apliques.',
+      },
+      {
+        question: '¿Qué documentos necesito para inscribirme?',
+        answer: 'Pasaporte vigente, CV en inglés y certificado de estudios o diploma.',
+      },
+    ],
   },
   {
     slug: 'espana-ti',
@@ -98,6 +147,25 @@ export const culturalPrograms: CulturalProgram[] = [
       src: 'https://upload.wikimedia.org/wikipedia/commons/e/ef/SF_maig_2_cropped.jpg',
       alt: 'Sagrada Família en Barcelona, España',
     },
+    faq: [
+      {
+        question: '¿Necesito experiencia previa para aplicar?',
+        answer:
+          'Los profesionales deben tener mínimo 2 años de experiencia laboral; si eres estudiante de tiempo completo no se exige experiencia previa.',
+      },
+      {
+        question: '¿En qué sectores puedo trabajar?',
+        answer: 'En reconocidos hoteles y restaurantes de España, dentro de la industria de hotelería, turismo y gastronomía.',
+      },
+      {
+        question: '¿El programa incluye seguro médico?',
+        answer: 'Sí, incluye seguro de emergencias médicas durante toda tu estadía.',
+      },
+      {
+        question: '¿Cuánto tiempo puedo permanecer trabajando?',
+        answer: 'Hasta 12 meses, en cualquier campo ocupacional relacionado con tu perfil.',
+      },
+    ],
   },
   {
     slug: 'asia',
@@ -124,6 +192,24 @@ export const culturalPrograms: CulturalProgram[] = [
       src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Mal%C3%A9.jpg/1280px-Mal%C3%A9.jpg',
       alt: 'Vista de Malé, capital de las Islas Maldivas',
     },
+    faq: [
+      {
+        question: '¿Qué experiencia necesito para aplicar?',
+        answer: 'Mínimo 2 años de experiencia certificada en gastronomía, hotelería o turismo.',
+      },
+      {
+        question: '¿Qué nivel de inglés piden?',
+        answer: 'Nivel B2 conversacional.',
+      },
+      {
+        question: '¿A qué destinos puedo ir?',
+        answer: 'Tailandia, Emiratos Árabes e Islas Maldivas, en establecimientos de alta categoría.',
+      },
+      {
+        question: '¿Qué incluye el programa?',
+        answer: 'Asignación de oferta laboral, seguro médico internacional, y vivienda y alimentación incluidas.',
+      },
+    ],
   },
   {
     slug: 'teacher-exchange',
@@ -151,6 +237,24 @@ export const culturalPrograms: CulturalProgram[] = [
       src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Front_view_of_Statue_of_Liberty_%28cropped%29.jpg/1280px-Front_view_of_Statue_of_Liberty_%28cropped%29.jpg',
       alt: 'Estatua de la Libertad en Nueva York',
     },
+    faq: [
+      {
+        question: '¿Qué experiencia docente necesito?',
+        answer: 'Licenciatura completa y al menos 2 años de experiencia como docente.',
+      },
+      {
+        question: '¿Qué nivel de inglés se requiere?',
+        answer: 'Nivel B2-C1, es decir, avanzado.',
+      },
+      {
+        question: '¿Cuánto tiempo puedo enseñar en Estados Unidos?',
+        answer: 'Hasta 5 años, bajo visa J-1.',
+      },
+      {
+        question: '¿En qué estados suelen ubicar a los docentes?',
+        answer: 'Con frecuencia en Texas, Carolina del Norte, Florida, Virginia y Arizona.',
+      },
+    ],
   },
   {
     slug: 'teacher-assistant',
@@ -178,6 +282,24 @@ export const culturalPrograms: CulturalProgram[] = [
       src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Chicago_River_ferry_b.jpg/1280px-Chicago_River_ferry_b.jpg',
       alt: 'Río Chicago y horizonte de la ciudad, Estados Unidos',
     },
+    faq: [
+      {
+        question: '¿Necesito ser profesional graduado?',
+        answer: 'No, basta con haber cursado mínimo sexto semestre, o estar hasta 12 meses después de graduarte.',
+      },
+      {
+        question: '¿Necesito licencia de enseñanza en Estados Unidos?',
+        answer: 'No, el programa no la exige.',
+      },
+      {
+        question: '¿Cuánto se gana?',
+        answer: 'La remuneración es desde $14 USD por hora.',
+      },
+      {
+        question: '¿Cuánto dura el programa?',
+        answer: 'Entre 1 y 3 años, bajo visa J-1.',
+      },
+    ],
   },
   {
     slug: 'aupair',
@@ -205,6 +327,24 @@ export const culturalPrograms: CulturalProgram[] = [
       src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/ISH_WC_Boston4.jpg/1280px-ISH_WC_Boston4.jpg',
       alt: 'Vista de Boston, Estados Unidos',
     },
+    faq: [
+      {
+        question: '¿Cuál es el rango de edad para aplicar?',
+        answer: 'Entre 18 y 26 años.',
+      },
+      {
+        question: '¿Necesito experiencia cuidando niños?',
+        answer: 'Sí, entre 1000 y 1500 horas de experiencia certificada.',
+      },
+      {
+        question: '¿Qué incluye el programa?',
+        answer: 'Alojamiento, alimentación y compensación económica, más seguro de emergencias médicas.',
+      },
+      {
+        question: '¿Puedo elegir a la familia anfitriona?',
+        answer: 'Sí, mediante entrevistas previas con familias seleccionadas y verificadas por el sponsor.',
+      },
+    ],
   },
 ]
 

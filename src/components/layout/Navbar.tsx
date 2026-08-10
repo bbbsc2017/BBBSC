@@ -8,19 +8,16 @@ import { CTAButton } from '../ui/CTAButton'
 
 interface NavGroup {
   label: string
-  indexTo: string
   items: { label: string; to: string }[]
 }
 
 const groups: NavGroup[] = [
   {
     label: 'Programas Culturales',
-    indexTo: '/programas-culturales',
     items: culturalPrograms.map((program) => ({ label: program.title, to: `/programas-culturales/${program.slug}` })),
   },
   {
     label: 'Programas Académicos',
-    indexTo: '/programas-academicos',
     items: academicPrograms.map((program) => ({ label: program.title, to: `/programas-academicos/${program.slug}` })),
   },
 ]
@@ -70,13 +67,10 @@ export function Navbar() {
 
           {groups.map((group) => (
             <div key={group.label} className="group relative">
-              <Link
-                to={group.indexTo}
-                className="flex items-center gap-1 rounded-full px-4 py-2 text-sm font-semibold text-white/70 transition-colors hover:text-brand"
-              >
+              <span className="flex cursor-default items-center gap-1 rounded-full px-4 py-2 text-sm font-semibold text-white/70 transition-colors group-hover:text-brand">
                 {group.label}
                 <ChevronDown className="size-3.5 transition-transform group-hover:rotate-180" />
-              </Link>
+              </span>
               <div className="invisible absolute left-0 top-full w-72 translate-y-1 opacity-0 transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
                 <div className="mt-2 overflow-hidden rounded-2xl border border-white/10 bg-ink-800 p-2 shadow-xl shadow-black/40">
                   {group.items.map((item) => (
@@ -100,14 +94,6 @@ export function Navbar() {
             }
           >
             Universidades
-          </NavLink>
-          <NavLink
-            to="/contacto"
-            className={({ isActive }) =>
-              `rounded-full px-4 py-2 text-sm font-semibold transition-colors ${isActive ? 'text-brand' : 'text-white/70 hover:text-brand'}`
-            }
-          >
-            Contáctanos
           </NavLink>
         </nav>
 
@@ -136,13 +122,7 @@ export function Navbar() {
             </Link>
             {groups.map((group) => (
               <div key={group.label} className="py-1">
-                <Link
-                  to={group.indexTo}
-                  onClick={() => setOpen(false)}
-                  className="block rounded-lg px-3 py-2.5 text-sm font-bold text-white"
-                >
-                  {group.label}
-                </Link>
+                <span className="block rounded-lg px-3 py-2.5 text-sm font-bold text-white">{group.label}</span>
                 <div className="flex flex-col">
                   {group.items.map((item) => (
                     <Link
@@ -160,9 +140,11 @@ export function Navbar() {
             <Link to="/universidades" onClick={() => setOpen(false)} className="rounded-lg px-3 py-2.5 text-sm font-semibold text-white/80">
               Universidades
             </Link>
-            <Link to="/contacto" onClick={() => setOpen(false)} className="rounded-lg px-3 py-2.5 text-sm font-semibold text-white/80">
-              Contáctanos
-            </Link>
+            <div className="pt-3">
+              <CTAButton to="/contacto" icon={false} className="w-full" >
+                Viaja y Aprende
+              </CTAButton>
+            </div>
           </nav>
         </div>
       )}

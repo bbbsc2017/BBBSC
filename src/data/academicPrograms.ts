@@ -10,6 +10,7 @@ export interface AcademicProgram {
   costs: string[]
   universitySlugs: string[]
   image: { src: string; alt: string }
+  faq: { question: string; answer: string }[]
 }
 
 export const academicPrograms: AcademicProgram[] = [
@@ -39,6 +40,24 @@ export const academicPrograms: AcademicProgram[] = [
       src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Toronto_Skyline_from_Olympic_Island%2C_June_20_2026_%285-3_cropped%29.jpg/1280px-Toronto_Skyline_from_Olympic_Island%2C_June_20_2026_%285-3_cropped%29.jpg',
       alt: 'Horizonte de Toronto, Canadá',
     },
+    faq: [
+      {
+        question: '¿Qué edad mínima piden?',
+        answer: '18 años.',
+      },
+      {
+        question: '¿Qué nivel de inglés necesito?',
+        answer: 'Nivel B2-C1, es decir, avanzado.',
+      },
+      {
+        question: '¿Puedo trabajar mientras estudio?',
+        answer: 'El programa exige estar estudiando o trabajando, con certificado estudiantil o laboral con permiso no remunerado.',
+      },
+      {
+        question: '¿Con qué universidad tiene convenio este programa?',
+        answer: 'Con Cape Breton University, en la isla de Cape Breton, Nueva Escocia.',
+      },
+    ],
   },
   {
     slug: 'polonia',
@@ -66,6 +85,24 @@ export const academicPrograms: AcademicProgram[] = [
       src: 'https://upload.wikimedia.org/wikipedia/commons/3/35/Aleja_Niepdleglosci_Warsaw_2022_aerial_%28cropped%29.jpg',
       alt: 'Vista aérea de Varsovia, Polonia',
     },
+    faq: [
+      {
+        question: '¿En qué universidad estudiaré?',
+        answer: 'En la Universidad de Vistula, en Varsovia.',
+      },
+      {
+        question: '¿Qué documentos necesito?',
+        answer: 'Certificado de bachillerato apostillado y pasaporte vigente, entre otros.',
+      },
+      {
+        question: '¿Qué puedo estudiar?',
+        answer: 'Carreras vocacionales en negocios, tecnología, turismo y marketing.',
+      },
+      {
+        question: '¿Es más económico que otros destinos europeos?',
+        answer: 'Sí, sus costos son más accesibles frente a otras opciones en Europa.',
+      },
+    ],
   },
   {
     slug: 'australia',
@@ -88,6 +125,24 @@ export const academicPrograms: AcademicProgram[] = [
       src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Sydney_Australia._%2821339175489%29.jpg/1280px-Sydney_Australia._%2821339175489%29.jpg',
       alt: 'Ópera de Sídney, Australia',
     },
+    faq: [
+      {
+        question: '¿Puedo trabajar y estudiar al mismo tiempo?',
+        answer: 'Sí, es un programa combinado de trabajo con cursos de inglés o formación profesional.',
+      },
+      {
+        question: '¿Qué nivel de inglés piden?',
+        answer: 'Nivel avanzado.',
+      },
+      {
+        question: '¿Necesito ser egresado de pregrado?',
+        answer: 'Sí, junto con soporte financiero comprobable.',
+      },
+      {
+        question: '¿Qué cubren los pagos del programa?',
+        answer: 'El primer pago cubre escuela y CoE; el segundo, seguro y trámite de visa.',
+      },
+    ],
   },
   {
     slug: 'malta',
@@ -110,6 +165,24 @@ export const academicPrograms: AcademicProgram[] = [
       src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/St_Sebastian_Curtain_%28cropped%29.jpg/1280px-St_Sebastian_Curtain_%28cropped%29.jpg',
       alt: 'Fortificaciones de La Valeta, Malta',
     },
+    faq: [
+      {
+        question: '¿El programa es solo de inglés?',
+        answer: 'Puede ser un curso intensivo de inglés o un programa combinado con exploración cultural.',
+      },
+      {
+        question: '¿Qué edad mínima piden?',
+        answer: '18 años.',
+      },
+      {
+        question: '¿Es un destino económico?',
+        answer: 'Sí, tiene un costo de vida más accesible que otros destinos europeos.',
+      },
+      {
+        question: '¿Qué necesito para aplicar?',
+        answer: 'Pasaporte vigente y soporte financiero comprobable.',
+      },
+    ],
   },
 ]
 

@@ -7,6 +7,8 @@ import { Container } from '../components/ui/Container'
 import { InfoList } from '../components/ui/InfoList'
 import { ContactCard } from '../components/ui/ContactCard'
 import { ProgramCard } from '../components/ui/ProgramCard'
+import { PriceCard } from '../components/ui/PriceCard'
+import { ProgramFAQ } from '../components/ui/ProgramFAQ'
 import { culturalPrograms, getCulturalProgram } from '../data/culturalPrograms'
 import { SITE } from '../lib/site'
 
@@ -14,7 +16,7 @@ export default function ProgramaCulturalDetalle() {
   const { slug = '' } = useParams()
   const program = getCulturalProgram(slug)
 
-  if (!program) return <Navigate to="/programas-culturales" replace />
+  if (!program) return <Navigate to="/" replace />
 
   const related = culturalPrograms.filter((item) => item.slug !== program.slug).slice(0, 3)
 
@@ -38,7 +40,7 @@ export default function ProgramaCulturalDetalle() {
         description={program.tagline}
         breadcrumbs={[
           { label: 'Inicio', to: '/' },
-          { label: 'Programas culturales', to: '/programas-culturales' },
+          { label: 'Programas culturales' },
           { label: program.title },
         ]}
       />
@@ -90,6 +92,10 @@ export default function ProgramaCulturalDetalle() {
                 </div>
               </div>
             </div>
+
+            <PriceCard programTitle={program.title} image={program.image} {...program.pricing} />
+
+            <ProgramFAQ items={program.faq} />
           </div>
 
           <ContactCard programTitle={program.title} />

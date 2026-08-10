@@ -1,9 +1,7 @@
 import { Route, Routes } from 'react-router-dom'
 import { Layout } from './components/layout/Layout'
 import Home from './pages/Home'
-import ProgramasCulturalesIndex from './pages/ProgramasCulturalesIndex'
 import ProgramaCulturalDetalle from './pages/ProgramaCulturalDetalle'
-import ProgramasAcademicosIndex from './pages/ProgramasAcademicosIndex'
 import ProgramaAcademicoDetalle from './pages/ProgramaAcademicoDetalle'
 import UniversidadesIndex from './pages/UniversidadesIndex'
 import UniversidadDetalle from './pages/UniversidadDetalle'
@@ -17,9 +15,7 @@ function App() {
     <Routes>
       <Route element={<Layout />}>
         <Route index element={<Home />} />
-        <Route path="programas-culturales" element={<ProgramasCulturalesIndex />} />
         <Route path="programas-culturales/:slug" element={<ProgramaCulturalDetalle />} />
-        <Route path="programas-academicos" element={<ProgramasAcademicosIndex />} />
         <Route path="programas-academicos/:slug" element={<ProgramaAcademicoDetalle />} />
         <Route path="universidades" element={<UniversidadesIndex />} />
         <Route path="universidades/:slug" element={<UniversidadDetalle />} />

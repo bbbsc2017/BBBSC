@@ -1,5 +1,5 @@
 import { Link, Navigate, useParams } from 'react-router-dom'
-import { BadgeDollarSign, GraduationCap, ListChecks, Sparkles } from 'lucide-react'
+import { GraduationCap, ListChecks, Sparkles } from 'lucide-react'
 import { Seo } from '../components/Seo'
 import { DetailHero } from '../components/ui/DetailHero'
 import { DestinationBanner } from '../components/ui/DestinationBanner'
@@ -7,6 +7,8 @@ import { Container } from '../components/ui/Container'
 import { InfoList } from '../components/ui/InfoList'
 import { ContactCard } from '../components/ui/ContactCard'
 import { ImageLinkCard } from '../components/ui/ImageLinkCard'
+import { PriceCard } from '../components/ui/PriceCard'
+import { ProgramFAQ } from '../components/ui/ProgramFAQ'
 import { academicPrograms, getAcademicProgram } from '../data/academicPrograms'
 import { getUniversity } from '../data/universities'
 import { SITE } from '../lib/site'
@@ -15,7 +17,7 @@ export default function ProgramaAcademicoDetalle() {
   const { slug = '' } = useParams()
   const program = getAcademicProgram(slug)
 
-  if (!program) return <Navigate to="/programas-academicos" replace />
+  if (!program) return <Navigate to="/" replace />
 
   const relatedUniversities = program.universitySlugs.map((s) => getUniversity(s)).filter(Boolean)
   const otherDestinations = academicPrograms.filter((item) => item.slug !== program.slug)
@@ -40,7 +42,7 @@ export default function ProgramaAcademicoDetalle() {
         description={program.tagline}
         breadcrumbs={[
           { label: 'Inicio', to: '/' },
-          { label: 'Programas académicos', to: '/programas-academicos' },
+          { label: 'Programas académicos' },
           { label: program.country },
         ]}
       />
@@ -80,13 +82,16 @@ export default function ProgramaAcademicoDetalle() {
               </div>
             </div>
 
-            <div>
-              <h3 className="mb-4 flex items-center gap-2 text-base font-bold text-white">
-                <BadgeDollarSign className="size-5 text-brand" />
-                Costos referenciales
-              </h3>
-              <InfoList items={program.costs} tone="ink" />
-            </div>
+            <PriceCard
+              programTitle={program.title}
+              image={program.image}
+              badge="Costos referenciales"
+              headline={`Inversión en ${program.title}`}
+              items={program.costs}
+              note="Valores de referencia; tu asesor te confirma el costo total actualizado."
+            />
+
+            <ProgramFAQ items={program.faq} />
 
             {relatedUniversities.length > 0 && (
               <div>

@@ -2,7 +2,6 @@ import { culturalPrograms } from '../../data/culturalPrograms'
 import { Container } from '../ui/Container'
 import { SectionHeading } from '../ui/SectionHeading'
 import { ProgramCard } from '../ui/ProgramCard'
-import { CTAButton } from '../ui/CTAButton'
 
 export function CulturalProgramsGrid() {
   return (
@@ -27,10 +26,6 @@ export function CulturalProgramsGrid() {
             />
           ))}
         </div>
-
-        <CTAButton to="/programas-culturales" variant="secondary">
-          Ver todos los programas culturales
-        </CTAButton>
       </Container>
     </section>
   )

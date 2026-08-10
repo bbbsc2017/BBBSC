@@ -33,8 +33,8 @@ export function BobbyAdvice() {
               <PawPrint className="size-7" />
             </span>
             <div className="flex flex-col gap-3">
-              <span className="text-xs font-bold uppercase tracking-wider text-ink/70">El consejo de Bobby</span>
-              <h2 className="text-balance text-3xl font-extrabold text-ink sm:text-4xl">Los 3 pasos para tu viaje cultural</h2>
+              <span className="text-xs font-bold uppercase tracking-wider text-white/80">El consejo de Bobby</span>
+              <h2 className="text-balance text-3xl font-extrabold text-white sm:text-4xl">Los 3 pasos para tu viaje cultural</h2>
             </div>
 
             <div className="grid w-full grid-cols-1 gap-5 sm:grid-cols-3">
@@ -43,9 +43,9 @@ export function BobbyAdvice() {
                   <span className="flex size-9 items-center justify-center rounded-full bg-ink text-sm font-bold text-brand">
                     {index + 1}
                   </span>
-                  <Icon className="size-6 text-ink" />
-                  <h3 className="text-base font-bold text-ink">{title}</h3>
-                  <p className="text-sm leading-relaxed text-ink/70">{description}</p>
+                  <Icon className="size-6 text-white" />
+                  <h3 className="text-base font-bold text-white">{title}</h3>
+                  <p className="text-sm leading-relaxed text-white/80">{description}</p>
                 </div>
               ))}
             </div>

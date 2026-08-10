@@ -42,7 +42,7 @@ export function PromoBanners() {
               key={title}
               to={to}
               className={`group relative flex flex-col justify-between overflow-hidden rounded-3xl p-6 transition-transform duration-300 hover:-translate-y-1 ${
-                tone === 'ink' ? 'bg-ink text-white' : 'bg-brand-gradient text-ink'
+                tone === 'ink' ? 'bg-ink text-white' : 'bg-brand-gradient text-white'
               }`}
             >
               <div
@@ -54,14 +54,14 @@ export function PromoBanners() {
               <div className="relative flex flex-col gap-3">
                 <span
                   className={`flex size-10 items-center justify-center rounded-xl ${
-                    tone === 'ink' ? 'bg-brand text-ink' : 'bg-ink text-brand'
+                    tone === 'ink' ? 'bg-brand text-white' : 'bg-ink text-brand'
                   }`}
                 >
                   <Icon className="size-5" />
                 </span>
-                <span className="text-xs font-bold uppercase tracking-wide opacity-70">{eyebrow}</span>
+                <span className="text-xs font-bold uppercase tracking-wide opacity-80">{eyebrow}</span>
                 <h3 className="text-xl font-extrabold leading-snug">{title}</h3>
-                <p className={`text-sm leading-relaxed ${tone === 'ink' ? 'text-white/70' : 'text-ink/70'}`}>{description}</p>
+                <p className={`text-sm leading-relaxed ${tone === 'ink' ? 'text-white/70' : 'text-white/80'}`}>{description}</p>
               </div>
               <span className="relative mt-6 inline-flex items-center gap-1.5 text-sm font-bold underline-offset-4 group-hover:underline">
                 {cta} →
