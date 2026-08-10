@@ -47,14 +47,14 @@ export default function ProgramaCulturalDetalle() {
       <DestinationBanner image={program.image} caption={`${program.title} · ${program.country}`} />
 
       <section className="py-16 sm:py-20">
-        <Container className="grid grid-cols-1 gap-12 lg:grid-cols-[1.6fr_1fr]">
+        <Container className="grid grid-cols-1 items-start gap-12 lg:grid-cols-[1.6fr_1fr]">
           <div className="flex flex-col gap-12">
             <div>
               <h2 className="text-xl font-bold text-white">Sobre el programa</h2>
               <p className="mt-3 text-base leading-relaxed text-white/70">{program.description}</p>
             </div>
 
-            <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
+            <div className="grid grid-cols-1 items-start gap-8 sm:grid-cols-2">
               <div>
                 <h3 className="mb-4 flex items-center gap-2 text-base font-bold text-white">
                   <ListChecks className="size-5 text-brand" />
@@ -71,7 +71,7 @@ export default function ProgramaCulturalDetalle() {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+            <div className="grid grid-cols-1 items-start gap-5 sm:grid-cols-2">
               <div className="flex items-start gap-3 rounded-2xl border border-white/10 bg-ink-800 p-5">
                 <Clock className="mt-0.5 size-5 shrink-0 text-brand" />
                 <div>

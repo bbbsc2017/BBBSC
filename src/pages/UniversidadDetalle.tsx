@@ -50,9 +50,9 @@ export default function UniversidadDetalle() {
       <DestinationBanner image={university.image} caption={`${university.name} · ${university.city}`} />
 
       <section className="py-16 sm:py-20">
-        <Container className="grid grid-cols-1 gap-12 lg:grid-cols-[1.6fr_1fr]">
+        <Container className="grid grid-cols-1 items-start gap-12 lg:grid-cols-[1.6fr_1fr]">
           <div className="flex flex-col gap-12">
-            <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
+            <div className="grid grid-cols-1 items-start gap-8 sm:grid-cols-2">
               <div>
                 <h3 className="mb-4 flex items-center gap-2 text-base font-bold text-white">
                   <BookOpen className="size-5 text-brand" />

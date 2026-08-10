@@ -11,7 +11,13 @@ export interface CulturalProgram {
   keyFacts: string[]
   image: { src: string; alt: string }
   faq: { question: string; answer: string }[]
-  pricing?: { badge?: string; headline?: string; items: string[]; note?: string }
+  pricing?: {
+    badge?: string
+    headline?: string
+    price?: { amount: string; unit?: string }
+    items: string[]
+    note?: string
+  }
 }
 
 export const culturalPrograms: CulturalProgram[] = [
@@ -65,12 +71,13 @@ export const culturalPrograms: CulturalProgram[] = [
       },
     ],
     pricing: {
-      badge: 'Inscripción y pagos',
-      headline: 'Inversión de Work and Travel USA',
+      badge: 'Temporada 2027',
+      headline: 'Work and Travel USA',
+      price: { amount: 'Desde $275', unit: 'USD por abono · 8 pagos' },
       items: [
         'Valor de la inscripción: $250.000 COP',
-        'El programa se paga en 8 abonos desde $275 USD, en las fechas estipuladas en el contrato',
-        'Por pronto pago se aplica un descuento desde $25 USD en el abono a realizar',
+        'Pagos en las fechas estipuladas en el contrato',
+        'Por pronto pago, descuento desde $25 USD en el abono a realizar',
       ],
       note: 'Valores de referencia; tu asesor te confirma el plan de pagos exacto según tu fecha de inscripción.',
     },

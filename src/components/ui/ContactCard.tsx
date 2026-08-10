@@ -5,7 +5,13 @@ import { whatsappLink, SITE } from '../../lib/site'
 interface ContactCardProps {
   programTitle: string
   image?: { src: string; alt: string }
-  pricing?: { badge?: string; headline?: string; items: string[]; note?: string }
+  pricing?: {
+    badge?: string
+    headline?: string
+    price?: { amount: string; unit?: string }
+    items: string[]
+    note?: string
+  }
 }
 
 export function ContactCard({ programTitle, image, pricing }: ContactCardProps) {
@@ -23,6 +29,13 @@ export function ContactCard({ programTitle, image, pricing }: ContactCardProps) 
             </span>
           )}
           <h3 className="text-xl font-extrabold text-white">{pricing.headline ?? `Inversión de ${programTitle}`}</h3>
+
+          {pricing.price && (
+            <div className="flex flex-wrap items-end gap-2">
+              <span className="text-4xl font-extrabold text-white sm:text-5xl">{pricing.price.amount}</span>
+              {pricing.price.unit && <span className="pb-1 text-sm font-semibold text-white/60">{pricing.price.unit}</span>}
+            </div>
+          )}
 
           <ul className="flex flex-col gap-3">
             {pricing.items.map((item) => (
