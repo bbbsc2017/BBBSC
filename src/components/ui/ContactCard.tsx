@@ -31,13 +31,16 @@ export function ContactCard({ programTitle, image, pricing }: ContactCardProps) 
           <h3 className="text-xl font-extrabold text-white">{pricing.headline ?? `Inversión de ${programTitle}`}</h3>
 
           {pricing.price && (
-            <div className="flex flex-wrap items-end justify-center gap-2">
-              <span className="text-4xl font-extrabold text-white sm:text-5xl">{pricing.price.amount}</span>
-              {pricing.price.unit && <span className="pb-1 text-sm font-semibold text-white/60">{pricing.price.unit}</span>}
+            <div className="flex flex-col items-center gap-1">
+              <span className="text-xs font-bold uppercase tracking-widest text-white/50">Desde</span>
+              <div className="flex flex-wrap items-end justify-center gap-2">
+                <span className="text-6xl font-extrabold text-white sm:text-7xl">{pricing.price.amount}</span>
+                {pricing.price.unit && <span className="pb-2 text-sm font-semibold text-white/60">{pricing.price.unit}</span>}
+              </div>
             </div>
           )}
 
-          <ul className="flex w-full flex-col gap-3 text-left">
+          <ul className="flex w-full flex-col gap-5 text-left">
             {pricing.items.map((item) => (
               <li key={item} className="flex items-start gap-3 text-sm leading-relaxed text-white/80">
                 <span className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-brand text-white">
