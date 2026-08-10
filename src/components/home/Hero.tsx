@@ -2,7 +2,7 @@ import { Globe2, GraduationCap, Plane, Sparkles } from 'lucide-react'
 import { CTAButton } from '../ui/CTAButton'
 import { Container } from '../ui/Container'
 import { GradientBlob } from '../ui/GradientBlob'
-import { HeroImagePanel } from './HeroImagePanel'
+import { HeroDestinationsGallery } from './HeroDestinationsGallery'
 
 const stats = [
   { label: 'Años de experiencia', value: '10+' },
@@ -12,11 +12,11 @@ const stats = [
 
 export function Hero() {
   return (
-    <section className="relative overflow-hidden bg-ink-mesh py-16 sm:py-20 lg:py-28">
+    <section className="relative overflow-hidden bg-ink-mesh py-16 sm:py-20 lg:py-24">
       <GradientBlob tone="brand" className="left-[-15%] top-0 size-72 sm:size-96" />
 
-      <Container className="relative flex flex-col gap-14 lg:flex-row lg:items-center lg:gap-10">
-        <div className="flex flex-col items-start gap-7 text-left lg:w-1/2">
+      <Container className="relative flex flex-col gap-12">
+        <div className="flex flex-col items-start gap-7 text-left lg:max-w-2xl">
           <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-brand backdrop-blur">
             <Sparkles className="size-3.5" />
             Expertos en Work &amp; Travel y experiencias internacionales
@@ -60,8 +60,11 @@ export function Hero() {
           </div>
         </div>
 
-        <div className="lg:w-1/2">
-          <HeroImagePanel />
+        <div>
+          <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-white/40">
+            Elige tu próximo destino
+          </p>
+          <HeroDestinationsGallery />
         </div>
       </Container>
     </section>
