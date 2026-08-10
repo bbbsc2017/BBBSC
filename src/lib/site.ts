@@ -36,3 +36,7 @@ export function whatsappLink(message?: string) {
   const base = `https://wa.me/${SITE.whatsapp.replace('+', '')}`
   return message ? `${base}?text=${encodeURIComponent(message)}` : base
 }
+
+export function formatDate(iso: string) {
+  return new Date(`${iso}T00:00:00`).toLocaleDateString('es-CO', { day: 'numeric', month: 'long', year: 'numeric' })
+}

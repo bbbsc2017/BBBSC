@@ -25,4 +25,12 @@
   <url><loc>https://bbbsc.com/contacto</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://bbbsc.com/terminos-y-condiciones</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
   <url><loc>https://bbbsc.com/trabaja-con-nosotros</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+
+  <url><loc>https://bbbsc.com/blog</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://bbbsc.com/blog/como-diligenciar-el-ds-160</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://bbbsc.com/blog/preguntas-entrevista-visa-j1</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://bbbsc.com/blog/work-and-travel-usa-2027-fechas-clave</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://bbbsc.com/blog/por-que-woosong-university-corea</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://bbbsc.com/blog/primera-semana-trabajando-en-estados-unidos</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://bbbsc.com/blog/guia-entrevista-con-el-sponsor</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
 </urlset>

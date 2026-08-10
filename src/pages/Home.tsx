@@ -1,6 +1,6 @@
 import { Seo } from '../components/Seo'
 import { Hero } from '../components/home/Hero'
-import { PromoBanners } from '../components/home/PromoBanners'
+import { LatestNewsSection } from '../components/home/LatestNewsSection'
 import { AboutUs } from '../components/home/AboutUs'
 import { CulturalProgramsGrid } from '../components/home/CulturalProgramsGrid'
 import { AcademicProgramsGrid } from '../components/home/AcademicProgramsGrid'
@@ -37,7 +37,7 @@ export default function Home() {
         }}
       />
       <Hero />
-      <PromoBanners />
+      <LatestNewsSection />
       <AboutUs />
       <CulturalProgramsGrid />
       <AcademicProgramsGrid />
