@@ -26,6 +26,7 @@ const PORT = process.env.PORT || 4000
 const CLIENTIFY_API_KEY = process.env.CLIENTIFY_API_KEY
 const SESSION_SECRET = process.env.SESSION_SECRET
 const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || '').split(',').map((o) => o.trim()).filter(Boolean)
+const PROXY_STRIPS_API_PREFIX = process.env.PROXY_STRIPS_API_PREFIX === 'true'
 
 if (!CLIENTIFY_API_KEY) {
   console.error('[bbbsc-server] Falta CLIENTIFY_API_KEY en el archivo .env. El servidor no puede iniciar sin ella.')
@@ -53,6 +54,20 @@ setInterval(cleanupExpiredSessions, 60 * 60 * 1000)
 
 const app = express()
 app.set('trust proxy', 1)
+
+// Algunos proxies de OpenLiteSpeed eliminan el prefijo del contexto (`/api/`)
+// antes de reenviar la solicitud. Staging puede restaurarlo de forma explícita
+// sin cambiar el comportamiento local ni el de producción.
+if (PROXY_STRIPS_API_PREFIX) {
+  app.use((req, _res, next) => {
+    const requestPath = req.url.split('?', 1)[0]
+    if (requestPath === '/' || (!requestPath.startsWith('/api/') && requestPath !== '/api')) {
+      req.url = `/api${req.url}`
+    }
+    next()
+  })
+}
+
 app.use(cookieParser(SESSION_SECRET))
 app.use(
   cors({
