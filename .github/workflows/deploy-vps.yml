@@ -101,7 +101,16 @@ jobs:
           pm2 delete bbbsc-server >/dev/null 2>&1 || true
           cd "$DEPLOY_PATH/current/server" && pm2 start index.js --name bbbsc-server
           pm2 save
-          if ! curl --fail --silent --show-error --retry 4 --retry-delay 2 http://127.0.0.1:4000/api/health >/dev/null; then
+          api_ready=false
+          for attempt in $(seq 1 15); do
+            if curl --fail --silent http://127.0.0.1:4000/api/health >/dev/null 2>&1; then
+              api_ready=true
+              break
+            fi
+            sleep 2
+          done
+          if [ "$api_ready" != "true" ]; then
+            pm2 logs bbbsc-server --lines 100 --nostream || true
             if [ -n "$previous" ] && [ -d "$previous" ]; then
               ln -sfn "$previous" "$DEPLOY_PATH/current.next"
               mv -Tf "$DEPLOY_PATH/current.next" "$DEPLOY_PATH/current"
