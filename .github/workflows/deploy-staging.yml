@@ -129,7 +129,13 @@ jobs:
           cd "$DEPLOY_PATH/releases"
           ls -1dt */ 2>/dev/null | tail -n +6 | while read -r old_release; do rm -rf -- "$DEPLOY_PATH/releases/${old_release%/}"; done
           cd "$DEPLOY_PATH/shared/server/backups"
-          ls -1t *.sqlite3 2>/dev/null | tail -n +11 | while read -r old_backup; do rm -f -- "$old_backup"; done
+          find . -maxdepth 1 -type f -name '*.sqlite3' -printf '%T@ %f\n' \
+            | sort -nr \
+            | tail -n +11 \
+            | cut -d' ' -f2- \
+            | while IFS= read -r old_backup; do
+                [ -n "$old_backup" ] && rm -f -- "$old_backup"
+              done
           REMOTE
 
       - name: Verificar sitio de pruebas
