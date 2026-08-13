@@ -1,11 +1,9 @@
-import { useState, type FormEvent } from 'react'
+import { useEffect, useState, type FormEvent } from 'react'
 import { MessageCircle, Send } from 'lucide-react'
-
-interface LocalComment {
-  name: string
-  comment: string
-  date: string
-}
+import { fetchPostComments, type PublicComment } from '../../lib/api'
+import { formatDate } from '../../lib/site'
+import { executeRecaptcha } from '../../lib/recaptcha'
+import { RecaptchaNotice } from '../ui/RecaptchaNotice'
 
 interface CommentsSectionProps {
   postSlug: string
@@ -19,7 +17,11 @@ export function CommentsSection({ postSlug, postTitle }: CommentsSectionProps) {
   const [form, setForm] = useState(emptyForm)
   const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle')
   const [errorMessage, setErrorMessage] = useState('')
-  const [comments, setComments] = useState<LocalComment[]>([])
+  const [comments, setComments] = useState<PublicComment[]>([])
+
+  useEffect(() => {
+    fetchPostComments(postSlug).then(setComments)
+  }, [postSlug])
 
   function updateField(field: keyof typeof emptyForm, value: string) {
     setForm((prev) => ({ ...prev, [field]: value }))
@@ -31,6 +33,7 @@ export function CommentsSection({ postSlug, postTitle }: CommentsSectionProps) {
     setErrorMessage('')
 
     try {
+      const recaptchaToken = await executeRecaptcha('blog_comment')
       const response = await fetch('/api/comments', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -42,6 +45,7 @@ export function CommentsSection({ postSlug, postTitle }: CommentsSectionProps) {
           comment: form.comment,
           postSlug,
           postTitle,
+          recaptchaToken,
         }),
       })
 
@@ -51,10 +55,9 @@ export function CommentsSection({ postSlug, postTitle }: CommentsSectionProps) {
         throw new Error(data.error || 'No pudimos enviar tu comentario. Intenta de nuevo.')
       }
 
-      setComments((prev) => [
-        { name: `${form.firstName} ${form.lastName}`.trim(), comment: form.comment, date: 'Ahora' },
-        ...prev,
-      ])
+      if (data.comment) {
+        setComments((prev) => [data.comment, ...prev])
+      }
       setForm(emptyForm)
       setShowForm(false)
       setStatus('success')
@@ -143,6 +146,7 @@ export function CommentsSection({ postSlug, postTitle }: CommentsSectionProps) {
           </div>
 
           {status === 'error' && <p className="text-sm font-medium text-red-400">{errorMessage}</p>}
+          <RecaptchaNotice />
 
           <div className="flex items-center gap-3">
             <button
@@ -175,11 +179,11 @@ export function CommentsSection({ postSlug, postTitle }: CommentsSectionProps) {
 
       {comments.length > 0 ? (
         <ul className="flex flex-col gap-4">
-          {comments.map((item, index) => (
-            <li key={`${item.name}-${index}`} className="rounded-2xl border border-white/10 bg-ink-800 p-5">
+          {comments.map((item) => (
+            <li key={item.id} className="rounded-2xl border border-white/10 bg-ink-800 p-5">
               <div className="flex items-center justify-between gap-2">
                 <span className="text-sm font-bold text-white">{item.name}</span>
-                <span className="text-xs text-white/40">{item.date}</span>
+                <span className="text-xs text-white/40">{formatDate(item.date.slice(0, 10))}</span>
               </div>
               <p className="mt-2 text-sm leading-relaxed text-white/70">{item.comment}</p>
             </li>

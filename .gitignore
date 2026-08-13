@@ -11,6 +11,17 @@ node_modules
 dist
 dist-ssr
 *.local
+.env
+.env.*
+!.env.example
+server/.env
+server/data/
+server/uploads/
+*.sqlite
+*.sqlite3
+*.db
+.lighthouseci/
+coverage/
 .claude/settings.local.json
 
 # Editor directories and files

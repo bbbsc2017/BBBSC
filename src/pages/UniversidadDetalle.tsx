@@ -8,6 +8,7 @@ import { InfoList } from '../components/ui/InfoList'
 import { ContactCard } from '../components/ui/ContactCard'
 import { ImageLinkCard } from '../components/ui/ImageLinkCard'
 import { universities, getUniversity } from '../data/universities'
+import { SITE } from '../lib/site'
 
 export default function UniversidadDetalle() {
   const { slug = '' } = useParams()
@@ -22,12 +23,16 @@ export default function UniversidadDetalle() {
       <Seo
         title={`${university.name} — ${university.country}`}
         description={university.description}
-        path={`/universidades/${university.slug}`}
+        path={`/${university.slug}`}
+        image={university.image.src}
+        imageAlt={university.image.alt}
         jsonLd={{
           '@context': 'https://schema.org',
           '@type': 'CollegeOrUniversity',
           name: university.name,
           description: university.description,
+          image: university.image.src,
+          url: `${SITE.url}/${university.slug}`,
           address: { '@type': 'PostalAddress', addressLocality: university.city, addressCountry: university.country },
         }}
       />
@@ -78,7 +83,12 @@ export default function UniversidadDetalle() {
             </div>
           </div>
 
-          <ContactCard programTitle={university.name} image={university.image} />
+          <ContactCard
+            programTitle={university.name}
+            image={university.image}
+            formKey={`university_${university.slug}`}
+            interestTag={`interesado_${university.slug.replaceAll('-', '_')}`}
+          />
         </Container>
       </section>
 
@@ -89,7 +99,7 @@ export default function UniversidadDetalle() {
             {others.map((item) => (
               <ImageLinkCard
                 key={item.slug}
-                to={`/universidades/${item.slug}`}
+                to={`/${item.slug}`}
                 eyebrow={item.country}
                 title={item.name}
                 subtitle={item.city}

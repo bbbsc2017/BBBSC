@@ -1,4 +1,6 @@
 User-agent: *
 Allow: /
+Disallow: /intranet
+Disallow: /api/
 
 Sitemap: https://bbbsc.com/sitemap.xml

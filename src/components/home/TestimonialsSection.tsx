@@ -32,7 +32,7 @@ export function TestimonialsSection() {
   }
 
   return (
-    <section className="relative overflow-hidden py-20 sm:py-28">
+    <section className="relative overflow-hidden py-14 sm:py-20">
       <GradientBlob tone="brand" className="right-[-10%] top-10 size-72 sm:size-96" />
       <Container className="relative flex flex-col items-center gap-14">
         <SectionHeading
@@ -53,10 +53,10 @@ export function TestimonialsSection() {
                 className={`absolute inset-0 transition-opacity duration-700 ${i === index ? 'opacity-100' : 'pointer-events-none opacity-0'}`}
               >
                 <div className="absolute left-0 top-2 h-56 w-56 -rotate-6 overflow-hidden rounded-[2rem] border border-white/10 shadow-2xl shadow-black/40 sm:h-72 sm:w-72">
-                  <img src={testimonial.images[0].src} alt={testimonial.images[0].alt} className="size-full object-cover" />
+                  <img src={testimonial.images[0].src} alt={testimonial.images[0].alt} loading="lazy" decoding="async" className="size-full object-cover" />
                 </div>
                 <div className="absolute bottom-2 right-0 h-56 w-56 rotate-6 overflow-hidden rounded-[2rem] border-4 border-ink shadow-2xl shadow-black/40 sm:h-72 sm:w-72">
-                  <img src={testimonial.images[1].src} alt={testimonial.images[1].alt} className="size-full object-cover" />
+                  <img src={testimonial.images[1].src} alt={testimonial.images[1].alt} loading="lazy" decoding="async" className="size-full object-cover" />
                 </div>
               </div>
             ))}

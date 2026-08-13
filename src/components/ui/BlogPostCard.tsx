@@ -1,15 +1,15 @@
 import { Link } from 'react-router-dom'
 import { ArrowUpRight } from 'lucide-react'
-import type { BlogPost } from '../../data/blogPosts'
+import type { PublicPost } from '../../lib/api'
 import { formatDate } from '../../lib/site'
 
-const categoryTone: Record<BlogPost['category'], string> = {
+const categoryTone: Record<PublicPost['category'], string> = {
   Embajada: 'bg-blue-500/15 text-blue-300',
   Programas: 'bg-brand/15 text-brand',
   Consejos: 'bg-emerald-500/15 text-emerald-300',
 }
 
-export function BlogPostCard({ post, className = '' }: { post: BlogPost; className?: string }) {
+export function BlogPostCard({ post, className = '' }: { post: PublicPost; className?: string }) {
   return (
     <Link
       to={`/blog/${post.slug}`}

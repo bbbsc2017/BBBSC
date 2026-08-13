@@ -1,0 +1,403 @@
+// Departamentos, municipios y universidades de Colombia para los formularios de inscripción.
+// `key` conserva el mismo valor (sin tildes) que se usaba en el formulario anterior del sitio,
+// para mantener consistencia con los datos ya existentes en Clientify.
+
+export interface ColombiaDepartment {
+  key: string
+  label: string
+  municipios: string[]
+  universidades: string[]
+}
+
+export const colombiaDepartments: ColombiaDepartment[] = [
+  {
+    key: 'Amazonas',
+    label: 'Amazonas',
+    municipios: [
+      'Leticia', 'El Encanto', 'La Chorrera', 'La Pedrera', 'La Victoria', 'Miriti - Parana', 'Puerto Alegria',
+      'Puerto Arica', 'Puerto Nariño', 'Puerto Santander', 'Tarapaca',
+    ],
+    universidades: ['Universidad de la Amazonía', 'Universidad Nacional (Leticia)'],
+  },
+  {
+    key: 'Arauca',
+    label: 'Arauca',
+    municipios: ['Arauca', 'Arauquita', 'Cravo Norte', 'Fortul', 'Puerto Rondón', 'Saravena', 'Tame'],
+    universidades: ['Universidad EAFIT', 'Universidad San Buenaventura - IBE', 'Otra'],
+  },
+  {
+    key: 'Antioquia',
+    label: 'Antioquia',
+    municipios: [
+      'berrojal', 'Abriaquí', 'Alejandría', 'Amagá', 'Amalfi', 'Andes', 'Angelópolis', 'Angostura', 'Anorí', 'Anzá',
+      'Apartadó', 'Arboletes', 'Argelia', 'Armenia', 'Barbosa', 'Bello', 'Belmira', 'Betania', 'Betulia', 'Briceño',
+      'Buriticá', 'Cáceres', 'Caicedo', 'Caldas', 'Campamento', 'Cañagordas', 'Caracolí', 'Caramanta', 'Carepa',
+      'Carolina del Príncipe', 'Caucasia', 'Chigorodó', 'Cisneros', 'Ciudad Bolívar', 'Cocorna', 'Concepción',
+      'Concordia', 'Copacabana', 'Dabeiba', 'Donmatias', 'Ebéjico', 'El Bagre', 'El Carmen de Viboral', 'El Peñol',
+      'El Retiro', 'El Santuario', 'Entrerrios', 'Envigado', 'Fredonia', 'Frontino', 'Giraldo', 'Goradota',
+      'Gomez Plata', 'Granada', 'Guadalupe', 'Guarne', 'Guatapé', 'Heliconia', 'Hispania', 'Itagüí', 'Ituango',
+      'Jardín', 'Jericó', 'La Ceja', 'La Estrella', 'La Pintada', 'La Unión', 'Liborina', 'Maceo', 'Marinilla',
+      'Medellín', 'Montebello', 'Murindó', 'Mutatá', 'Nariño', 'Nechí', 'Necoclí', 'Olaya', 'Peque', 'Pueblorrico',
+      'Puerto Berrío', 'Puerto Nare', 'Puerto Triunfo', 'Remedios', 'Rionegro', 'Sabanalarga', 'Sabaneta', 'Salgar',
+      'San Andrés de Cuerquia', 'San Carlos', 'San Francisco', 'San Jerónimo', 'San José de la Montaña',
+      'San Juan de rabá', 'San Luis', 'San Pedro de los Milagros', 'San Pedro de Urabá', 'San Rafael', 'San Roque',
+      'San Vicente', 'Santa Bárbara', 'Santa Rosa de Osos', 'Santo Domingo', 'Segovia', 'Sonsón', 'Sopetrán',
+      'Támesis', 'Tarazá', 'Tarso', 'Titiribí', 'Toledo', 'Turbo', 'Uramita', 'Urrao', 'Valdivia', 'Valparaíso',
+      'Vegachí', 'Venecia', 'Vigía del Fuerte', 'Yalí', 'Yarumal', 'Yolombó', 'Yondó', 'Zaragoza',
+    ],
+    universidades: [
+      'UDEA - Universidad de Antioquia', 'Universidad EAFIT', 'Universidad de Medellin',
+      'Universidad Nacional (Medellín)', 'Univiersidad San Buenaventura - MDE',
+    ],
+  },
+  {
+    key: 'Atlantico',
+    label: 'Atlántico',
+    municipios: [
+      'Barranquilla', 'Baranoa', 'Campo De La Cruz', 'Candelaria', 'Galapa', 'Juan, De Acosta', 'Luruaco',
+      'Malambo', 'Manati', 'Palmar De Varela', 'Piojo', 'Polonuevo', 'Ponedera', 'Puerto Colombia', 'Repelon',
+      'Sabanagrande', 'Sabanalarga', 'Santa Lucia', 'Santo Tomas', 'Soledad', 'Suan', 'Tubara', 'Usiacuri',
+    ],
+    universidades: [
+      'Universidad del Atlántico', 'Universidad del Norte (Uninorte)', 'Universidad Simón Bolívar',
+      'Corporación Universitaria de la Costa (CUC)', 'Universidad Autónoma del Caribe', 'Otra',
+    ],
+  },
+  {
+    key: 'Bolivar',
+    label: 'Bolívar',
+    municipios: [
+      'Cartagena', 'Achi', 'Altos, Del, Rosario', 'Arenal', 'Arjona', 'Arroyohondo', 'Barranco De Loba', 'Calamar',
+      'Cantagallo', 'Cicuco', 'Cordoba', 'Clemencia', 'El Carmen De Bolivar', 'El Guamo', 'El Peñon',
+      'Hatillo De Loba', 'Magangue', 'Mahates', 'Margarita', 'Maria La Baja', 'Montecristo', 'Mompos', 'Morales',
+      'Norosi', 'Pinillos', 'Regidor', 'Rio Viejo', 'San Cristobal', 'San Estanislao', 'San Fernando', 'San Jacinto',
+      'San Jacinto Del Cauca', 'San Juan Nepomuceno', 'San, Martin De Loba', 'San Pablo', 'Santa Catalina',
+      'Santa Rosa', 'Santa Rosa Del Sur', 'Simiti', 'Soplaviento', 'Talaigua, Nuevo', 'Tiquisio', 'Turbaco',
+      'Turbana', 'Villanueva', 'Zambrano',
+    ],
+    universidades: ['Escuela Naval de Cadetes Almirante Padilla', 'Universidad de Córdoba', 'Otra'],
+  },
+  {
+    key: 'Boyaca',
+    label: 'Boyacá',
+    municipios: [
+      'Tunja', 'Almeida', 'Aquitania', 'Arcabuco', 'Belén', 'Berbeo', 'Betéitiva', 'Boavita', 'Boyacá', 'Briceño',
+      'Buena Vista', 'Busbanzá', 'Caldas', 'Campohermoso', 'Cerinza', 'Chinavita', 'Chiquinquirá', 'Chiscas',
+      'Chita', 'Chitaraque', 'Chivatá', 'Chíquiza', 'Ciénaga', 'Combita', 'Coper', 'Corrales', 'Covarachía',
+      'Cubará', 'Cucaita', 'Cuítiva', 'Duitama', 'El Cocuy', 'El Espino', 'Firavitoba', 'Floresta', 'Gachantivá',
+      'Gámeza', 'Garagoa', 'Guacamayas', 'Guateque', 'Guayatá', 'Güicán', 'Iza', 'Jenesano', 'Jericó', 'La Capilla',
+      'La Uvita', 'La Victoria', 'Labranzagrande', 'Macanal', 'Maripí', 'Miraflores', 'Mongua', 'Monguí',
+      'Moniquirá', 'Motavita', 'Muzo', 'Nobsa', 'Nuevo Colón', 'Oicatá', 'Otanche', 'Pachavita', 'Páez', 'Paipa',
+      'Pajarito', 'Panqueba', 'Pauna', 'Paya', 'Paz de Río', 'Pesca', 'Pisba', 'Puerto Boyacá', 'Quípama',
+      'Ramiriquí', 'Ráquira', 'Rondón', 'Saboyá', 'Sáchica', 'Samacá', 'San Eduardo', 'San José de Pare',
+      'San Luis de Gaceno', 'San Mateo', 'San Miguel de Sema', 'San Pablo de Borbur', 'Santa María',
+      'Santa Rosa de Viterbo', 'Santa Sofía', 'Santana', 'Sativanorte', 'Sativasur', 'Siachoque', 'Soatá', 'Socha',
+      'Socotá', 'Sogamoso', 'Somondoco', 'Sora', 'Soracá', 'Sotaquirá', 'Susacón', 'Sutamarchán', 'Sutatenza',
+      'Tasco', 'Tenza', 'Tibaná', 'Tibasosa', 'Tinjacá', 'Tipacoque', 'Toca', 'Togüí', 'Tópaga', 'Tota', 'Tununguá',
+      'Turmequé', 'Tuta', 'Tutazá', 'Úmbita', 'Ventaquemada', 'Viracachá', 'Zetaquira',
+    ],
+    universidades: [
+      'UPTC - Universidad Pedagógica y Tecnológica de Colombia', 'USTA - Universidad Santo Tomás de Aquino - TUN',
+      'Otra',
+    ],
+  },
+  {
+    key: 'Caldas',
+    label: 'Caldas',
+    municipios: [
+      'Manizales', 'Aguadas', 'Anserma', 'Aranzazu', 'Belalcázar', 'Chinchiná', 'Filadelfia', 'La Dorada',
+      'La Merced', 'Manzanares', 'Marmato', 'Marquetalia', 'Marulanda', 'Neira', 'Norcasia', 'Pácora', 'Palestina',
+      'Pensilvania', 'Riosucio', 'Risaralda', 'Salamina', 'Samaná', 'San José', 'Supía', 'Victoria', 'Villamaría',
+      'Viterbo',
+    ],
+    universidades: [
+      'UCALDAS - Universidad De Caldas', 'Universidad Nacional de Colombia - Sede Manizales',
+      'Universidad Autónoma de Manizales', 'Otra',
+    ],
+  },
+  {
+    key: 'Caqueta',
+    label: 'Caquetá',
+    municipios: [
+      'Florencia', 'Albania', 'Belén de los Andaquíes', 'Cartagena del Chairá', 'Curillo', 'El Doncello',
+      'El Paujil', 'La Montañita', 'Milán', 'Morelia', 'Puerto Rico', 'San José del Fragua', 'San Vicente del Caguán',
+      'Solano', 'Solita', 'Valparaíso',
+    ],
+    universidades: ['Universidad de la Amazonia', 'Universidad Minuto de Dios - Sede Caquetá', 'Otra'],
+  },
+  {
+    key: 'Casanare',
+    label: 'Casanare',
+    municipios: [
+      'Yopal', 'Aguazul', 'Chámeza', 'Hato Corozal', 'La Salina', 'Maní', 'Monterrey', 'Nunchía', 'Orocué',
+      'Paz de Ariporo', 'Pore', 'Recetor', 'Sabanalarga', 'Sácama', 'San Luis de Palenque', 'Támara', 'Tauramena',
+      'Trinidad', 'Villanueva',
+    ],
+    universidades: ['Corporacion Universitaria Remington', 'Corporación Universitaria Internacional de Colombia', 'Otra'],
+  },
+  {
+    key: 'Cauca',
+    label: 'Cauca',
+    municipios: [
+      'Popayán', 'Almaguer', 'Argelia', 'Balboa', 'Bolívar', 'Buenos Aires', 'Cajibío', 'Caldono', 'Caloto',
+      'Corinto', 'El Tambo', 'Florencia', 'Guachené', 'Guapí', 'Inzá', 'Jambaló', 'La Sierra', 'La Vega',
+      'López de Micay', 'Mercaderes', 'Miranda', 'Morales', 'Padilla', 'Páez', 'Patía', 'Piamonte', 'Piendamó',
+      'Puerto Tejada', 'Puracé', 'Rosas', 'San Sebastián', 'Santa Rosa', 'Silvia', 'Sotará', 'Suárez', 'Timbío',
+      'Timbiquí', 'Toribío', 'Totoró', 'Villa Rica',
+    ],
+    universidades: ['Universidad del Cauca', 'Corporación Universitaria Autónoma del Cauca', 'Otra'],
+  },
+  {
+    key: 'Cesar',
+    label: 'Cesar',
+    municipios: [
+      'Valledupar', 'Aguachica', 'Agustín Codazzi', 'Astrea', 'Becerril', 'Bosconia', 'Chimichagua', 'Chiriguaná',
+      'Curumaní', 'El Copey', 'El Paso', 'Gamarra', 'González', 'La Gloria', 'La Jagua de Ibirico',
+      'Manaure Balcón del Cesar', 'Pailitas', 'Pelaya', 'Pueblo Bello', 'Río de Oro', 'San Alberto', 'San Diego',
+      'San Martín', 'Tamalameque',
+    ],
+    universidades: ['UNICESAR - Universidad Popular del Cesar', 'Fundación Universitaria del Área Andina', 'Otra'],
+  },
+  {
+    key: 'Choco',
+    label: 'Chocó',
+    municipios: [
+      'Quibdó', 'Acandí', 'Alto Baudó', 'Atrato', 'Bagadó', 'Bahía Solano', 'Bajo Baudó', 'Bojayá',
+      'Cantón de San Pablo', 'Carmen del Darién', 'Cértegui', 'Condoto', 'El Carmen de Atrato',
+      'El Litoral de San Juan', 'Istmina', 'Juradó', 'Lloró', 'Medio Atrato', 'Medio Baudó', 'Medio San Juan',
+      'Nóvita', 'Nuquí', 'Río Iró', 'Río Quito', 'Riosucio', 'San José del Palmar', 'Sipí', 'Tadó', 'Unguía',
+      'Unión Panamericana',
+    ],
+    universidades: ['Universidad Tecnológica del Chocó', 'UNIMINUTO - Corporacion Universitaria Minuto de Dios - CHO', 'Otra'],
+  },
+  {
+    key: 'Cordoba',
+    label: 'Córdoba',
+    municipios: [
+      'Montería', 'Ayapel', 'Buenavista', 'Canalete', 'Cereté', 'Chimá', 'Chinú', 'Ciénaga de Oro', 'Cotorra',
+      'La Apartada', 'Lorica', 'Los Córdobas', 'Momil', 'Montelíbano', 'Moñitos', 'Planeta Rica', 'Pueblo Nuevo',
+      'Puerto Escondido', 'Puerto Libertador', 'Purísima', 'Sahagún', 'San Andrés de Sotavento', 'San Antero',
+      'San Bernardo del Viento', 'San Carlos', 'San Pelayo', 'Tierralta', 'Tuchín', 'Valencia',
+    ],
+    universidades: [
+      'Universidad de Córdoba', 'Corporación Universitaria del Caribe (CECAR)',
+      'Universidad Cooperativa de Colombia - Sede Montería', 'Otra',
+    ],
+  },
+  {
+    key: 'Cundinamarca',
+    label: 'Cundinamarca',
+    municipios: [
+      'Bogotá', 'Agua de Dios', 'Albán', 'Anapoima', 'Anolaima', 'Apulo', 'Arbeláez', 'Beltrán', 'Bituima',
+      'Bojacá', 'Cabrera', 'Cachipay', 'Cajicá', 'Caparrapí', 'Cáqueza', 'Carmen de Carupa', 'Chaguaní', 'Chía',
+      'Chipaque', 'Choachí', 'Chocontá', 'Cogua', 'Cota', 'Cucunubá', 'El Colegio', 'El Peñón', 'El Rosal',
+      'Facatativá', 'Fómeque', 'Fosca', 'Funza', 'Fúquene', 'Fusagasugá', 'Gachalá', 'Gachancipá', 'Gachetá',
+      'Gama', 'Girardot', 'Granada', 'Guachetá', 'Guaduas', 'Guasca', 'Guataquí', 'Guatavita',
+      'Guayabal de Síquima', 'Guayabetal', 'Gutiérrez', 'Jerusalén', 'Junín', 'La Calera', 'La Mesa', 'La Palma',
+      'La Peña', 'La Vega', 'Lenguazaque', 'Machetá', 'Madrid', 'Manta', 'Medina', 'Mosquera', 'Nariño', 'Nemocón',
+      'Nilo', 'Nimaima', 'Nocaima', 'Pacho', 'Paime', 'Pandi', 'Paratebueno', 'Pasca', 'Puerto Salgar', 'Pulí',
+      'Quebradanegra', 'Quetame', 'Quipile', 'Rafael Reyes', 'San Antonio del Tequendama', 'San Bernardo',
+      'San Cayetano', 'San Francisco', 'San Juan de Río Seco', 'Sasaima', 'Sesquilé', 'Sibaté', 'Silvania',
+      'Simijaca', 'Soacha', 'Sopó', 'Subachoque', 'Suesca', 'Supatá', 'Susa', 'Sutatausa', 'Tabio', 'Tausa',
+      'Tena', 'Tenjo', 'Tibacuy', 'Tibirita', 'Tocaima', 'Tocancipá', 'Topaipí', 'Ubalá', 'Ubaque', 'Ubaté', 'Une',
+      'Útica', 'Venecia', 'Vergara', 'Vianí', 'Villagómez', 'Villapinzón', 'Villeta', 'Viotá', 'Yacopí', 'Zipacón',
+      'Zipaquirá',
+    ],
+    universidades: [
+      'CUN - Corporación Unificada Nacional de Educación Superior - BTA', 'IBERO - Corporación Universitaria Iberoamericana',
+      'UCOMPENSAR - Universidad Compensar', 'UDCA - Universidad de Ciencias Aplicadas y Ambientales',
+      'UEC - Universidad Externado de Colombia', 'UNAL - Universidad Nacional de Colombia - BOG',
+      'UNIAGUSTINIANA - Universitaria Agustiniana', 'UNIANDINA - Fundación Universitaria del Área Andina',
+      'UNIMINUTO - Corporación Universitaria Minuto de Dios - BTA', 'UNILIBRE - Universidad Libre de Colombia',
+      'UNISABANA - Universidad de La Sabana', 'Universidad Central', 'Universidad Colegio Mayor de Cundinamarca',
+      'Universidad de Cundinamarca', 'ULASALLE - Universidad de La Salle', 'UNIANDES - Universidad de Los Andes',
+      'Universidad ECCI', 'Universidad El Bosque', 'UTADEO - Universidad Jorge Tadeo Lozano',
+      'Universidad Militar Nueva Granada',
+    ],
+  },
+  {
+    key: 'Guainia',
+    label: 'Guainía',
+    municipios: ['Inírida', 'Barranco Minas', 'Cacahual', 'La Guadalupe', 'Mapiripana', 'Morichal', 'Pana Pana', 'Puerto Colombia', 'San Felipe'],
+    universidades: ['Instituciones Regionales de Educación Superior', 'Otra'],
+  },
+  {
+    key: 'Guaviare',
+    label: 'Guaviare',
+    municipios: ['San José del Guaviare', 'Calamar', 'El Retorno', 'Miraflores'],
+    universidades: ['Universidad de la Amazonia', 'Otra'],
+  },
+  {
+    key: 'Huila',
+    label: 'Huila',
+    municipios: [
+      'Neiva', 'Acevedo', 'Agrado', 'Aipe', 'Algeciras', 'Altamira', 'Baraya', 'Campoalegre', 'Colombia', 'Elías',
+      'Garzón', 'Gigante', 'Guadalupe', 'Hobo', 'Íquira', 'Isnos', 'La Argentina', 'La Plata', 'Nátaga', 'Oporapa',
+      'Paicol', 'Palermo', 'Palestina', 'Pital', 'Pitalito', 'Rivera', 'Saladoblanco', 'San Agustín', 'Santa María',
+      'Suaza', 'Tarqui', 'Tello', 'Teruel', 'Tesalia', 'Timaná', 'Villavieja', 'Yaguará',
+    ],
+    universidades: ['CORHUILA - Corporación Universitaria del Huila Corhuila', 'USCO - Universidad Surcolombiana', 'Otra'],
+  },
+  {
+    key: 'LaGuajira',
+    label: 'La Guajira',
+    municipios: [
+      'Riohacha', 'Albania', 'Barrancas', 'Dibulla', 'Distracción', 'El Molino', 'Fonseca', 'Hatonuevo',
+      'La Jagua del Pilar', 'Maicao', 'Manaure', 'San Juan del Cesar', 'Uribia', 'Urumita', 'Villanueva',
+    ],
+    universidades: ['Universidad del Magdalena', 'Otra'],
+  },
+  {
+    key: 'Magdalena',
+    label: 'Magdalena',
+    municipios: [
+      'Santa Marta', 'Algarrobo', 'Aracataca', 'Ariguaní', 'Cerro de San Antonio', 'Chibolo', 'Ciénaga', 'Concordia',
+      'El Banco', 'El Piñón', 'El Retén', 'Fundación', 'Guamal', 'Nueva Granada', 'Pedraza', 'Pijiño del Carmen',
+      'Pivijay', 'Plato', 'Puebloviejo', 'Remolino', 'Sabanas de San Ángel', 'Salamina', 'San Sebastián de Buenavista',
+      'San Zenón', 'Santa Ana', 'Santa Bárbara de Pinto', 'Sitionuevo', 'Tenerife', 'Zapayán', 'Zona Bananera',
+    ],
+    universidades: ['Universidad del Magdalena', 'Universidad Cooperativa de Colombia - Sede Santa Marta', 'Otra'],
+  },
+  {
+    key: 'Meta',
+    label: 'Meta',
+    municipios: [
+      'Villavicencio', 'Acacías', 'Barranca de Upía', 'Cabuyaro', 'Castilla La Nueva', 'Cubarral', 'Cumaral',
+      'El Calvario', 'El Castillo', 'El Dorado', 'Fuente de Oro', 'Granada', 'Guamal', 'La Macarena', 'Lejanías',
+      'Mapiripán', 'Mesetas', 'Puerto Concordia', 'Puerto Gaitán', 'Puerto Lleras', 'Puerto López', 'Puerto Rico',
+      'Restrepo', 'San Carlos de Guaroa', 'San Juan de Arama', 'San Juanito', 'San Martín', 'Uribe', 'Vistahermosa',
+    ],
+    universidades: ['Universidad de los Llanos (Unillanos)', 'Universidad Cooperativa de Colombia - Sede Villavicencio', 'Otra'],
+  },
+  {
+    key: 'Narino',
+    label: 'Nariño',
+    municipios: [
+      'Pasto', 'Albán', 'Aldana', 'Ancuya', 'Arboleda', 'Barbacoas', 'Belén', 'Buesaco', 'Chachagüí', 'Colón',
+      'Consacá', 'Contadero', 'Córdoba', 'Cuaspud', 'Cumbal', 'Cumbitara', 'El Charco', 'El Rosario',
+      'El Tablón de Gómez', 'El Tambo', 'Francisco Pizarro', 'Funes', 'Guachucal', 'Guaitarilla', 'Gualmatán',
+      'Iles', 'Imués', 'Ipiales', 'La Cruz', 'La Florida', 'La Llanada', 'La Tola', 'La Unión', 'Leiva', 'Linares',
+      'Los Andes', 'Magüí Payán', 'Mallama', 'Mosquera', 'Nariño', 'Olaya Herrera', 'Ospina', 'Pizarro', 'Policarpa',
+      'Potosí', 'Providencia', 'Puerres', 'Pupiales', 'Ricaurte', 'Roberto Payán', 'Samaniego', 'San Bernardo',
+      'San Lorenzo', 'San Pablo', 'San Pedro de Cartago', 'Sandoná', 'Santa Bárbara', 'Santacruz', 'Sapuyes',
+      'Taminango', 'Tangua', 'Tumaco', 'Túquerres', 'Yacuanquer',
+    ],
+    universidades: ['Universidad de Nariño', 'Universidad Cooperativa de Colombia - Sede Pasto', 'Otra'],
+  },
+  {
+    key: 'NorteDeSantander',
+    label: 'Norte de Santander',
+    municipios: [
+      'Cúcuta', 'Abrego', 'Arboledas', 'Bochalema', 'Bucarasica', 'Cáchira', 'Cácota', 'Chinácota', 'Chitagá',
+      'Convención', 'Cucutilla', 'Durania', 'El Carmen', 'El Tarra', 'El Zulia', 'Gramalote', 'Hacarí', 'Herrán',
+      'La Esperanza', 'La Playa', 'Labateca', 'Los Patios', 'Lourdes', 'Mutiscua', 'Ocaña', 'Pamplona',
+      'Pamplonita', 'Puerto Santander', 'Ragonvalia', 'Salazar', 'San Calixto', 'San Cayetano', 'Santiago',
+      'Sardinata', 'Silos', 'Teorama', 'Tibú', 'Toledo', 'Villa Caro', 'Villa del Rosario',
+    ],
+    universidades: [
+      'FESC - Fundación de Estudios Superiores Comfanorte', 'UFPS - Universidad Francisco de Paula Santander',
+      'UNISANGIL - Fundación Universitaria de San Gil', 'Universidad de Pamplona', 'USTA - Universidad Santo Tomás de Aquino - BGA',
+      'USTA - Universidad Santo Tomás de Aquino - BOG', 'Otra',
+    ],
+  },
+  {
+    key: 'Putumayo',
+    label: 'Putumayo',
+    municipios: [
+      'Mocoa', 'Colón', 'Orito', 'Puerto Asís', 'Puerto Caicedo', 'Puerto Guzmán', 'Leguízamo', 'San Francisco',
+      'San Miguel', 'Santiago', 'Sibundoy', 'Valle del Guamuez', 'Villagarzón',
+    ],
+    universidades: ['Universidad de la Amazonia - Sede Putumayo', 'Otra'],
+  },
+  {
+    key: 'Quindio',
+    label: 'Quindío',
+    municipios: ['Armenia', 'Buenavista', 'Calarcá', 'Circasia', 'Córdoba', 'Filandia', 'Génova', 'La Tebaida', 'Montenegro', 'Pijao', 'Quimbaya', 'Salento'],
+    universidades: ['Institución Universitaria EAM', 'UNIQUINDIO - Universidad del Quindio', 'Otra'],
+  },
+  {
+    key: 'Risaralda',
+    label: 'Risaralda',
+    municipios: ['Pereira', 'Apía', 'Balboa', 'Belén de Umbría', 'Dosquebradas', 'Guática', 'La Celia', 'La Virginia', 'Marsella', 'Mistrató', 'Pueblo Rico', 'Quinchía', 'Santa Rosa de Cabal', 'Santuario'],
+    universidades: ['Fundación Universitaria Comfamiliar Risaralda', 'UTP - Universidad Tecnológica de Pereira', 'Otra'],
+  },
+  {
+    key: 'SanAndresProvidencia',
+    label: 'San Andrés y Providencia',
+    municipios: ['San Andrés', 'Providencia'],
+    universidades: ['Universidad Nacional de Colombia - Sede Caribe', 'Otra'],
+  },
+  {
+    key: 'Santander',
+    label: 'Santander',
+    municipios: [
+      'Bucaramanga', 'Aguada', 'Albania', 'Aratoca', 'Barbosa', 'Barichara', 'Barrancabermeja', 'Betulia',
+      'Bolívar', 'Cabrera', 'California', 'Capitanejo', 'Carcasí', 'Cepitá', 'Cerrito', 'Charalá', 'Charta',
+      'Chima', 'Chipatá', 'Cimitarra', 'Concepción', 'Confines', 'Contratación', 'Coromoro', 'Curití',
+      'El Carmen de Chucurí', 'El Guacamayo', 'El Peñón', 'El Playón', 'Encino', 'Enciso', 'Florián',
+      'Floridablanca', 'Galán', 'Gámbita', 'Giron', 'Guaca', 'Guadalupe', 'Guapotá', 'Guavatá', 'Güepsa', 'Hato',
+      'Jesús María', 'Jordán', 'La Belleza', 'La Paz', 'Landázuri', 'Lebrija', 'Los Santos', 'Macaravita', 'Málaga',
+      'Matanza', 'Mogotes', 'Molagavita', 'Ocamonte', 'Oiba', 'Onzaga', 'Palmar', 'Palmas del Socorro', 'Páramo',
+      'Piedecuesta', 'Pinchote', 'Puente Nacional', 'Puerto Parra', 'Puerto Wilches', 'Rionegro',
+      'Sabana de Torres', 'San Andrés', 'San Benito', 'San Gil', 'San Joaquín', 'San José de Miranda', 'San Miguel',
+      'San Vicente de Chucurí', 'Santa Bárbara', 'Santa Helena del Opón', 'Simacota', 'Socorro', 'Suaita', 'Sucre',
+      'Suratá', 'Tona', 'Valle de San José', 'Vélez', 'Vetas', 'Villanueva', 'Zapatoca',
+    ],
+    universidades: [
+      'UCC - Universidad Cooperativa de Colombia - BGA', 'UDES - Universidad de Santander',
+      'UDI - Universidad de Investigación y Desarrollo', 'UIS - Universidad Industrial de Santander',
+      'UMB - Universidad Manuela Beltrán - BGA', 'UNAB - Universidad Autónoma de Bucaramanga',
+      'UNAULA - Universidad Autónoma Latinoamericana', 'UNILIBRE - Universidad Libre de Colombia - Socorro',
+      'UPB - Universidad Pontificia Bolivariana - BGA', 'UTS - Unidades Tecnologicas de Santander', 'Otra',
+    ],
+  },
+  {
+    key: 'Sucre',
+    label: 'Sucre',
+    municipios: ['Sincelejo', 'Buenavista', 'Caimito', 'Chalán', 'Colosó', 'Corozal', 'Coveñas', 'El Roble', 'Galeras', 'Guaranda', 'La Unión', 'Los Palmitos', 'Majagual', 'Morroa', 'Ovejas', 'Palmito', 'Sampués', 'San Benito Abad', 'San Juan de Betulia', 'San Marcos', 'San Onofre', 'San Pedro', 'Sincé', 'Sucre', 'Tolú', 'Tolú Viejo'],
+    universidades: ['Universidad de Sucre', 'Otra'],
+  },
+  {
+    key: 'Tolima',
+    label: 'Tolima',
+    municipios: [
+      'Ibagué', 'Alpujarra', 'Alvarado', 'Ambalema', 'Anzoátegui', 'Armero', 'Ataco', 'Cajamarca',
+      'Carmen De Apicalá', 'Casabianca', 'Chaparral', 'Coello', 'Coyaima', 'Cunday', 'Dolores', 'Espinal', 'Falan',
+      'Flandes', 'Fresno', 'Guamo', 'Herveo', 'Honda', 'Icononzo', 'Lérida', 'Líbano', 'Mariquita', 'Melgar',
+      'Murillo', 'Natagaima', 'Ortega', 'Palocabildo', 'Piedras', 'Planadas', 'Prado', 'Purificación', 'Rioblanco',
+      'Roncesvalles', 'Rovira', 'Saldaña', 'San Antonio',
+    ],
+    universidades: [
+      'Conservatorio del Tolima - IES', 'CUN - Corporacion Unificada Nacional De Educacion Superior - IBE',
+      'ITFIP - Instituto tolimense de formacion tecnica profesionalé', 'POLI - Politecnico Grancolombiano Instituto Universitaria',
+      'UAN - Universidad Antonio Narino - IBE', 'UCC - Universidad Cooperativa de Colombia - IBE',
+      'UNIBAGUE - Universidad de Ibague', 'UNIMINUTO - Corporacion Universitaria Minuto de Dios - IBE',
+      'Universidad de Manizales IBE', 'Univiersidad San Buenaventura - IBE', 'UT - Universidad Del Tolima', 'Otra',
+    ],
+  },
+  {
+    key: 'ValleDelCauca',
+    label: 'Valle del Cauca',
+    municipios: [
+      'Cali', 'Alcalá', 'Andalucía', 'Ansermanuevo', 'Argelia', 'Bolívar', 'Buenaventura', 'Bugalagrande',
+      'Caicedonia', 'Candelaria', 'Cartago', 'Dagua', 'El Águila', 'El Cairo', 'El Cerrito', 'El Dovio', 'Florida',
+      'Ginebra', 'Guacarí', 'Jamundí', 'La Cumbre', 'La Unión', 'La Victoria', 'Obando', 'Palmira', 'Pradera',
+      'Restrepo', 'Riofrío', 'Roldanillo', 'San Pedro', 'Sevilla', 'Toro', 'Trujillo', 'Tuluá', 'Ulloa',
+      'Versalles', 'Vijes', 'Yotoco', 'Yumbo', 'Zarzal',
+    ],
+    universidades: [
+      'CUN - Corporacion Unificada Nacional de Educacion Superior - CAL', 'Institución Universitaria Escuela Nacional del Deporte',
+      'UAO - Universidad Autónoma del Occidente', 'Universidad del Cauca', 'UV - Universidad del Valle', 'Otra',
+    ],
+  },
+  {
+    key: 'Vaupes',
+    label: 'Vaupés',
+    municipios: ['Mitú', 'Carurú', 'Pacoa', 'Taraira', 'Yavaraté'],
+    universidades: ['Universidad Nacional de Colombia', 'Otra'],
+  },
+]
+
+export function getDepartment(key: string) {
+  return colombiaDepartments.find((d) => d.key === key)
+}

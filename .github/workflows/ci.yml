@@ -1,0 +1,61 @@
+name: Verificar BBBSC
+
+on:
+  workflow_call:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality:
+    name: Calidad, seguridad básica y build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Descargar repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Instalar frontend
+        run: npm ci
+
+      - name: Revisar frontend
+        run: npm run lint
+
+      - name: Compilar frontend
+        env:
+          VITE_RECAPTCHA_SITE_KEY: ${{ vars.VITE_RECAPTCHA_SITE_KEY }}
+        run: npm run build
+
+      - name: Instalar backend
+        working-directory: server
+        run: npm ci
+
+      - name: Comprobar sintaxis del backend
+        run: |
+          node --check server/index.js
+          find server/lib server/routes -name '*.js' -print0 | xargs -0 -n1 node --check
+
+      - name: Auditar dependencias de producción
+        run: |
+          npm audit --omit=dev --audit-level=high
+          npm --prefix server audit --omit=dev --audit-level=high
+
+      - name: Guardar build verificable
+        uses: actions/upload-artifact@v4
+        with:
+          name: bbbsc-frontend-${{ github.sha }}
+          path: dist
+          retention-days: 7

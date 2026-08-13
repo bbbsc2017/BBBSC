@@ -52,7 +52,7 @@ export function Footer() {
           <ul className="flex flex-col gap-2.5 text-sm text-white/70">
             {culturalPrograms.map((program) => (
               <li key={program.slug}>
-                <Link to={`/programas-culturales/${program.slug}`} className="transition-colors hover:text-white">
+                <Link to={`/${program.slug}`} className="transition-colors hover:text-white">
                   {program.title}
                 </Link>
               </li>
@@ -65,7 +65,7 @@ export function Footer() {
           <ul className="flex flex-col gap-2.5 text-sm text-white/70">
             {academicPrograms.map((program) => (
               <li key={program.slug}>
-                <Link to={`/programas-academicos/${program.slug}`} className="transition-colors hover:text-white">
+                <Link to={`/${program.slug}`} className="transition-colors hover:text-white">
                   {program.country}
                 </Link>
               </li>
@@ -76,7 +76,7 @@ export function Footer() {
           <ul className="flex flex-col gap-2.5 text-sm text-white/70">
             {universities.map((university) => (
               <li key={university.slug}>
-                <Link to={`/universidades/${university.slug}`} className="transition-colors hover:text-white">
+                <Link to={`/${university.slug}`} className="transition-colors hover:text-white">
                   {university.name}
                 </Link>
               </li>

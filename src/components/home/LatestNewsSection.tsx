@@ -1,14 +1,13 @@
 import { useEffect, useRef, useState } from 'react'
 import { ArrowRight } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import { getLatestBlogPosts } from '../../data/blogPosts'
+import { fetchPosts, getLatestPosts, type PublicPost } from '../../lib/api'
 import { Container } from '../ui/Container'
 import { SectionHeading } from '../ui/SectionHeading'
 import { BlogPostCard } from '../ui/BlogPostCard'
 
-const latestPosts = getLatestBlogPosts(6)
-
 export function LatestNewsSection() {
+  const [latestPosts, setLatestPosts] = useState<PublicPost[]>([])
   const scrollerRef = useRef<HTMLDivElement>(null)
   const [index, setIndex] = useState(0)
   const [paused, setPaused] = useState(false)
@@ -16,12 +15,16 @@ export function LatestNewsSection() {
   const dragStateRef = useRef({ startX: 0, startScrollLeft: 0, moved: false })
 
   useEffect(() => {
-    if (paused || dragging) return
+    fetchPosts().then((posts) => setLatestPosts(getLatestPosts(posts, 6)))
+  }, [])
+
+  useEffect(() => {
+    if (paused || dragging || latestPosts.length === 0) return
     const id = setInterval(() => {
       setIndex((current) => (current + 1) % latestPosts.length)
     }, 4500)
     return () => clearInterval(id)
-  }, [paused, dragging])
+  }, [paused, dragging, latestPosts.length])
 
   useEffect(() => {
     if (dragging) return
@@ -83,7 +86,7 @@ export function LatestNewsSection() {
   }
 
   return (
-    <section className="relative py-20 sm:py-28">
+    <section className="relative py-14 sm:py-20">
       <Container className="flex flex-col items-center gap-14">
         <SectionHeading
           eyebrow="BBB News"
@@ -111,7 +114,7 @@ export function LatestNewsSection() {
             draggable={false}
             className="group flex w-[85%] shrink-0 snap-center flex-col items-center justify-center gap-3 rounded-3xl border border-dashed border-white/15 bg-white/5 p-6 text-center transition-all duration-300 hover:-translate-y-1 hover:border-brand/40 hover:bg-white/10 sm:w-[45%] lg:w-[31%]"
           >
-            <span className="flex size-12 items-center justify-center rounded-full bg-brand/15 text-brand transition-transform duration-300 group-hover:translate-x-1">
+            <span className="flex size-12 items-center justify-center rounded-full bg-brand text-white transition-transform duration-300 group-hover:translate-x-1">
               <ArrowRight className="size-5" />
             </span>
             <span className="text-base font-bold text-white">Ver todo el blog</span>

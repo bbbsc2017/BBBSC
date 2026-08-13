@@ -27,7 +27,7 @@ server {
     listen [::]:443 ssl http2;
     server_name bbbsc.com;
 
-    root /var/www/bbbsc.com/dist;
+    root /var/www/bbbsc.com/current/dist;
     index index.html;
 
     ssl_certificate     /etc/letsencrypt/live/bbbsc.com/fullchain.pem;
@@ -38,6 +38,8 @@ server {
     add_header X-Content-Type-Options "nosniff" always;
     add_header Referrer-Policy "strict-origin-when-cross-origin" always;
     add_header Permissions-Policy "geolocation=(), microphone=(), camera=()" always;
+    add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
+    add_header Content-Security-Policy "default-src 'self'; img-src 'self' data: https:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self' 'unsafe-inline' https://www.google.com https://www.gstatic.com https://www.googletagmanager.com https://connect.facebook.net https://app.clientify.net; connect-src 'self' https://www.google.com https://www.gstatic.com https://*.google-analytics.com https://connect.facebook.net https://www.facebook.com https://app.clientify.net; frame-src 'self' https://www.google.com; base-uri 'self'; form-action 'self'; frame-ancestors 'self'; object-src 'none'; upgrade-insecure-requests" always;
 
     # Compresión
     gzip on;
@@ -64,6 +66,13 @@ server {
         proxy_set_header Host $host;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    # Sitemap dinámico: incorpora nuevas entradas y ofertas creadas en la intranet.
+    location = /sitemap.xml {
+        proxy_pass http://127.0.0.1:4000/api/sitemap.xml;
+        proxy_set_header Host $host;
+        expires 1h;
     }
 
     # SPA fallback: cualquier ruta que no sea un archivo real cae en index.html

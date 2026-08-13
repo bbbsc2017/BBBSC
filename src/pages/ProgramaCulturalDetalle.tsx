@@ -1,8 +1,7 @@
 import { Navigate, useParams } from 'react-router-dom'
-import { Clock, ListChecks, ShieldCheck, Sparkles } from 'lucide-react'
+import { Clock, ShieldCheck, Sparkles } from 'lucide-react'
 import { Seo } from '../components/Seo'
-import { DetailHero } from '../components/ui/DetailHero'
-import { DestinationBanner } from '../components/ui/DestinationBanner'
+import { ProgramHero } from '../components/ui/ProgramHero'
 import { Container } from '../components/ui/Container'
 import { InfoList } from '../components/ui/InfoList'
 import { ContactCard } from '../components/ui/ContactCard'
@@ -24,19 +23,27 @@ export default function ProgramaCulturalDetalle() {
       <Seo
         title={`${program.title} — ${program.country}`}
         description={program.description}
-        path={`/programas-culturales/${program.slug}`}
+        path={`/${program.slug}`}
+        image={program.image.src}
+        imageAlt={program.image.alt}
         jsonLd={{
           '@context': 'https://schema.org',
           '@type': 'Course',
           name: program.title,
           description: program.description,
+          image: program.image.src,
+          url: `${SITE.url}/${program.slug}`,
           provider: { '@type': 'Organization', name: SITE.name, sameAs: SITE.url },
         }}
       />
-      <DetailHero
-        eyebrow={`Programa cultural · ${program.country}`}
+      <ProgramHero
+        eyebrow="Programa cultural"
         title={program.title}
         description={program.tagline}
+        country={program.country}
+        image={program.image}
+        requirements={program.requirements}
+        primaryTo={program.slug === 'work-and-travel-usa' ? '/work-and-travel-usa/inscripcion' : undefined}
         breadcrumbs={[
           { label: 'Inicio', to: '/' },
           { label: 'Programas culturales' },
@@ -44,9 +51,7 @@ export default function ProgramaCulturalDetalle() {
         ]}
       />
 
-      <DestinationBanner image={program.image} caption={`${program.title} · ${program.country}`} />
-
-      <section className="py-16 sm:py-20">
+      <section id="contenido-programa" className="scroll-mt-24 py-16 sm:py-20">
         <Container className="grid grid-cols-1 items-start gap-12 lg:grid-cols-[1.6fr_1fr]">
           <div className="flex flex-col gap-12">
             <div>
@@ -54,21 +59,12 @@ export default function ProgramaCulturalDetalle() {
               <p className="mt-3 text-base leading-relaxed text-white/70">{program.description}</p>
             </div>
 
-            <div className="grid grid-cols-1 items-start gap-8 sm:grid-cols-2">
-              <div>
-                <h3 className="mb-4 flex items-center gap-2 text-base font-bold text-white">
-                  <ListChecks className="size-5 text-brand" />
-                  Requisitos
-                </h3>
-                <InfoList items={program.requirements} />
-              </div>
-              <div>
-                <h3 className="mb-4 flex items-center gap-2 text-base font-bold text-white">
-                  <Sparkles className="size-5 text-brand" />
-                  Beneficios
-                </h3>
-                <InfoList items={program.benefits} />
-              </div>
+            <div>
+              <h3 className="mb-4 flex items-center gap-2 text-base font-bold text-white">
+                <Sparkles className="size-5 text-brand" />
+                Beneficios del programa
+              </h3>
+              <InfoList items={program.benefits} />
             </div>
 
             <div className="grid grid-cols-1 items-start gap-5 sm:grid-cols-2">
@@ -95,7 +91,14 @@ export default function ProgramaCulturalDetalle() {
             <ProgramFAQ items={program.faq} />
           </div>
 
-          <ContactCard programTitle={program.title} image={program.image} pricing={program.pricing} />
+          <ContactCard
+            programTitle={program.title}
+            image={program.image}
+            pricing={program.pricing}
+            registrationTo={program.slug === 'work-and-travel-usa' ? '/work-and-travel-usa/inscripcion' : undefined}
+            formKey={program.slug === 'work-and-travel-usa' ? undefined : `cultural_${program.slug}`}
+            interestTag={program.slug === 'work-and-travel-usa' ? undefined : `interesado_${program.slug.replaceAll('-', '_')}`}
+          />
         </Container>
       </section>
 
@@ -106,7 +109,7 @@ export default function ProgramaCulturalDetalle() {
             {related.map((item) => (
               <ProgramCard
                 key={item.slug}
-                to={`/programas-culturales/${item.slug}`}
+                to={`/${item.slug}`}
                 eyebrow={item.country}
                 title={item.title}
                 description={item.tagline}

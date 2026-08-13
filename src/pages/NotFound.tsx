@@ -6,10 +6,10 @@ import { CTAButton } from '../components/ui/CTAButton'
 export default function NotFound() {
   return (
     <>
-      <Seo title="Página no encontrada" description="La página que buscas no existe o fue movida." path="/404" />
+      <Seo title="Página no encontrada" description="La página que buscas no existe o fue movida." path="/404" noIndex />
       <section className="relative overflow-hidden bg-ink-mesh py-28">
         <Container className="flex flex-col items-center gap-6 text-center">
-          <span className="flex size-16 items-center justify-center rounded-2xl bg-ink-800/10 text-brand">
+          <span className="flex size-16 items-center justify-center rounded-2xl bg-brand text-white">
             <Compass className="size-8" />
           </span>
           <h1 className="text-4xl font-extrabold text-white">404</h1>

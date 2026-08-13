@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import { Navigate, useParams } from 'react-router-dom'
 import { Seo } from '../components/Seo'
 import { DetailHero } from '../components/ui/DetailHero'
@@ -6,17 +7,31 @@ import { Container } from '../components/ui/Container'
 import { CTAButton } from '../components/ui/CTAButton'
 import { BlogPostCard } from '../components/ui/BlogPostCard'
 import { CommentsSection } from '../components/blog/CommentsSection'
-import { blogPosts, getBlogPost } from '../data/blogPosts'
+import { fetchPost, fetchPosts, type PublicPost, type PublicPostDetail } from '../lib/api'
 import { SITE, formatDate, whatsappLink } from '../lib/site'
 
 export default function BlogPost() {
   const { slug = '' } = useParams()
-  const post = getBlogPost(slug)
+  const [post, setPost] = useState<PublicPostDetail | null | undefined>(undefined)
+  const [allPosts, setAllPosts] = useState<PublicPost[]>([])
 
-  if (!post) return <Navigate to="/blog" replace />
+  useEffect(() => {
+    setPost(undefined)
+    fetchPost(slug).then(setPost)
+    fetchPosts().then(setAllPosts)
+  }, [slug])
 
-  const related = blogPosts.filter((item) => item.slug !== post.slug && item.category === post.category).slice(0, 3)
-  const relatedPosts = related.length > 0 ? related : blogPosts.filter((item) => item.slug !== post.slug).slice(0, 3)
+  if (post === null) return <Navigate to="/blog" replace />
+  if (!post) {
+    return (
+      <section className="py-24 text-center text-sm text-white/50">
+        <Container>Cargando artículo...</Container>
+      </section>
+    )
+  }
+
+  const related = allPosts.filter((item) => item.slug !== post.slug && item.category === post.category).slice(0, 3)
+  const relatedPosts = related.length > 0 ? related : allPosts.filter((item) => item.slug !== post.slug).slice(0, 3)
 
   return (
     <>
@@ -25,6 +40,9 @@ export default function BlogPost() {
         description={post.excerpt}
         path={`/blog/${post.slug}`}
         type="article"
+        image={post.image.src}
+        imageAlt={post.image.alt}
+        publishedTime={post.date}
         jsonLd={{
           '@context': 'https://schema.org',
           '@type': 'BlogPosting',
@@ -32,6 +50,7 @@ export default function BlogPost() {
           description: post.excerpt,
           datePublished: post.date,
           image: post.image.src,
+          mainEntityOfPage: `${SITE.url}/blog/${post.slug}`,
           author: { '@type': 'Person', name: post.author.name, jobTitle: post.author.role },
           publisher: { '@type': 'Organization', name: SITE.name, url: SITE.url },
         }}
@@ -66,11 +85,7 @@ export default function BlogPost() {
 
       <section className="pb-16 sm:pb-20">
         <Container className="mx-auto flex max-w-3xl flex-col gap-6">
-          {post.content.map((paragraph) => (
-            <p key={paragraph.slice(0, 40)} className="text-base leading-relaxed text-white/80">
-              {paragraph}
-            </p>
-          ))}
+          <div className="blog-content" dangerouslySetInnerHTML={{ __html: post.contentHtml }} />
 
           <div className="mt-6 flex flex-col items-center gap-3 rounded-3xl border border-brand/30 bg-ink-800 p-8 text-center">
             <h3 className="text-lg font-bold text-white">¿Tienes dudas sobre tu proceso?</h3>
