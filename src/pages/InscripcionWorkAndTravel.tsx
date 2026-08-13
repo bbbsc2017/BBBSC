@@ -14,7 +14,33 @@ import { getCulturalProgram } from '../data/culturalPrograms'
 import { executeRecaptcha } from '../lib/recaptcha'
 import { RecaptchaNotice } from '../components/ui/RecaptchaNotice'
 
-const workTravelProgram = getCulturalProgram('work-and-travel-usa')!
+type RegistrationProgram = 'usa' | 'asia'
+
+const registrationPrograms = {
+  usa: {
+    slug: 'work-and-travel-usa',
+    title: 'Work and Travel USA',
+    formKey: 'registration_work-and-travel-usa',
+    interestTag: 'interesado_work_and_travel_usa',
+    recaptchaAction: 'work_travel_registration',
+    visaRegion: 'Estados Unidos',
+    relativesRegion: 'Estados Unidos',
+  },
+  asia: {
+    slug: 'asia',
+    title: 'Trainee & Internship Asia',
+    formKey: 'registration_asia',
+    interestTag: 'interesado_asia',
+    recaptchaAction: 'asia_registration',
+    visaRegion: 'Asia',
+    relativesRegion: 'Asia',
+  },
+} as const
+
+const experienceDurations = ['Sin experiencia', 'Menos de 6 meses', '6 meses a 1 año', '1 a 2 años', '2 a 3 años', 'Más de 3 años']
+const experienceAreas = ['Gastronomía', 'Hotelería', 'Turismo', 'Restaurante', 'Bar', 'Panadería', 'Pastelería', 'Cafetería', 'Eventos', 'Recepción', 'Housekeeping', 'Cocina', 'Otra']
+const experienceRoles = ['Mesero', 'Auxiliar de cocina', 'Cocinero', 'Chef', 'Chef de partida', 'Ayudante de cocina', 'Bartender', 'Barista', 'Panadero', 'Pastelero', 'Recepcionista', 'Botones', 'Housekeeper', 'Camarera de hotel', 'Supervisor de restaurante', 'Supervisor de cocina', 'Supervisor de housekeeping', 'Anfitrión', 'Cajero', 'Atención al cliente', 'Guía turístico', 'Agente de viajes', 'Otra']
+const travelAvailability = ['Inmediata', '1 mes', '2 meses', '3 meses o más']
 
 const initialForm = {
   firstName: '', lastName: '', cedula: '', email: '', phone: '', fechaNacimiento: '',
@@ -25,6 +51,7 @@ const initialForm = {
   nivelAcademico: '', programaAcademico: '', jornadaAcademica: '', semestre: '', fechaGrado: '',
   departamentoUniversidad: '', municipioUniversidad: '', universidad: '',
   nombrePadre: '', telefonoPadre: '', nombreMadre: '', telefonoMadre: '', familiaresEEUU: '',
+  tiempoExperiencia: '', areaExperiencia: '', cargoExperiencia: '', empresaExperiencia: '', disponibilidadViaje: '',
   gdprAceptado: false,
 }
 
@@ -89,7 +116,11 @@ function StepActions({ step, onBack, onNext, submitting }: { step: number; onBac
   )
 }
 
-export default function InscripcionWorkAndTravel() {
+export function ProgramRegistration({ program = 'usa' }: { program?: RegistrationProgram }) {
+  const registration = registrationPrograms[program]
+  const isAsia = program === 'asia'
+  const culturalProgram = getCulturalProgram(registration.slug)!
+  const pagePath = `/${registration.slug}/inscripcion`
   const formRef = useRef<HTMLFormElement>(null)
   const [form, setForm] = useState<FormState>(initialForm)
   const [step, setStep] = useState(0)
@@ -128,12 +159,13 @@ export default function InscripcionWorkAndTravel() {
     setErrorMessage('')
 
     try {
-      const recaptchaToken = await executeRecaptcha('work_travel_registration')
+      const recaptchaToken = await executeRecaptcha(registration.recaptchaAction)
       const response = await fetch('/api/registrations', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ...form,
+          formKey: registration.formKey,
           departamentoNacimientoLabel: birthDept?.label,
           departamentoUniversidadLabel: uniDept?.label,
           recaptchaToken,
@@ -151,7 +183,7 @@ export default function InscripcionWorkAndTravel() {
   if (status === 'success') {
     return (
       <>
-        <Seo title="Inscripción enviada — Work and Travel USA" description="Tu inscripción a Work and Travel USA fue enviada correctamente." path="/work-and-travel-usa/inscripcion" />
+        <Seo title={`Inscripción enviada — ${registration.title}`} description={`Tu inscripción a ${registration.title} fue enviada correctamente.`} path={pagePath} />
         <section className="relative overflow-hidden bg-ink-mesh py-24">
           <Container className="flex flex-col items-center gap-5 text-center">
             <span className="flex size-16 items-center justify-center rounded-2xl bg-brand text-white"><CheckCircle2 className="size-8" /></span>
@@ -159,7 +191,7 @@ export default function InscripcionWorkAndTravel() {
             <p className="max-w-md text-balance text-white/70">Gracias por inscribirte. Un asesor revisará tu información y se pondrá en contacto contigo para continuar con el proceso.</p>
             <div className="flex flex-wrap items-center justify-center gap-4 pt-2">
               <CTAButton to="/">Volver al inicio</CTAButton>
-              <CTAButton href={whatsappLink('¡Hola! Acabo de enviar mi inscripción a Work and Travel USA.')} icon={false} variant="ghost">Escríbenos por WhatsApp</CTAButton>
+              <CTAButton href={whatsappLink(`¡Hola! Acabo de enviar mi inscripción a ${registration.title}.`)} icon={false} variant="ghost">Escríbenos por WhatsApp</CTAButton>
             </div>
           </Container>
         </section>
@@ -169,15 +201,15 @@ export default function InscripcionWorkAndTravel() {
 
   return (
     <>
-      <Seo title="Inscripción a Work and Travel USA" description="Inicia tu inscripción a Work and Travel USA con BBB Student Center. Completa tu perfil y recibe acompañamiento durante el proceso." path="/work-and-travel-usa/inscripcion" image={workTravelProgram.image.src} imageAlt={workTravelProgram.image.alt} />
+      <Seo title={`Inscripción a ${registration.title}`} description={`Inicia tu inscripción a ${registration.title} con BBB Student Center. Completa tu perfil y recibe acompañamiento durante el proceso.`} path={pagePath} image={culturalProgram.image.src} imageAlt={culturalProgram.image.alt} />
       <ShowcaseHero
-        eyebrow="Inscripción Work and Travel USA"
-        title="Inscríbete a Work and Travel USA"
-        description="Cuéntanos sobre ti y descubre si este programa encaja con tus planes. Completar tu perfil toma aproximadamente 8 minutos."
-        image={workTravelProgram.image}
+        eyebrow={`Inscripción ${registration.title}`}
+        title={`Inscríbete a ${registration.title}`}
+        description={isAsia ? 'Cuéntanos sobre tu perfil, estudios y experiencia laboral para orientarte hacia oportunidades en hotelería y turismo en Asia.' : 'Cuéntanos sobre ti y descubre si este programa encaja con tus planes. Completar tu perfil toma aproximadamente 8 minutos.'}
+        image={culturalProgram.image}
         primaryAction={{ label: 'Empezar inscripción', to: '#formulario-inscripcion' }}
-        secondaryAction={{ label: 'Volver al programa', to: '/work-and-travel-usa' }}
-        breadcrumbs={[{ label: 'Inicio', to: '/' }, { label: 'Programas culturales' }, { label: 'Work and Travel USA', to: '/work-and-travel-usa' }, { label: 'Inscripción' }]}
+        secondaryAction={{ label: 'Volver al programa', to: `/${registration.slug}` }}
+        breadcrumbs={[{ label: 'Inicio', to: '/' }, { label: 'Programas culturales' }, { label: registration.title, to: `/${registration.slug}` }, { label: 'Inscripción' }]}
       />
 
       <section id="formulario-inscripcion" className="scroll-mt-24 py-6 sm:py-8">
@@ -202,9 +234,9 @@ export default function InscripcionWorkAndTravel() {
 
           <div className="grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_280px]">
             <form ref={formRef} onSubmit={handleSubmit} className="scroll-mt-24 rounded-3xl border border-white/10 bg-ink-800 p-5 shadow-2xl shadow-black/20 sm:p-8">
-              <input type="hidden" name="formKey" value="registration_work-and-travel-usa" />
-              <input type="hidden" name="interestTag" value="interesado_work_and_travel_usa" />
-              <input type="hidden" name="message" value={`${form.firstName.trim()} ${form.lastName.trim()} se inscribió en el formulario de la página web de Work and Travel USA.`.trim()} />
+              <input type="hidden" name="formKey" value={registration.formKey} />
+              <input type="hidden" name="interestTag" value={registration.interestTag} />
+              <input type="hidden" name="message" value={`${form.firstName.trim()} ${form.lastName.trim()} se inscribió en el formulario de la página web de ${registration.title}.`.trim()} />
               {step === 0 && (
                 <div className="flex flex-col gap-6">
                   <StepHeading number={1} title="Cuéntanos quién eres" description="Empecemos con tus datos básicos y de contacto." />
@@ -236,10 +268,10 @@ export default function InscripcionWorkAndTravel() {
                   <fieldset className="flex flex-col gap-5 border-t border-white/10 pt-7">
                     <h3 className="text-sm font-bold uppercase tracking-wider text-brand">Experiencia previa</h3>
                     <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-                      <ChoiceField name="participacionPrevia" label="¿Has participado antes en Work and Travel?" required value={form.participacionPrevia} onChange={(value) => update('participacionPrevia', value)} />
+                      <ChoiceField name="participacionPrevia" label={`¿Has participado antes en el programa de ${isAsia ? 'Asia' : 'Work and Travel'}?`} required value={form.participacionPrevia} onChange={(value) => update('participacionPrevia', value)} />
                       {form.participacionPrevia === 'Si' && <FormField label="Número de participaciones anteriores"><SelectInput value={form.numeroParticipaciones} onChange={(event) => update('numeroParticipaciones', event.target.value)}>{previousSwtCount.filter((value) => value !== '0').map((value) => <option key={value} value={value}>{value}</option>)}</SelectInput></FormField>}
-                      <ChoiceField name="visaAplicada" label="¿Has aplicado a una visa de Estados Unidos?" required value={form.visaAplicada} onChange={(value) => update('visaAplicada', value)} />
-                      <ChoiceField name="visaNegada" label="¿Te han negado una visa de Estados Unidos?" required value={form.visaNegada} onChange={(value) => update('visaNegada', value)} />
+                      <ChoiceField name="visaAplicada" label={`¿Has aplicado a alguna visa en ${registration.visaRegion}?`} required value={form.visaAplicada} onChange={(value) => update('visaAplicada', value)} />
+                      <ChoiceField name="visaNegada" label={`¿Te han negado alguna visa para ${registration.visaRegion}?`} required value={form.visaNegada} onChange={(value) => update('visaNegada', value)} />
                     </div>
                   </fieldset>
                   <fieldset className="flex flex-col gap-5 border-t border-white/10 pt-7">
@@ -263,8 +295,8 @@ export default function InscripcionWorkAndTravel() {
                       <FormField label="Nivel académico"><SelectInput value={form.nivelAcademico} onChange={(event) => update('nivelAcademico', event.target.value)}>{academicLevels.map((value) => <option key={value} value={value}>{value}</option>)}</SelectInput></FormField>
                       <FormField label="Jornada académica"><SelectInput value={form.jornadaAcademica} onChange={(event) => update('jornadaAcademica', event.target.value)}>{academicShifts.map((value) => <option key={value} value={value}>{value}</option>)}</SelectInput></FormField>
                       <FormField label="Programa académico" className="sm:col-span-2"><SelectInput value={form.programaAcademico} onChange={(event) => update('programaAcademico', event.target.value)}>{careers.map((value) => <option key={value} value={value}>{value}</option>)}</SelectInput></FormField>
-                      <FormField label="Semestre"><SelectInput value={form.semestre} onChange={(event) => update('semestre', event.target.value)}>{semesters.map((value) => <option key={value} value={value}>{value}</option>)}</SelectInput></FormField>
-                      <FormField label="Fecha tentativa de grado" required><TextInput required type="date" value={form.fechaGrado} onChange={(event) => update('fechaGrado', event.target.value)} /></FormField>
+                      {!isAsia && <FormField label="Semestre"><SelectInput value={form.semestre} onChange={(event) => update('semestre', event.target.value)}>{semesters.map((value) => <option key={value} value={value}>{value}</option>)}</SelectInput></FormField>}
+                      {!isAsia && <FormField label="Fecha tentativa de grado" required><TextInput required type="date" value={form.fechaGrado} onChange={(event) => update('fechaGrado', event.target.value)} /></FormField>}
                     </div>
                     <div className="mt-2 grid grid-cols-1 gap-5 border-t border-white/10 pt-6 sm:grid-cols-2">
                       <h4 className="text-sm font-bold text-white sm:col-span-2">Tu universidad</h4>
@@ -280,9 +312,24 @@ export default function InscripcionWorkAndTravel() {
                       <FormField label="Teléfono del padre"><TextInput type="tel" placeholder="+57" value={form.telefonoPadre} onChange={(event) => update('telefonoPadre', event.target.value)} /></FormField>
                       <FormField label="Nombre de la madre"><TextInput autoComplete="off" value={form.nombreMadre} onChange={(event) => update('nombreMadre', event.target.value)} /></FormField>
                       <FormField label="Teléfono de la madre"><TextInput type="tel" placeholder="+57" value={form.telefonoMadre} onChange={(event) => update('telefonoMadre', event.target.value)} /></FormField>
-                      <div className="sm:col-span-2"><ChoiceField name="familiaresEEUU" label="¿Tienes padres, hermanos o hijos viviendo en Estados Unidos?" required value={form.familiaresEEUU} onChange={(value) => update('familiaresEEUU', value)} /></div>
+                      <div className="sm:col-span-2"><ChoiceField name="familiaresEEUU" label={`¿Tienes padres, hermanos o hijos viviendo en ${registration.relativesRegion}?`} required value={form.familiaresEEUU} onChange={(value) => update('familiaresEEUU', value)} /></div>
                     </div>
                   </fieldset>
+                  {isAsia && (
+                    <fieldset className="flex flex-col gap-5 border-t border-white/10 pt-7">
+                      <div>
+                        <h3 className="text-sm font-bold uppercase tracking-wider text-brand">Experiencia laboral</h3>
+                        <p className="mt-2 text-sm leading-relaxed text-white/55">Cuéntanos sobre tu experiencia en gastronomía, hotelería o turismo.</p>
+                      </div>
+                      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+                        <FormField label="Tiempo de experiencia" required><SelectInput required value={form.tiempoExperiencia} onChange={(event) => update('tiempoExperiencia', event.target.value)}>{experienceDurations.map((value) => <option key={value} value={value}>{value}</option>)}</SelectInput></FormField>
+                        <FormField label="Área de experiencia" required><SelectInput required value={form.areaExperiencia} onChange={(event) => update('areaExperiencia', event.target.value)}>{experienceAreas.map((value) => <option key={value} value={value}>{value}</option>)}</SelectInput></FormField>
+                        <FormField label="Cargo desempeñado" required><SelectInput required value={form.cargoExperiencia} onChange={(event) => update('cargoExperiencia', event.target.value)}>{experienceRoles.map((value) => <option key={value} value={value}>{value}</option>)}</SelectInput></FormField>
+                        <FormField label="Empresa donde adquiriste la experiencia" required><TextInput required autoComplete="organization" placeholder="Nombre de la empresa" value={form.empresaExperiencia} onChange={(event) => update('empresaExperiencia', event.target.value)} /></FormField>
+                        <FormField label="Disponibilidad para viajar" required className="sm:col-span-2"><SelectInput required value={form.disponibilidadViaje} onChange={(event) => update('disponibilidadViaje', event.target.value)}>{travelAvailability.map((value) => <option key={value} value={value}>{value}</option>)}</SelectInput></FormField>
+                      </div>
+                    </fieldset>
+                  )}
                 </div>
               )}
 
@@ -293,7 +340,7 @@ export default function InscripcionWorkAndTravel() {
                     <div><dt className="text-white/45">Nombre</dt><dd className="mt-1 font-semibold text-white">{form.firstName} {form.lastName}</dd></div>
                     <div><dt className="text-white/45">Correo</dt><dd className="mt-1 break-all font-semibold text-white">{form.email}</dd></div>
                     <div><dt className="text-white/45">Nivel de inglés</dt><dd className="mt-1 font-semibold text-white">{form.nivelIngles}</dd></div>
-                    <div><dt className="text-white/45">Fecha tentativa de grado</dt><dd className="mt-1 font-semibold text-white">{form.fechaGrado}</dd></div>
+                    <div><dt className="text-white/45">{isAsia ? 'Experiencia' : 'Fecha tentativa de grado'}</dt><dd className="mt-1 font-semibold text-white">{isAsia ? form.tiempoExperiencia : form.fechaGrado}</dd></div>
                   </dl>
                   <fieldset className="rounded-2xl border border-brand/25 bg-brand/5 p-5">
                     <label className="flex cursor-pointer items-start gap-3 text-sm leading-relaxed text-white/80">
@@ -327,4 +374,8 @@ export default function InscripcionWorkAndTravel() {
       </section>
     </>
   )
+}
+
+export default function InscripcionWorkAndTravel() {
+  return <ProgramRegistration program="usa" />
 }
