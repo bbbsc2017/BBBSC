@@ -6,7 +6,11 @@ interface SeoProps {
   description: string
   path: string
   image?: string
+  imageAlt?: string
   type?: 'website' | 'article'
+  noIndex?: boolean
+  publishedTime?: string
+  modifiedTime?: string
   jsonLd?: Record<string, unknown> | Record<string, unknown>[]
 }
 
@@ -30,14 +34,18 @@ function setLink(rel: string, href: string) {
   el.setAttribute('href', href)
 }
 
-export function Seo({ title, description, path, image, type = 'website', jsonLd }: SeoProps) {
+export function Seo({ title, description, path, image, imageAlt, type = 'website', noIndex = false, publishedTime, modifiedTime, jsonLd }: SeoProps) {
+  const jsonLdText = jsonLd ? JSON.stringify(jsonLd) : ''
+
   useEffect(() => {
     const fullTitle = `${title} | ${SITE.name}`
     const url = `${SITE.url}${path}`
-    const ogImage = image ?? `${SITE.url}/og-image.jpg`
+    const ogImage = image ? (image.startsWith('/') ? `${SITE.url}${image}` : image) : SITE.defaultSocialImage
+    const socialImageAlt = imageAlt || `${title} — ${SITE.name}`
 
     document.title = fullTitle
     setMeta('name', 'description', description)
+    setMeta('name', 'robots', noIndex ? 'noindex, nofollow' : 'index, follow')
     setLink('canonical', url)
 
     setMeta('property', 'og:title', fullTitle)
@@ -45,6 +53,7 @@ export function Seo({ title, description, path, image, type = 'website', jsonLd 
     setMeta('property', 'og:type', type)
     setMeta('property', 'og:url', url)
     setMeta('property', 'og:image', ogImage)
+    setMeta('property', 'og:image:alt', socialImageAlt)
     setMeta('property', 'og:site_name', SITE.name)
     setMeta('property', 'og:locale', 'es_CO')
 
@@ -52,26 +61,27 @@ export function Seo({ title, description, path, image, type = 'website', jsonLd 
     setMeta('name', 'twitter:title', fullTitle)
     setMeta('name', 'twitter:description', description)
     setMeta('name', 'twitter:image', ogImage)
+    setMeta('name', 'twitter:image:alt', socialImageAlt)
+    if (type === 'article' && publishedTime) setMeta('property', 'article:published_time', publishedTime)
+    if (type === 'article' && modifiedTime) setMeta('property', 'article:modified_time', modifiedTime)
 
     let script = document.getElementById('page-jsonld') as HTMLScriptElement | null
-    if (jsonLd) {
+    if (jsonLdText) {
       if (!script) {
         script = document.createElement('script')
         script.id = 'page-jsonld'
         script.type = 'application/ld+json'
         document.head.appendChild(script)
       }
-      script.textContent = JSON.stringify(jsonLd)
+      script.textContent = jsonLdText
     } else if (script) {
       script.remove()
     }
 
-    window.scrollTo({ top: 0, behavior: 'instant' as ScrollBehavior })
-
     return () => {
       document.getElementById('page-jsonld')?.remove()
     }
-  }, [title, description, path, image, type, jsonLd])
+  }, [title, description, path, image, imageAlt, type, noIndex, publishedTime, modifiedTime, jsonLdText])
 
   return null
 }

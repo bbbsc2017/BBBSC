@@ -1,6 +1,7 @@
 import { Check, MessageCircle, Phone } from 'lucide-react'
 import { CTAButton } from './CTAButton'
 import { whatsappLink, SITE } from '../../lib/site'
+import { InterestForm } from './InterestForm'
 
 interface ContactCardProps {
   programTitle: string
@@ -12,9 +13,12 @@ interface ContactCardProps {
     items: string[]
     note?: string
   }
+  registrationTo?: string
+  formKey?: string
+  interestTag?: string
 }
 
-export function ContactCard({ programTitle, image, pricing }: ContactCardProps) {
+export function ContactCard({ programTitle, image, pricing, registrationTo, formKey, interestTag }: ContactCardProps) {
   const hasPricing = !!pricing?.items?.length
 
   if (hasPricing) {
@@ -51,9 +55,24 @@ export function ContactCard({ programTitle, image, pricing }: ContactCardProps) 
             ))}
           </ul>
 
-          <CTAButton href={whatsappLink(`¡Hola! Quiero inscribirme a ${programTitle}.`)} icon={false} className="w-full">
-            ¡Inscríbete ya!
-          </CTAButton>
+          {registrationTo ? (
+            <>
+              <CTAButton to={registrationTo} icon={false} className="w-full">
+                ¡Inscríbete ya!
+              </CTAButton>
+              <CTAButton
+                href={whatsappLink(`¡Hola! Tengo dudas sobre ${programTitle}.`)}
+                icon={false}
+                variant="ghost"
+                className="w-full"
+              >
+                Prefiero escribir por WhatsApp
+              </CTAButton>
+            </>
+          ) : formKey && interestTag ? <>
+            <div className="w-full border-t border-white/10 pt-5 text-left"><h4 className="mb-1 text-base font-bold text-white">¿Listo para aplicar?</h4><p className="mb-4 text-xs leading-5 text-white/55">Déjanos tus datos y un asesor te contará cómo iniciar.</p><InterestForm formKey={formKey} programTitle={programTitle} interestTag={interestTag} /></div>
+            <CTAButton href={whatsappLink(`¡Hola! Quiero más información sobre ${programTitle}.`)} icon={false} variant="ghost" className="w-full">Prefiero escribir por WhatsApp</CTAButton>
+          </> : <CTAButton href={whatsappLink(`¡Hola! Quiero inscribirme a ${programTitle}.`)} icon={false} className="w-full">¡Inscríbete ya!</CTAButton>}
 
           {pricing.note && <p className="text-center text-xs text-white/50">{pricing.note}</p>}
 
@@ -78,7 +97,7 @@ export function ContactCard({ programTitle, image, pricing }: ContactCardProps) 
         </div>
       )}
       <div className={`flex flex-col gap-5 px-6 pb-6 ${image ? 'pt-0' : 'pt-6'}`}>
-        <span className="flex size-11 items-center justify-center rounded-2xl bg-ink text-brand">
+        <span className="flex size-11 items-center justify-center rounded-2xl bg-brand text-white">
           <MessageCircle className="size-5" />
         </span>
         <div>
@@ -87,9 +106,8 @@ export function ContactCard({ programTitle, image, pricing }: ContactCardProps) 
             Un asesor te cuenta requisitos, costos y fechas de {programTitle} sin costo ni compromiso.
           </p>
         </div>
-        <CTAButton href={whatsappLink(`¡Hola! Quiero más información sobre ${programTitle}.`)} icon={false} className="w-full">
-          Escríbenos por WhatsApp
-        </CTAButton>
+        {formKey && interestTag && <InterestForm formKey={formKey} programTitle={programTitle} interestTag={interestTag} />}
+        <CTAButton href={whatsappLink(`¡Hola! Quiero más información sobre ${programTitle}.`)} icon={false} variant={formKey ? 'ghost' : 'primary'} className="w-full">Escríbenos por WhatsApp</CTAButton>
         <a href={`tel:${SITE.phones.ibague}`} className="flex items-center justify-center gap-2 text-sm font-semibold text-white/70 hover:text-brand">
           <Phone className="size-4" />
           {SITE.whatsappDisplay}

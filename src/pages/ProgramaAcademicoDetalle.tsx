@@ -1,8 +1,7 @@
 import { Link, Navigate, useParams } from 'react-router-dom'
-import { GraduationCap, ListChecks, Sparkles } from 'lucide-react'
+import { GraduationCap, Sparkles } from 'lucide-react'
 import { Seo } from '../components/Seo'
-import { DetailHero } from '../components/ui/DetailHero'
-import { DestinationBanner } from '../components/ui/DestinationBanner'
+import { ProgramHero } from '../components/ui/ProgramHero'
 import { Container } from '../components/ui/Container'
 import { InfoList } from '../components/ui/InfoList'
 import { ContactCard } from '../components/ui/ContactCard'
@@ -26,19 +25,26 @@ export default function ProgramaAcademicoDetalle() {
       <Seo
         title={`${program.title} — Programa académico`}
         description={program.description}
-        path={`/programas-academicos/${program.slug}`}
+        path={`/${program.slug}`}
+        image={program.image.src}
+        imageAlt={program.image.alt}
         jsonLd={{
           '@context': 'https://schema.org',
           '@type': 'Course',
           name: program.title,
           description: program.description,
+          image: program.image.src,
+          url: `${SITE.url}/${program.slug}`,
           provider: { '@type': 'Organization', name: SITE.name, sameAs: SITE.url },
         }}
       />
-      <DetailHero
-        eyebrow={`Programa académico · ${program.country}`}
+      <ProgramHero
+        eyebrow="Programa académico"
         title={program.title}
         description={program.tagline}
+        country={program.country}
+        image={program.image}
+        requirements={program.requirements}
         breadcrumbs={[
           { label: 'Inicio', to: '/' },
           { label: 'Programas académicos' },
@@ -46,9 +52,7 @@ export default function ProgramaAcademicoDetalle() {
         ]}
       />
 
-      <DestinationBanner image={program.image} caption={`${program.title} · ${program.country}`} />
-
-      <section className="py-16 sm:py-20">
+      <section id="contenido-programa" className="scroll-mt-24 py-16 sm:py-20">
         <Container className="grid grid-cols-1 items-start gap-12 lg:grid-cols-[1.6fr_1fr]">
           <div className="flex flex-col gap-12">
             <div>
@@ -64,21 +68,12 @@ export default function ProgramaAcademicoDetalle() {
               <InfoList items={program.programTypes} />
             </div>
 
-            <div className="grid grid-cols-1 items-start gap-8 sm:grid-cols-2">
-              <div>
-                <h3 className="mb-4 flex items-center gap-2 text-base font-bold text-white">
-                  <ListChecks className="size-5 text-brand" />
-                  Requisitos
-                </h3>
-                <InfoList items={program.requirements} />
-              </div>
-              <div>
-                <h3 className="mb-4 flex items-center gap-2 text-base font-bold text-white">
-                  <Sparkles className="size-5 text-brand" />
-                  Beneficios
-                </h3>
-                <InfoList items={program.benefits} />
-              </div>
+            <div>
+              <h3 className="mb-4 flex items-center gap-2 text-base font-bold text-white">
+                <Sparkles className="size-5 text-brand" />
+                Beneficios del programa
+              </h3>
+              <InfoList items={program.benefits} />
             </div>
 
             <ProgramFAQ items={program.faq} />
@@ -90,7 +85,7 @@ export default function ProgramaAcademicoDetalle() {
                   {relatedUniversities.map((university) => (
                     <Link
                       key={university!.slug}
-                      to={`/universidades/${university!.slug}`}
+                      to={`/${university!.slug}`}
                       className="rounded-2xl border border-white/10 bg-ink-800 px-5 py-4 text-sm font-semibold text-white transition-colors hover:border-brand/40 hover:text-brand"
                     >
                       {university!.name} — {university!.city}
@@ -104,6 +99,8 @@ export default function ProgramaAcademicoDetalle() {
           <ContactCard
             programTitle={program.title}
             image={program.image}
+            formKey={`academic_${program.slug}`}
+            interestTag={`interesado_${program.slug.replaceAll('-', '_')}`}
             pricing={{
               badge: 'Costos referenciales',
               headline: `Inversión en ${program.title}`,
@@ -121,7 +118,7 @@ export default function ProgramaAcademicoDetalle() {
             {otherDestinations.map((item) => (
               <ImageLinkCard
                 key={item.slug}
-                to={`/programas-academicos/${item.slug}`}
+                to={`/${item.slug}`}
                 eyebrow={item.country}
                 title={item.tagline}
                 image={item.image}

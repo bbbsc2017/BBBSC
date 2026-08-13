@@ -42,7 +42,7 @@ export default function TrabajaConNosotros() {
           <div className="grid w-full grid-cols-1 gap-5 sm:grid-cols-3">
             {reasons.map(({ Icon, title, description }) => (
               <div key={title} className="flex flex-col items-start gap-4 rounded-3xl border border-white/10 bg-ink-800 p-6">
-                <span className="flex size-11 items-center justify-center rounded-2xl bg-ink text-brand">
+                <span className="flex size-11 items-center justify-center rounded-2xl bg-brand text-white">
                   <Icon className="size-5" />
                 </span>
                 <h3 className="text-base font-bold text-white">{title}</h3>

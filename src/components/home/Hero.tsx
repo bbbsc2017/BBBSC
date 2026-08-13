@@ -12,7 +12,7 @@ const stats = [
 
 const destinations = [
   {
-    to: '/programas-culturales/work-and-travel-usa',
+    to: '/work-and-travel-usa',
     country: 'Estados Unidos',
     label: 'Work and Travel USA',
     image: {
@@ -21,7 +21,7 @@ const destinations = [
     },
   },
   {
-    to: '/programas-culturales/espana-ti',
+    to: '/espana-ti',
     country: 'España',
     label: 'Trainee & Internship',
     image: {
@@ -30,7 +30,7 @@ const destinations = [
     },
   },
   {
-    to: '/programas-culturales/asia',
+    to: '/asia',
     country: 'Asia',
     label: 'Trainee & Internship',
     image: {
@@ -39,7 +39,7 @@ const destinations = [
     },
   },
   {
-    to: '/programas-academicos/canada',
+    to: '/canada',
     country: 'Canadá',
     label: 'Estudia en Canadá',
     image: {
@@ -48,7 +48,7 @@ const destinations = [
     },
   },
   {
-    to: '/programas-academicos/australia',
+    to: '/australia',
     country: 'Australia',
     label: 'Estudia en Australia',
     image: {
@@ -68,19 +68,15 @@ export function Hero() {
     return () => clearInterval(id)
   }, [])
 
+  useEffect(() => {
+    const nextImage = new Image()
+    nextImage.src = destinations[(index + 1) % destinations.length].image.src
+  }, [index])
+
   return (
     <section className="relative overflow-hidden bg-ink">
       <div className="absolute inset-0" aria-hidden="true">
-        {destinations.map((dest, i) => (
-          <img
-            key={dest.image.src}
-            src={dest.image.src}
-            alt=""
-            className={`absolute inset-0 size-full object-cover transition-opacity duration-[1800ms] ease-in-out ${
-              i === index ? 'opacity-100' : 'opacity-0'
-            }`}
-          />
-        ))}
+        <img key={destinations[index].image.src} src={destinations[index].image.src} alt="" fetchPriority="high" className="absolute inset-0 size-full animate-[fadeIn_1.2s_ease-in-out] object-cover" />
         <div className="absolute inset-0 bg-gradient-to-r from-ink via-ink/85 to-ink/40" />
         <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/20 to-ink/30" />
       </div>
@@ -93,18 +89,17 @@ export function Hero() {
           </span>
 
           <h1 className="text-balance text-4xl font-extrabold leading-[1.05] tracking-tight text-white sm:text-5xl lg:text-6xl">
-            Impulsa tu vida <span className="text-brand">viajando</span> por el mundo
+            Trabaja, estudia y <span className="text-brand">vive el mundo</span>
           </h1>
 
           <p className="max-w-xl text-balance text-base text-white/70 sm:text-lg">
-            Descubre nuevas culturas, desarrolla habilidades globales y vive experiencias inolvidables.
-            Deja que el viaje transforme tu futuro.
+            Encuentra programas Work and Travel, prácticas y estudios en el exterior con acompañamiento antes, durante y después de tu viaje.
           </p>
 
           <div className="flex flex-wrap items-center gap-4">
-            <CTAButton to="/contacto">Viaja y Aprende</CTAButton>
+            <CTAButton to="/work-and-travel-usa">Explora los programas</CTAButton>
             <CTAButton to="/contacto" variant="ghost">
-              Habla con un asesor
+              Cuéntanos tu plan
             </CTAButton>
           </div>
 

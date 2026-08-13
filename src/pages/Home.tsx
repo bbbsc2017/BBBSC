@@ -16,25 +16,17 @@ export default function Home() {
         title="Programas Work & Travel y experiencias internacionales"
         description="BBB Student Center: agencia experta en Work and Travel USA, prácticas profesionales, intercambio docente y programas académicos en Estados Unidos, España, Asia, Canadá, Polonia y Australia."
         path="/"
-        jsonLd={{
-          '@context': 'https://schema.org',
-          '@type': 'Organization',
-          name: SITE.name,
-          url: SITE.url,
-          logo: `${SITE.url}/favicon.svg`,
-          description: SITE.tagline,
-          email: SITE.email,
-          sameAs: Object.values(SITE.social),
-          contactPoint: [
-            {
-              '@type': 'ContactPoint',
-              telephone: SITE.whatsapp,
-              contactType: 'customer service',
-              areaServed: 'CO',
-              availableLanguage: ['Spanish'],
-            },
-          ],
-        }}
+        image={SITE.defaultSocialImage}
+        imageAlt="Nueva York, uno de los destinos de los programas internacionales de BBB Student Center"
+        jsonLd={[
+          { '@context': 'https://schema.org', '@type': 'WebSite', name: SITE.name, alternateName: SITE.shortName, url: SITE.url, inLanguage: 'es-CO' },
+          {
+            '@context': 'https://schema.org', '@type': 'EducationalOrganization', name: SITE.name, alternateName: SITE.shortName,
+            url: SITE.url, logo: `${SITE.url}/favicon.svg`, image: SITE.defaultSocialImage, description: SITE.tagline, email: SITE.email,
+            sameAs: Object.values(SITE.social), areaServed: 'Colombia',
+            contactPoint: [{ '@type': 'ContactPoint', telephone: SITE.whatsapp, contactType: 'customer service', areaServed: 'CO', availableLanguage: ['Spanish'] }],
+          },
+        ]}
       />
       <Hero />
       <LatestNewsSection />

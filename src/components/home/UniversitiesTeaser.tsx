@@ -6,7 +6,7 @@ import { ImageLinkCard } from '../ui/ImageLinkCard'
 
 export function UniversitiesTeaser() {
   return (
-    <section className="relative py-20 sm:py-28">
+    <section className="relative py-14 sm:py-20">
       <Container className="flex flex-col items-center gap-14">
         <SectionHeading
           eyebrow="Universidades aliadas"
@@ -18,7 +18,7 @@ export function UniversitiesTeaser() {
           {universities.map((university) => (
             <ImageLinkCard
               key={university.slug}
-              to={`/universidades/${university.slug}`}
+              to={`/${university.slug}`}
               eyebrow={university.country}
               title={university.name}
               subtitle={university.city}

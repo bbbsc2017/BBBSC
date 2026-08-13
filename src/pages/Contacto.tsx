@@ -35,10 +35,7 @@ export default function Contacto() {
 
       <section className="py-16 sm:py-20">
         <Container className="grid grid-cols-1 gap-12 lg:grid-cols-[1fr_1fr]">
-          <form
-            className="flex flex-col gap-5 rounded-3xl border border-white/10 bg-ink-800 p-6 sm:p-8"
-            onSubmit={(event) => event.preventDefault()}
-          >
+          <div className="flex flex-col gap-5 rounded-3xl border border-white/10 bg-ink-800 p-6 sm:p-8">
             <h2 className="text-xl font-bold text-white">Escríbenos</h2>
             <label className="flex flex-col gap-1.5 text-sm font-semibold text-white">
               Nombre
@@ -75,18 +72,18 @@ export default function Contacto() {
               <MessageCircle className="size-4" />
               Enviar por WhatsApp
             </CTAButton>
-          </form>
+          </div>
 
           <div className="flex flex-col gap-5">
             <div className="flex flex-col gap-4 rounded-3xl border border-white/10 bg-ink-800 p-6">
               <a href={whatsappLink()} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-sm font-semibold text-white transition-colors hover:text-brand">
-                <span className="flex size-10 items-center justify-center rounded-xl bg-ink text-brand">
+                <span className="flex size-10 items-center justify-center rounded-xl bg-brand text-white">
                   <Phone className="size-4" />
                 </span>
                 {SITE.whatsappDisplay}
               </a>
               <a href={`mailto:${SITE.email}`} className="flex items-center gap-3 text-sm font-semibold text-white transition-colors hover:text-brand">
-                <span className="flex size-10 items-center justify-center rounded-xl bg-ink text-brand">
+                <span className="flex size-10 items-center justify-center rounded-xl bg-brand text-white">
                   <Mail className="size-4" />
                 </span>
                 {SITE.email}
@@ -96,7 +93,7 @@ export default function Contacto() {
             {SITE.offices.map((office) => (
               <div key={office.city} className="flex flex-col gap-3 rounded-3xl border border-white/10 bg-ink-800 p-6">
                 <div className="flex items-start gap-3">
-                  <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-ink text-brand">
+                  <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-brand text-white">
                     <MapPin className="size-4" />
                   </span>
                   <div>
@@ -110,6 +107,7 @@ export default function Contacto() {
                 <iframe
                   title={`Mapa oficina ${office.city}`}
                   src={`https://www.google.com/maps?q=${encodeURIComponent(`${office.address}, ${office.city}, Colombia`)}&output=embed`}
+                  loading="lazy"
                   className="h-48 w-full rounded-2xl border border-white/10 grayscale invert"
                 />
               </div>

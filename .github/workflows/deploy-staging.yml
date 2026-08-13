@@ -1,0 +1,125 @@
+name: Desplegar BBBSC en pruebas
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm_deploy:
+        description: Escribe STAGING para confirmar
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: bbbsc-staging
+  cancel-in-progress: false
+
+jobs:
+  validate:
+    if: inputs.confirm_deploy == 'STAGING'
+    uses: ./.github/workflows/ci.yml
+
+  deploy:
+    name: Publicar en new.bbbsc.com
+    needs: validate
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    environment: staging
+    env:
+      DEPLOY_PATH: ${{ secrets.VPS_DEPLOY_PATH }}
+      RELEASE_ID: ${{ github.sha }}
+      API_PORT: 4001
+      PM2_APP_NAME: bbbsc-server-staging
+      STAGING_URL: https://new.bbbsc.com
+    steps:
+      - name: Descargar repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Compilar frontend
+        env:
+          VITE_RECAPTCHA_SITE_KEY: ${{ vars.VITE_RECAPTCHA_SITE_KEY }}
+        run: |
+          npm ci
+          npm run build
+
+      - name: Preparar acceso SSH
+        env:
+          VPS_SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
+          VPS_KNOWN_HOSTS: ${{ secrets.VPS_KNOWN_HOSTS }}
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$VPS_SSH_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          printf '%s\n' "$VPS_KNOWN_HOSTS" > ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/known_hosts
+
+      - name: Validar staging y crear versión
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_PORT: ${{ secrets.VPS_PORT }}
+          VPS_USER: ${{ secrets.VPS_USER }}
+        run: |
+          test "$DEPLOY_PATH" = "/www/wwwroot/new.bbbsc.com"
+          ssh -p "${VPS_PORT:-22}" "$VPS_USER@$VPS_HOST" "set -eu; mkdir -p '$DEPLOY_PATH/releases/$RELEASE_ID/dist' '$DEPLOY_PATH/releases/$RELEASE_ID/server' '$DEPLOY_PATH/shared/server/data' '$DEPLOY_PATH/shared/server/uploads' '$DEPLOY_PATH/shared/server/backups'; test -s '$DEPLOY_PATH/shared/server/.env'"
+
+      - name: Subir frontend y backend
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_PORT: ${{ secrets.VPS_PORT }}
+          VPS_USER: ${{ secrets.VPS_USER }}
+        run: |
+          rsync -az --delete -e "ssh -p ${VPS_PORT:-22}" dist/ "$VPS_USER@$VPS_HOST:$DEPLOY_PATH/releases/$RELEASE_ID/dist/"
+          rsync -az --delete --exclude node_modules --exclude .env --exclude data --exclude uploads -e "ssh -p ${VPS_PORT:-22}" server/ "$VPS_USER@$VPS_HOST:$DEPLOY_PATH/releases/$RELEASE_ID/server/"
+
+      - name: Activar versión y reiniciar API de pruebas
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_PORT: ${{ secrets.VPS_PORT }}
+          VPS_USER: ${{ secrets.VPS_USER }}
+        run: |
+          ssh -p "${VPS_PORT:-22}" "$VPS_USER@$VPS_HOST" "DEPLOY_PATH='$DEPLOY_PATH' RELEASE_ID='$RELEASE_ID' API_PORT='$API_PORT' PM2_APP_NAME='$PM2_APP_NAME' bash -s" <<'REMOTE'
+          set -euo pipefail
+          release="$DEPLOY_PATH/releases/$RELEASE_ID"
+          previous="$(readlink -f "$DEPLOY_PATH/current" 2>/dev/null || true)"
+          database="$DEPLOY_PATH/shared/server/data/bbbsc.sqlite3"
+          if [ -f "$database" ]; then
+            cp -p "$database" "$DEPLOY_PATH/shared/server/backups/bbbsc-staging-$(date +%Y%m%d-%H%M%S).sqlite3"
+          fi
+          ln -sfn "$DEPLOY_PATH/shared/server/.env" "$release/server/.env"
+          ln -sfn "$DEPLOY_PATH/shared/server/data" "$release/server/data"
+          ln -sfn "$DEPLOY_PATH/shared/server/uploads" "$release/server/uploads"
+          cd "$release/server"
+          npm ci --omit=dev
+          ln -sfn "$release" "$DEPLOY_PATH/current.next"
+          mv -Tf "$DEPLOY_PATH/current.next" "$DEPLOY_PATH/current"
+          pm2 delete "$PM2_APP_NAME" >/dev/null 2>&1 || true
+          cd "$DEPLOY_PATH/current/server" && pm2 start index.js --name "$PM2_APP_NAME"
+          pm2 save
+          if ! curl --fail --silent --show-error --retry 4 --retry-delay 2 "http://127.0.0.1:$API_PORT/api/health" >/dev/null; then
+            if [ -n "$previous" ] && [ -d "$previous" ]; then
+              ln -sfn "$previous" "$DEPLOY_PATH/current.next"
+              mv -Tf "$DEPLOY_PATH/current.next" "$DEPLOY_PATH/current"
+              pm2 delete "$PM2_APP_NAME" >/dev/null 2>&1 || true
+              cd "$DEPLOY_PATH/current/server" && pm2 start index.js --name "$PM2_APP_NAME"
+              pm2 save
+            fi
+            exit 1
+          fi
+          cd "$DEPLOY_PATH/releases"
+          ls -1dt */ 2>/dev/null | tail -n +6 | while read -r old_release; do rm -rf -- "$DEPLOY_PATH/releases/${old_release%/}"; done
+          cd "$DEPLOY_PATH/shared/server/backups"
+          ls -1t *.sqlite3 2>/dev/null | tail -n +11 | while read -r old_backup; do rm -f -- "$old_backup"; done
+          REMOTE
+
+      - name: Verificar sitio de pruebas
+        run: |
+          curl --fail --silent --show-error --retry 4 --retry-delay 5 "$STAGING_URL/" >/dev/null
+          curl --fail --silent --show-error --retry 4 --retry-delay 5 "$STAGING_URL/api/health" >/dev/null
+          curl --fail --silent --show-error --head "$STAGING_URL/" | tr -d '\r' | grep -Eiq '^x-robots-tag: noindex, nofollow$'

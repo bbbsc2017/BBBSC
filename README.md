@@ -1,43 +1,61 @@
 # BBB Student Center — bbbsc.com
 
-Sitio web de BBB Student Center: agencia de intercambios especializada en programas Work & Travel, prácticas profesionales, intercambio docente y programas académicos en Estados Unidos, España, Asia, Canadá, Polonia y Australia.
+Sitio web, catálogo de ofertas e intranet de BBB Student Center. La experiencia pública presenta programas culturales y académicos, universidades, BBB News y oportunidades laborales; la intranet administra contenido, usuarios, roles, medios, comentarios, formularios, analítica y ofertas.
 
-Construido con React 19 + TypeScript + Vite + Tailwind CSS v4 + react-router-dom. SPA completamente responsive, optimizada para SEO/SEM (meta tags dinámicos por página, Open Graph, JSON-LD, sitemap.xml, robots.txt).
+## Stack
 
-## Desarrollo
+- React 19, TypeScript, Vite 8 y Tailwind CSS 4.
+- React Router para rutas públicas y privadas.
+- Node.js 22 + Express para autenticación, contenido dinámico, Clientify, ofertas y administración.
+- Base local persistente en `server/data/` y archivos en `server/uploads/`; ambos están ignorados por Git.
+
+## Desarrollo local
+
+Requiere Node.js 22.
 
 ```bash
-npm install
+npm ci
 npm run dev
 ```
 
-El blog tiene un formulario de comentarios que llama a un backend propio (`server/`) para crear el contacto en Clientify sin exponer la API key en el navegador. Para probarlo en local, en otra terminal:
+En otra terminal:
 
 ```bash
 cd server
-npm install
-cp .env.example .env   # completa CLIENTIFY_API_KEY
-npm run dev             # http://localhost:4000
+npm ci
+copy .env.example .env
+npm run dev
 ```
 
-Vite ya redirige `/api/*` a ese servicio en desarrollo (ver `vite.config.ts`). Sin el backend corriendo, el resto del sitio funciona igual; solo falla el envío de comentarios.
+El frontend se abre en `http://localhost:5173` y redirige `/api/*` al servidor local. Completa las variables del servidor antes de probar autenticación, Clientify o los formularios protegidos.
 
-## Build de producción
+## Variables importantes
+
+- Frontend: `VITE_RECAPTCHA_SITE_KEY`.
+- Servidor: `SESSION_SECRET`, conexión con la API central de BBBSC, Clientify y `RECAPTCHA_SECRET_KEY`.
+- `RECAPTCHA_MIN_SCORE` permite ajustar el umbral de reCAPTCHA; el valor recomendado inicial es `0.5`.
+
+No subas archivos `.env`, bases de datos, copias de seguridad ni archivos cargados por usuarios. Usa los ejemplos incluidos como guía.
+
+## Verificación
 
 ```bash
-npm run build   # tsc -b && vite build -> genera dist/
-npm run preview # sirve dist/ localmente para verificar el build
+npm run lint
+npm run build
+cd server
+npm audit --omit=dev
 ```
 
-## Estructura
+La automatización de GitHub repite estas comprobaciones en cada cambio propuesto y antes de un despliegue.
 
-- `src/data/` — contenido de programas culturales, académicos, universidades, FAQ y posts del blog.
-- `src/components/` — layout (navbar, footer), componentes de UI reutilizables y secciones de la home.
-- `src/pages/` — páginas por ruta (home, índices y detalle de programas/universidades, blog, contacto, legales).
-- `src/components/Seo.tsx` — meta tags, Open Graph y JSON-LD por página.
-- `public/robots.txt`, `public/sitemap.xml` — SEO técnico.
-- `server/` — backend Node/Express para el formulario de comentarios del blog (integración con Clientify).
+## SEO y seguridad
+
+- Metadatos, canonical, Open Graph, Twitter Cards y JSON-LD por página.
+- Sitemap dinámico en `/sitemap.xml` mediante `/api/sitemap.xml`.
+- `robots.txt` excluye la intranet y la API.
+- Comentarios, formularios de interés e inscripción pública usan reCAPTCHA y límites por IP.
+- La intranet requiere sesión, permisos por rol y no se indexa.
 
 ## Despliegue
 
-Ver [`deploy/DEPLOY.md`](./deploy/DEPLOY.md) para el proceso de build + subida a un VPS con OpenLiteSpeed (frontend estático + backend Node).
+Consulta [`deploy/DEPLOY.md`](./deploy/DEPLOY.md). La migración está diseñada para probarse primero en un subdominio, conservar la web actual y desplegar versiones reversibles en el VPS. No elimines la instalación existente de aaPanel antes de validar la nueva versión.

@@ -5,7 +5,7 @@ import { SectionHeading } from '../ui/SectionHeading'
 
 export function FAQSection() {
   return (
-    <section className="relative py-20 sm:py-28">
+    <section className="relative py-14 sm:py-20">
       <Container className="flex flex-col items-center gap-14">
         <SectionHeading eyebrow="FAQ" title="Preguntas frecuentes" description="Todo lo que necesitas saber antes de comenzar tu proceso." />
 

@@ -1,40 +1,35 @@
-# bbbsc-server
+# API e intranet de BBBSC
 
-Backend mínimo (Express) con un solo propósito: recibir los comentarios del blog y crear el contacto correspondiente en Clientify, sin exponer la API key en el navegador.
+Servidor Express de bbbsc.com. Mantiene las credenciales privadas fuera del navegador y concentra autenticación, usuarios, roles, entradas, comentarios, medios, ofertas, formularios, Clientify, analítica y sitemap.
 
-## Por qué existe
-
-El sitio (`../src`) es una SPA estática. La API key de Clientify **no puede** vivir en ese código porque cualquier visitante podría verla en las herramientas de desarrollador y usarla para leer o escribir en todo el CRM. Este servicio hace esa llamada del lado del servidor, usando la key solo desde una variable de entorno.
-
-## Desarrollo local
+## Desarrollo
 
 ```bash
-cd server
-npm install
-cp .env.example .env   # completa CLIENTIFY_API_KEY si el .env no existe ya
-npm run dev             # http://localhost:4000
+npm ci
+copy .env.example .env
+npm run dev
 ```
 
-El frontend (`npm run dev` en la raíz del proyecto) ya está configurado para redirigir `/api/*` a `http://localhost:4000` durante desarrollo (ver `vite.config.ts`).
+El servidor escucha en `http://localhost:4000` por defecto. Revisa `server/.env.example` y completa al menos los secretos de sesión, la conexión con la API central y las credenciales de las integraciones que vayas a probar.
 
-## Endpoint
+## Protección de formularios públicos
 
-`POST /api/comments`
+Estos envíos requieren un token reCAPTCHA nuevo y conservan límites de solicitudes por IP:
 
-```json
-{
-  "firstName": "Juan",
-  "lastName": "Pérez",
-  "email": "juan@example.com",
-  "phone": "3001234567",
-  "comment": "¡Excelente artículo!",
-  "postSlug": "como-diligenciar-el-ds-160",
-  "postTitle": "Cómo diligenciar correctamente el formulario DS-160"
-}
-```
+- `POST /api/comments`
+- `POST /api/interest-forms`
+- `POST /api/registrations`
 
-Crea un contacto en Clientify (tag `comentario-blog` + `blog-<slug>`, con el comentario guardado en el campo `message`) y responde `{ "ok": true }`. Incluye un límite simple de 5 solicitudes cada 10 minutos por IP para mitigar spam.
+Configura `RECAPTCHA_SECRET_KEY`. Si falta, los formularios se bloquean de forma segura con un error de configuración; no se permite enviar datos sin validación.
 
-## Despliegue en el VPS (OpenLiteSpeed)
+## Datos persistentes
 
-Ver [`../deploy/DEPLOY.md`](../deploy/DEPLOY.md) — se ejecuta como proceso Node persistente (con `pm2` o `systemd`) y OpenLiteSpeed lo expone por detrás en `/api/`.
+- Base y estado de la intranet: `server/data/`.
+- Medios y documentos: `server/uploads/`.
+- Copias de seguridad: `server/backups/`.
+
+Estas rutas no se incluyen en Git. En producción deben vivir en directorios compartidos entre versiones y tener copias de seguridad periódicas.
+
+## Producción
+
+El proceso se ejecuta con PM2 y Nginx/aaPanel publica la SPA, redirige `/api/` al servidor y sirve el sitemap dinámico. Consulta [`../deploy/DEPLOY.md`](../deploy/DEPLOY.md) para la instalación, los secretos de GitHub, la reversión automática y la migración segura.

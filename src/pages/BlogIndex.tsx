@@ -1,24 +1,32 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { ArrowUpRight, Newspaper, Search } from 'lucide-react'
+import { ArrowUpRight, BookOpenText, Layers3, Newspaper, Search } from 'lucide-react'
 import { Seo } from '../components/Seo'
 import { Container } from '../components/ui/Container'
-import { GradientBlob } from '../components/ui/GradientBlob'
 import { BlogPostCard } from '../components/ui/BlogPostCard'
-import { blogPosts, type BlogPost } from '../data/blogPosts'
+import { ShowcaseHero } from '../components/ui/ShowcaseHero'
+import { fetchPosts, sortByDateDesc, type PublicPost } from '../lib/api'
 import { formatDate } from '../lib/site'
 
-const categories: Array<BlogPost['category']> = ['Embajada', 'Programas', 'Consejos']
+const categories: Array<PublicPost['category']> = ['Embajada', 'Programas', 'Consejos']
 
 export default function BlogIndex() {
+  const [posts, setPosts] = useState<PublicPost[]>([])
+  const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
-  const [activeCategory, setActiveCategory] = useState<'Todos los blogs' | BlogPost['category']>('Todos los blogs')
+  const [activeCategory, setActiveCategory] = useState<'Todos los blogs' | PublicPost['category']>('Todos los blogs')
 
-  const sorted = useMemo(() => [...blogPosts].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()), [])
+  useEffect(() => {
+    fetchPosts()
+      .then(setPosts)
+      .finally(() => setLoading(false))
+  }, [])
+
+  const sorted = useMemo(() => sortByDateDesc(posts), [posts])
   const featured = sorted[0]
 
   const sameCategoryPosts = useMemo(
-    () => sorted.filter((post) => post.slug !== featured.slug && post.category === featured.category).slice(0, 4),
+    () => (featured ? sorted.filter((post) => post.slug !== featured.slug && post.category === featured.category).slice(0, 4) : []),
     [sorted, featured],
   )
 
@@ -34,8 +42,24 @@ export default function BlogIndex() {
     return true
   })
 
-  const categoryCount = (category: 'Todos los blogs' | BlogPost['category']) =>
-    category === 'Todos los blogs' ? blogPosts.length : blogPosts.filter((post) => post.category === category).length
+  const categoryCount = (category: 'Todos los blogs' | PublicPost['category']) =>
+    category === 'Todos los blogs' ? posts.length : posts.filter((post) => post.category === category).length
+
+  if (loading) {
+    return (
+      <section className="py-24 text-center text-sm text-white/50">
+        <Container>Cargando publicaciones...</Container>
+      </section>
+    )
+  }
+
+  if (!featured) {
+    return (
+      <section className="py-24 text-center text-sm text-white/50">
+        <Container>Todavía no hay publicaciones en el blog.</Container>
+      </section>
+    )
+  }
 
   return (
     <>
@@ -43,25 +67,29 @@ export default function BlogIndex() {
         title="Blog — BBB News"
         description="Guías de visa, novedades de programas Work & Travel y consejos prácticos para tu próxima experiencia internacional."
         path="/blog"
+        image={featured.image.src}
+        imageAlt={featured.image.alt}
       />
 
-      <section className="relative overflow-hidden bg-ink-mesh py-14 sm:py-16">
-        <GradientBlob tone="brand" className="left-[-15%] top-0 size-72 sm:size-96" />
-        <Container className="relative flex flex-col items-center gap-4 text-center">
-          <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-brand backdrop-blur">
-            <Newspaper className="size-3.5" />
-            BBB News
-          </span>
-          <h1 className="max-w-2xl text-balance text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
-            Noticias, guías y consejos para tu próxima experiencia
-          </h1>
-          <p className="max-w-xl text-balance text-sm text-white/70 sm:text-base">
-            Todo lo que necesitas saber sobre visas, programas de intercambio y vida en el exterior.
-          </p>
-        </Container>
-      </section>
+      <ShowcaseHero
+        eyebrow="BBB News"
+        title="Noticias, guías y consejos para tu próxima experiencia"
+        description="Todo lo que necesitas saber sobre visas, programas de intercambio y vida en el exterior."
+        image={featured.image}
+        imageKey={featured.slug}
+        items={[
+          { label: 'Publicaciones', value: `${posts.length} artículos disponibles`, icon: Newspaper },
+          { label: 'Embajada', value: `${categoryCount('Embajada')} publicaciones`, icon: BookOpenText },
+          { label: 'Programas', value: `${categoryCount('Programas')} publicaciones`, icon: Layers3 },
+          { label: 'Consejos', value: `${categoryCount('Consejos')} publicaciones`, icon: BookOpenText },
+        ]}
+        itemHeading="Explora BBB News"
+        primaryAction={{ label: 'Leer noticia destacada', to: `/blog/${featured.slug}` }}
+        secondaryAction={{ label: 'Ver publicaciones', to: '#publicaciones' }}
+        breadcrumbs={[{ label: 'Inicio', to: '/' }, { label: 'Blog' }]}
+      />
 
-      <section className="py-16 sm:py-20">
+      <section id="publicaciones" className="scroll-mt-24 py-16 sm:py-20">
         <Container className="grid grid-cols-1 gap-10 lg:grid-cols-[240px_1fr]">
           <aside className="flex flex-col gap-8 lg:sticky lg:top-24 lg:h-fit">
             <div className="relative">
@@ -106,6 +134,8 @@ export default function BlogIndex() {
                   <img
                     src={featured.image.src}
                     alt={featured.image.alt}
+                    loading="lazy"
+                    decoding="async"
                     className="size-full object-cover transition-transform duration-700 group-hover:scale-105"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-ink-800 via-transparent to-transparent sm:bg-gradient-to-r" />
@@ -135,6 +165,7 @@ export default function BlogIndex() {
                             src={post.image.src}
                             alt={post.image.alt}
                             loading="lazy"
+                            decoding="async"
                             className="size-full object-cover transition-transform duration-500 group-hover:scale-105"
                           />
                         </span>

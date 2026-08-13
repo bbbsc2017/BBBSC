@@ -1,0 +1,298 @@
+import { Router } from 'express'
+import multer from 'multer'
+import { getDb, nowIso } from '../db.js'
+import { requireAuth, requirePermission } from '../auth.js'
+import { PERMISSIONS } from '../lib/permissions.js'
+import { slugify, uniqueSlug } from '../lib/slugify.js'
+import { getUsers } from '../lib/bbbscApi.js'
+import { analyzeStoredPdf, downloadPdf, extractPdfText, inferOfferFields, MAX_PDF_BYTES, safeStoredPdfPath } from '../lib/offerPdfs.js'
+
+export const publicOffersRouter = Router()
+export const adminOffersRouter = Router()
+
+const PROGRAMS = ['work-travel-usa', 'work-travel-asia', 'trainee-internship', 'teacher-assistant', 'teacher-exchange']
+const STATUSES = ['draft', 'active', 'closed']
+const PERIODS = ['hour', 'week', 'month', 'year', 'program']
+const pdfUpload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: MAX_PDF_BYTES, files: 1 },
+  fileFilter: (_req, file, callback) => callback(null, file.mimetype === 'application/pdf' || file.originalname.toLowerCase().endsWith('.pdf')),
+})
+
+function availableExpression(alias = 'o') {
+  return `MAX(0, ${alias}.vacancies_total - ${alias}.vacancies_lost - (SELECT COUNT(*) FROM job_applications a WHERE a.offer_id = ${alias}.id AND a.status = 'active'))`
+}
+
+function toOffer(row, { privateFields = false } = {}) {
+  const vacanciesAvailable = Number(row.vacancies_available ?? 0)
+  const status = row.status === 'active' && (new Date(row.available_until) < new Date() || vacanciesAvailable < 1) ? 'closed' : row.status
+  return {
+    id: row.id, slug: row.slug, title: row.title, program: row.program, sponsor: row.sponsor, employer: row.employer,
+    compensationType: row.compensation_type, compensationMin: row.compensation_min, compensationMax: row.compensation_max,
+    compensationCurrency: row.compensation_currency, compensationPeriod: row.compensation_period, hasTips: row.has_tips === 1,
+    englishLevel: row.english_level, city: row.city, state: row.state, offerType: row.offer_type,
+    airportPickup: row.airport_pickup === 1, overtime: row.overtime === 1, bonuses: row.bonuses,
+    vacanciesTotal: row.vacancies_total, vacanciesLost: row.vacancies_lost, vacanciesAvailable,
+    availableUntil: row.available_until, imageSrc: row.image_src, description: row.description, status,
+    hasPdf: Boolean(row.pdf_file_name), pdfViewUrl: row.pdf_file_name ? `/api/offers/${encodeURIComponent(row.slug)}/pdf` : null,
+    ...(privateFields ? { storedStatus: row.status, pdfSourceUrl: row.pdf_source_url, pdfFileName: row.pdf_file_name, pdfText: row.pdf_text } : {}),
+    createdAt: row.created_at, updatedAt: row.updated_at,
+  }
+}
+
+function selectOffers(where = '', params = [], order = 'o.updated_at DESC') {
+  return getDb().prepare(`SELECT o.*, ${availableExpression('o')} AS vacancies_available FROM job_offers o ${where} ORDER BY ${order}`).all(...params)
+}
+
+function validateOffer(body) {
+  const required = ['title', 'program', 'sponsor', 'employer', 'compensationType', 'compensationMin', 'compensationCurrency', 'compensationPeriod', 'englishLevel', 'city', 'state', 'offerType', 'vacanciesTotal', 'availableUntil']
+  const missing = required.filter((key) => body?.[key] === undefined || body?.[key] === null || String(body[key]).trim() === '')
+  if (missing.length) return 'Completa todos los campos obligatorios.'
+  if (!PROGRAMS.includes(body.program)) return 'El programa no es válido.'
+  if (!['salary', 'stipend'].includes(body.compensationType)) return 'El tipo de compensación no es válido.'
+  if (!PERIODS.includes(body.compensationPeriod)) return 'El periodo de compensación no es válido.'
+  if (!STATUSES.includes(body.status || 'draft')) return 'El estado no es válido.'
+  const minimum = Number(body.compensationMin)
+  const maximum = body.compensationMax === '' || body.compensationMax == null ? null : Number(body.compensationMax)
+  if (!Number.isFinite(minimum) || minimum < 0 || (maximum !== null && (!Number.isFinite(maximum) || maximum < minimum))) return 'El rango de salario no es válido.'
+  const vacancies = Number(body.vacanciesTotal)
+  if (!Number.isInteger(vacancies) || vacancies < 0) return 'La cantidad de vacantes no es válida.'
+  if (Number.isNaN(new Date(body.availableUntil).getTime())) return 'La fecha de disponibilidad no es válida.'
+  return null
+}
+
+function offerValues(body, existing = {}) {
+  return {
+    title: String(body.title).trim(), program: body.program, sponsor: String(body.sponsor).trim(), employer: String(body.employer).trim(),
+    compensationType: body.compensationType, compensationMin: Number(body.compensationMin),
+    compensationMax: body.compensationMax === '' || body.compensationMax == null ? null : Number(body.compensationMax),
+    compensationCurrency: String(body.compensationCurrency).trim().toUpperCase().slice(0, 3), compensationPeriod: body.compensationPeriod,
+    hasTips: body.hasTips ? 1 : 0, englishLevel: String(body.englishLevel).trim(), city: String(body.city).trim(), state: String(body.state).trim(),
+    offerType: String(body.offerType).trim(), airportPickup: body.airportPickup ? 1 : 0, overtime: body.overtime ? 1 : 0,
+    bonuses: String(body.bonuses || '').trim(), vacanciesTotal: Number(body.vacanciesTotal), availableUntil: new Date(body.availableUntil).toISOString(),
+    imageSrc: String(body.imageSrc || '').trim(), description: String(body.description || '').trim(), status: body.status || existing.status || 'draft',
+    pdfSourceUrl: String(body.pdfSourceUrl ?? existing.pdf_source_url ?? '').trim(),
+    pdfFileName: String(body.pdfFileName ?? existing.pdf_file_name ?? '').trim(),
+    pdfText: String(body.pdfText ?? existing.pdf_text ?? ''),
+    pdfExtractedData: JSON.stringify(body.pdfExtractedData || (() => { try { return JSON.parse(existing.pdf_extracted_data || '{}') } catch { return {} } })()),
+  }
+}
+
+publicOffersRouter.get('/offers', (req, res) => {
+  let where = "WHERE o.status IN ('active', 'closed')"
+  const params = []
+  if (PROGRAMS.includes(req.query.program)) { where += ' AND o.program = ?'; params.push(req.query.program) }
+  if (req.query.search?.trim()) { where += ' AND (o.title LIKE ? OR o.employer LIKE ?)'; const term = `%${req.query.search.trim()}%`; params.push(term, term) }
+  if (req.query.city?.trim()) { where += ' AND o.city LIKE ?'; params.push(`%${req.query.city.trim()}%`) }
+  if (req.query.sponsor?.trim()) { where += ' AND o.sponsor LIKE ?'; params.push(`%${req.query.sponsor.trim()}%`) }
+  const minSalary = Number(req.query.minSalary)
+  const maxSalary = Number(req.query.maxSalary)
+  if (Number.isFinite(minSalary) && req.query.minSalary !== '') { where += ' AND COALESCE(o.compensation_max, o.compensation_min) >= ?'; params.push(minSalary) }
+  if (Number.isFinite(maxSalary) && req.query.maxSalary !== '') { where += ' AND o.compensation_min <= ?'; params.push(maxSalary) }
+  const offers = selectOffers(where, params, "CASE WHEN o.status = 'active' THEN 0 ELSE 1 END, o.available_until DESC, o.updated_at DESC").map((row) => toOffer(row))
+  const facets = getDb().prepare("SELECT DISTINCT program, city, sponsor FROM job_offers WHERE status IN ('active', 'closed') ORDER BY program, city, sponsor").all()
+  return res.json({ ok: true, offers, facets })
+})
+
+publicOffersRouter.get('/offers/:slug', (req, res, next) => {
+  if (req.params.slug === 'me') return next()
+  const row = selectOffers("WHERE o.slug = ? AND o.status IN ('active', 'closed')", [req.params.slug])[0]
+  if (!row) return res.status(404).json({ ok: false, error: 'Oferta no encontrada.' })
+  return res.json({ ok: true, offer: toOffer(row) })
+})
+
+publicOffersRouter.get('/offers/:slug/pdf', (req, res) => {
+  const row = getDb().prepare("SELECT slug, title, pdf_file_name FROM job_offers WHERE slug = ? AND status IN ('active', 'closed')").get(req.params.slug)
+  if (!row) return res.status(404).json({ ok: false, error: 'Documento no encontrado.' })
+  const filePath = safeStoredPdfPath(row.pdf_file_name)
+  if (!filePath) return res.status(404).json({ ok: false, error: 'El PDF todavía no está disponible.' })
+  res.set({
+    'Content-Type': 'application/pdf',
+    'Content-Disposition': 'inline; filename="documento-oferta-bbbsc.pdf"',
+    'Cache-Control': 'private, no-store',
+    'X-Content-Type-Options': 'nosniff',
+    'Content-Security-Policy': "default-src 'none'; frame-ancestors 'self'",
+  })
+  return res.sendFile(filePath)
+})
+
+publicOffersRouter.get('/offers/me', requireAuth, (req, res) => {
+  const row = getDb().prepare(
+    `SELECT a.id AS application_id, a.applied_at, a.source, o.*, ${availableExpression('o')} AS vacancies_available
+     FROM job_applications a JOIN job_offers o ON o.id = a.offer_id
+     WHERE a.participant_id = ? AND a.status = 'active'`,
+  ).get(req.user.id)
+  return res.json({ ok: true, application: row ? { id: row.application_id, appliedAt: row.applied_at, source: row.source, offer: toOffer(row) } : null })
+})
+
+publicOffersRouter.post('/offers/:id/apply', requireAuth, (req, res) => {
+  if (req.user.role !== 'STUDENT') return res.status(403).json({ ok: false, error: 'Solo los participantes activos pueden aplicar a una oferta.' })
+  const db = getDb()
+  db.exec('BEGIN IMMEDIATE')
+  try {
+    const existing = db.prepare("SELECT id FROM job_applications WHERE participant_id = ? AND status = 'active'").get(req.user.id)
+    if (existing) { db.exec('ROLLBACK'); return res.status(409).json({ ok: false, error: 'Ya tienes una oferta asignada. Puedes seguir consultando las demás, pero no aplicar nuevamente.' }) }
+    const row = selectOffers("WHERE o.id = ? AND o.status = 'active'", [Number(req.params.id)])[0]
+    if (!row || new Date(row.available_until) < new Date()) { db.exec('ROLLBACK'); return res.status(409).json({ ok: false, error: 'Esta oferta ya no está disponible.' }) }
+    if (Number(row.vacancies_available) < 1) { db.exec('ROLLBACK'); return res.status(409).json({ ok: false, error: 'Esta oferta ya no tiene vacantes disponibles.' }) }
+    const timestamp = nowIso()
+    const result = db.prepare("INSERT INTO job_applications (participant_id, offer_id, status, source, applied_at) VALUES (?, ?, 'active', 'participant', ?)").run(req.user.id, row.id, timestamp)
+    db.prepare("INSERT INTO job_application_history (participant_id, offer_id, application_id, event_type, actor_id, created_at) VALUES (?, ?, ?, 'applied', ?, ?)").run(req.user.id, row.id, result.lastInsertRowid, req.user.id, timestamp)
+    db.exec('COMMIT')
+    return res.status(201).json({ ok: true, application: { id: result.lastInsertRowid, appliedAt: timestamp, offer: toOffer({ ...row, vacancies_available: Number(row.vacancies_available) - 1 }) } })
+  } catch (error) {
+    db.exec('ROLLBACK'); console.error('[bbbsc-server] Error aplicando a oferta:', error)
+    return res.status(500).json({ ok: false, error: 'No pudimos registrar la aplicación.' })
+  }
+})
+
+adminOffersRouter.get('/offers', requirePermission(PERMISSIONS.OFFERS_VIEW), (_req, res) => res.json({ ok: true, offers: selectOffers().map((row) => toOffer(row, { privateFields: true })) }))
+
+adminOffersRouter.get('/offers/:id', requirePermission(PERMISSIONS.OFFERS_VIEW), (req, res) => {
+  const row = selectOffers('WHERE o.id = ?', [Number(req.params.id)])[0]
+  if (!row) return res.status(404).json({ ok: false, error: 'Oferta no encontrada.' })
+  return res.json({ ok: true, offer: toOffer(row, { privateFields: true }) })
+})
+
+adminOffersRouter.post('/offers/extract-pdf-url', requirePermission(PERMISSIONS.OFFERS_MANAGE), async (req, res) => {
+  try {
+    const sourceUrl = String(req.body?.url || '').trim()
+    if (!sourceUrl) return res.status(400).json({ ok: false, error: 'Ingresa la URL del PDF.' })
+    const downloaded = await downloadPdf(sourceUrl)
+    const text = await extractPdfText(downloaded.buffer)
+    if (!text) return res.status(422).json({ ok: false, error: 'El PDF no contiene texto legible. Puede ser un documento escaneado.' })
+    const analysis = inferOfferFields(text)
+    return res.json({ ok: true, analysis: { ...analysis, pdfSourceUrl: downloaded.sourceUrl, pdfFileName: downloaded.fileName, pdfText: text } })
+  } catch (error) {
+    console.error('[bbbsc-server] Error importando PDF por URL:', error)
+    return res.status(400).json({ ok: false, error: error instanceof Error ? error.message : 'No pudimos procesar el PDF.' })
+  }
+})
+
+adminOffersRouter.post('/offers/extract-pdf', requirePermission(PERMISSIONS.OFFERS_MANAGE), (req, res) => {
+  pdfUpload.single('file')(req, res, async (uploadError) => {
+    if (uploadError instanceof multer.MulterError && uploadError.code === 'LIMIT_FILE_SIZE') return res.status(400).json({ ok: false, error: 'El PDF supera el tamaño máximo permitido (25 MB).' })
+    if (uploadError || !req.file) return res.status(400).json({ ok: false, error: 'Selecciona un archivo PDF válido.' })
+    try {
+      const analysis = await analyzeStoredPdf(req.file.buffer)
+      return res.json({ ok: true, analysis: { fields: analysis.fields, detected: analysis.detected, confidence: analysis.confidence, warnings: analysis.warnings, pdfSourceUrl: '', pdfFileName: analysis.fileName, pdfText: analysis.text } })
+    } catch (error) {
+      return res.status(400).json({ ok: false, error: error instanceof Error ? error.message : 'No pudimos procesar el PDF.' })
+    }
+  })
+})
+
+adminOffersRouter.post('/offers', requirePermission(PERMISSIONS.OFFERS_MANAGE), (req, res) => {
+  const error = validateOffer(req.body)
+  if (error) return res.status(400).json({ ok: false, error })
+  const db = getDb(); const values = offerValues(req.body); const timestamp = nowIso()
+  const slug = uniqueSlug(slugify(req.body.slug || values.title), (candidate) => !!db.prepare('SELECT id FROM job_offers WHERE slug = ?').get(candidate))
+  const result = db.prepare(
+    `INSERT INTO job_offers (slug,title,program,sponsor,employer,compensation_type,compensation_min,compensation_max,compensation_currency,compensation_period,has_tips,english_level,city,state,offer_type,airport_pickup,overtime,bonuses,vacancies_total,available_until,image_src,description,pdf_source_url,pdf_file_name,pdf_text,pdf_extracted_data,status,created_by,created_at,updated_at)
+     VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
+  ).run(slug, values.title, values.program, values.sponsor, values.employer, values.compensationType, values.compensationMin, values.compensationMax, values.compensationCurrency, values.compensationPeriod, values.hasTips, values.englishLevel, values.city, values.state, values.offerType, values.airportPickup, values.overtime, values.bonuses, values.vacanciesTotal, values.availableUntil, values.imageSrc, values.description, values.pdfSourceUrl, values.pdfFileName, values.pdfText, values.pdfExtractedData, values.status, req.user.id, timestamp, timestamp)
+  return res.status(201).json({ ok: true, offer: toOffer(selectOffers('WHERE o.id = ?', [result.lastInsertRowid])[0]) })
+})
+
+adminOffersRouter.put('/offers/:id', requirePermission(PERMISSIONS.OFFERS_MANAGE), (req, res) => {
+  const error = validateOffer(req.body)
+  if (error) return res.status(400).json({ ok: false, error })
+  const db = getDb(); const existing = db.prepare('SELECT * FROM job_offers WHERE id = ?').get(req.params.id)
+  if (!existing) return res.status(404).json({ ok: false, error: 'Oferta no encontrada.' })
+  const activeCount = db.prepare("SELECT COUNT(*) AS total FROM job_applications WHERE offer_id = ? AND status = 'active'").get(existing.id).total
+  const values = offerValues(req.body, existing)
+  if (values.vacanciesTotal < activeCount + existing.vacancies_lost) return res.status(400).json({ ok: false, error: `No puedes reducir las vacantes por debajo de ${activeCount + existing.vacancies_lost}; ya están ocupadas o perdidas.` })
+  db.prepare(
+    `UPDATE job_offers SET title=?,program=?,sponsor=?,employer=?,compensation_type=?,compensation_min=?,compensation_max=?,compensation_currency=?,compensation_period=?,has_tips=?,english_level=?,city=?,state=?,offer_type=?,airport_pickup=?,overtime=?,bonuses=?,vacancies_total=?,available_until=?,image_src=?,description=?,pdf_source_url=?,pdf_file_name=?,pdf_text=?,pdf_extracted_data=?,status=?,updated_at=? WHERE id=?`,
+  ).run(values.title, values.program, values.sponsor, values.employer, values.compensationType, values.compensationMin, values.compensationMax, values.compensationCurrency, values.compensationPeriod, values.hasTips, values.englishLevel, values.city, values.state, values.offerType, values.airportPickup, values.overtime, values.bonuses, values.vacanciesTotal, values.availableUntil, values.imageSrc, values.description, values.pdfSourceUrl, values.pdfFileName, values.pdfText, values.pdfExtractedData, values.status, nowIso(), existing.id)
+  return res.json({ ok: true, offer: toOffer(selectOffers('WHERE o.id = ?', [existing.id])[0]) })
+})
+
+adminOffersRouter.post('/offers/:id/duplicate', requirePermission(PERMISSIONS.OFFERS_MANAGE), (req, res) => {
+  const db = getDb(); const existing = db.prepare('SELECT * FROM job_offers WHERE id = ?').get(req.params.id)
+  if (!existing) return res.status(404).json({ ok: false, error: 'Oferta no encontrada.' })
+  const timestamp = nowIso(); const slug = uniqueSlug(slugify(`${existing.slug}-copia`), (candidate) => !!db.prepare('SELECT id FROM job_offers WHERE slug = ?').get(candidate))
+  const result = db.prepare(
+    `INSERT INTO job_offers (slug,title,program,sponsor,employer,compensation_type,compensation_min,compensation_max,compensation_currency,compensation_period,has_tips,english_level,city,state,offer_type,airport_pickup,overtime,bonuses,vacancies_total,available_until,image_src,description,pdf_source_url,pdf_file_name,pdf_text,pdf_extracted_data,status,created_by,created_at,updated_at)
+     SELECT ?, title || ' (copia)',program,sponsor,employer,compensation_type,compensation_min,compensation_max,compensation_currency,compensation_period,has_tips,english_level,city,state,offer_type,airport_pickup,overtime,bonuses,vacancies_total,available_until,image_src,description,pdf_source_url,pdf_file_name,pdf_text,pdf_extracted_data,'draft',?,?,? FROM job_offers WHERE id=?`,
+  ).run(slug, req.user.id, timestamp, timestamp, existing.id)
+  return res.status(201).json({ ok: true, offer: toOffer(selectOffers('WHERE o.id = ?', [result.lastInsertRowid])[0]) })
+})
+
+adminOffersRouter.delete('/offers/:id', requirePermission(PERMISSIONS.OFFERS_MANAGE), (req, res) => {
+  const db = getDb(); const applications = db.prepare('SELECT COUNT(*) AS total FROM job_applications WHERE offer_id = ?').get(req.params.id).total
+  if (applications > 0) return res.status(409).json({ ok: false, error: 'Esta oferta tiene historial de aplicaciones y no puede eliminarse. Puedes cerrarla.' })
+  const result = db.prepare('DELETE FROM job_offers WHERE id = ?').run(req.params.id)
+  if (!result.changes) return res.status(404).json({ ok: false, error: 'Oferta no encontrada.' })
+  return res.json({ ok: true })
+})
+
+adminOffersRouter.post('/participants/:participantId/offer', requirePermission(PERMISSIONS.OFFERS_ASSIGN), (req, res) => {
+  const db = getDb(); db.exec('BEGIN IMMEDIATE')
+  try {
+    if (db.prepare("SELECT id FROM job_applications WHERE participant_id = ? AND status = 'active'").get(req.params.participantId)) { db.exec('ROLLBACK'); return res.status(409).json({ ok: false, error: 'El participante ya tiene una oferta asignada.' }) }
+    const row = selectOffers("WHERE o.id = ? AND o.status = 'active'", [Number(req.body?.offerId)])[0]
+    if (!row || Number(row.vacancies_available) < 1) { db.exec('ROLLBACK'); return res.status(409).json({ ok: false, error: 'La oferta no está activa o no tiene vacantes.' }) }
+    const timestamp = nowIso(); const result = db.prepare("INSERT INTO job_applications (participant_id,offer_id,status,source,assigned_by,applied_at) VALUES (?,?,'active','admin',?,?)").run(req.params.participantId, row.id, req.user.id, timestamp)
+    db.prepare("INSERT INTO job_application_history (participant_id,offer_id,application_id,event_type,actor_id,created_at) VALUES (?,?,?,'assigned',?,?)").run(req.params.participantId, row.id, result.lastInsertRowid, req.user.id, timestamp)
+    db.exec('COMMIT'); return res.status(201).json({ ok: true })
+  } catch (error) { db.exec('ROLLBACK'); console.error(error); return res.status(500).json({ ok: false, error: 'No pudimos asignar la oferta.' }) }
+})
+
+adminOffersRouter.delete('/participants/:participantId/offer', requirePermission(PERMISSIONS.OFFERS_ASSIGN), (req, res) => {
+  const { returnVacancy, reason } = req.body || {}
+  if (typeof returnVacancy !== 'boolean') return res.status(400).json({ ok: false, error: 'Indica qué debe pasar con la vacante.' })
+  const db = getDb(); db.exec('BEGIN IMMEDIATE')
+  try {
+    const application = db.prepare("SELECT * FROM job_applications WHERE participant_id = ? AND status = 'active'").get(req.params.participantId)
+    if (!application) { db.exec('ROLLBACK'); return res.status(404).json({ ok: false, error: 'El participante no tiene una oferta activa.' }) }
+    const timestamp = nowIso()
+    db.prepare("UPDATE job_applications SET status='removed',vacancy_returned=?,removal_reason=?,removed_at=? WHERE id=?").run(returnVacancy ? 1 : 0, String(reason || '').trim(), timestamp, application.id)
+    if (!returnVacancy) db.prepare('UPDATE job_offers SET vacancies_lost = vacancies_lost + 1, updated_at = ? WHERE id = ?').run(timestamp, application.offer_id)
+    db.prepare('INSERT INTO job_application_history (participant_id,offer_id,application_id,event_type,actor_id,note,created_at) VALUES (?,?,?,?,?,?,?)').run(req.params.participantId, application.offer_id, application.id, returnVacancy ? 'removed_returned' : 'removed_lost', req.user.id, String(reason || '').trim(), timestamp)
+    db.exec('COMMIT'); return res.json({ ok: true })
+  } catch (error) { db.exec('ROLLBACK'); console.error(error); return res.status(500).json({ ok: false, error: 'No pudimos retirar la oferta.' }) }
+})
+
+adminOffersRouter.get('/participants/:participantId/offer-history', requirePermission(PERMISSIONS.USERS_VIEW), (req, res) => {
+  const rows = getDb().prepare(
+    `SELECT h.*, o.title, o.employer, o.program FROM job_application_history h
+     LEFT JOIN job_offers o ON o.id = h.offer_id WHERE h.participant_id = ? ORDER BY h.created_at DESC`,
+  ).all(req.params.participantId)
+  return res.json({ ok: true, history: rows.map((row) => ({ id: row.id, eventType: row.event_type, note: row.note, createdAt: row.created_at, offer: row.offer_id ? { id: row.offer_id, title: row.title, employer: row.employer, program: row.program } : null })) })
+})
+
+function escapeXml(value) { return String(value ?? '').replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;') }
+export function buildParticipantsExcel(users, filter) {
+  const rows = users.filter((user) => filter === 'with' ? user.currentOffer : filter === 'without' ? !user.currentOffer : true)
+  const headers = ['Nombre', 'Apellido', 'Correo', 'Código', 'Estado intranet', 'Tiene oferta', 'Cargo', 'Empleador', 'Programa', 'Sponsor', 'Ciudad', 'Estado', 'Salario/Estipendio', 'Fecha de asignación']
+  const data = rows.map((user) => [user.firstName, user.lastName, user.email, user.studentCode || '', user.panelActive ? 'Activo' : 'Inactivo', user.currentOffer ? 'Sí' : 'No', user.currentOffer?.title || '', user.currentOffer?.employer || '', user.currentOffer?.program || '', user.currentOffer?.sponsor || '', user.currentOffer?.city || '', user.currentOffer?.state || '', user.currentOffer?.compensationLabel || '', user.currentOffer?.appliedAt || ''])
+  const tableRows = [headers, ...data].map((row) => `<Row>${row.map((cell) => `<Cell><Data ss:Type="String">${escapeXml(cell)}</Data></Cell>`).join('')}</Row>`).join('')
+  return `<?xml version="1.0"?><Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet" xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"><Worksheet ss:Name="Participantes"><Table>${tableRows}</Table></Worksheet></Workbook>`
+}
+
+adminOffersRouter.get('/offer-participants/export', requirePermission(PERMISSIONS.OFFERS_EXPORT), async (req, res) => {
+  try {
+    const central = await getUsers(req.bbbscAccessToken)
+    const centralUsers = (Array.isArray(central) ? central : central?.users || []).filter((user) => (user.roles || [user.role]).includes('STUDENT'))
+    const db = getDb()
+    const applications = db.prepare(
+      `SELECT a.participant_id,a.applied_at,o.title,o.employer,o.program,o.sponsor,o.city,o.state,o.compensation_type,o.compensation_min,o.compensation_max,o.compensation_currency,o.compensation_period
+       FROM job_applications a JOIN job_offers o ON o.id=a.offer_id WHERE a.status='active'`,
+    ).all()
+    const byUser = new Map(applications.map((row) => [row.participant_id, row]))
+    const access = new Map(db.prepare('SELECT bbbsc_user_id,enabled FROM intranet_user_access').all().map((row) => [row.bbbsc_user_id, row.enabled === 1]))
+    const users = centralUsers.map((user) => {
+      const offer = byUser.get(user.id)
+      const compensationLabel = offer ? `${offer.compensation_type === 'stipend' ? 'Estipendio' : 'Salario'} ${offer.compensation_currency} ${offer.compensation_min}${offer.compensation_max ? ` - ${offer.compensation_max}` : ''} / ${offer.compensation_period}` : ''
+      return { ...user, panelActive: user.isActive !== false && access.get(user.id) === true, currentOffer: offer ? { ...offer, compensationLabel } : null }
+    })
+    const file = buildParticipantsExcel(users, ['with', 'without'].includes(req.query.filter) ? req.query.filter : 'all')
+    res.setHeader('Content-Type', 'application/vnd.ms-excel; charset=utf-8')
+    res.setHeader('Content-Disposition', `attachment; filename="participantes-ofertas-${new Date().toISOString().slice(0, 10)}.xls"`)
+    return res.send(file)
+  } catch (error) {
+    console.error('[bbbsc-server] Error exportando participantes:', error)
+    return res.status(502).json({ ok: false, error: 'No pudimos generar el archivo de Excel.' })
+  }
+})
