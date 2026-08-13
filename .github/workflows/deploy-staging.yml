@@ -48,6 +48,7 @@ jobs:
         run: |
           npm ci
           npm run build
+          node deploy/prepare-staging-build.mjs
 
       - name: Preparar acceso SSH
         env:
@@ -122,4 +123,4 @@ jobs:
         run: |
           curl --fail --silent --show-error --retry 4 --retry-delay 5 "$STAGING_URL/" >/dev/null
           curl --fail --silent --show-error --retry 4 --retry-delay 5 "$STAGING_URL/api/health" >/dev/null
-          curl --fail --silent --show-error --head "$STAGING_URL/" | tr -d '\r' | grep -Eiq '^x-robots-tag: noindex, nofollow$'
+          curl --fail --silent --show-error "$STAGING_URL/" | grep -Fq 'name="robots" content="noindex, nofollow"'
