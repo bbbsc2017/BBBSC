@@ -57,6 +57,19 @@ const asiaRegistrationFields = [
   { key: 'disponibilidadViaje', label: 'Disponibilidad para viajar', defaultTarget: 'ignore' },
 ]
 
+const offerApplicationFields = [
+  { key: 'firstName', label: 'Nombre del participante', defaultTarget: 'standard:first_name' },
+  { key: 'lastName', label: 'Apellidos del participante', defaultTarget: 'standard:last_name' },
+  { key: 'email', label: 'Correo del participante', defaultTarget: 'standard:email' },
+  { key: 'travelStartDate', label: 'Fecha prevista de inicio del viaje', defaultTarget: 'ignore' },
+  { key: 'travelEndDate', label: 'Fecha prevista de regreso', defaultTarget: 'ignore' },
+  { key: 'offerName', label: 'Oferta elegida', defaultTarget: 'ignore' },
+  { key: 'clientifyProductName', label: 'Producto enlazado', defaultTarget: 'ignore' },
+  { key: 'interestTag', label: 'Etiqueta de oferta elegida (oculta)', defaultTarget: 'standard:tags' },
+  { key: 'message', label: 'Mensaje de aplicación (oculto)', defaultTarget: 'standard:message' },
+  { key: 'contactSource', label: 'Origen del contacto (oculto)', defaultTarget: 'standard:contact_source' },
+]
+
 const programs = [
   ['cultural_trainee-and-internship', 'Trainee and Internship USA', 'trainee_and_internship'],
   ['cultural_espana-ti', 'Trainee & Internship España', 'espana_ti'],
@@ -76,6 +89,14 @@ const programs = [
 ]
 
 export const FORM_DEFINITIONS = [
+  {
+    key: 'offer_application',
+    label: 'Aplicación · Oferta de empleo',
+    title: 'Aplicación a oferta de empleo',
+    interestTag: 'oferta_elegida',
+    source: 'Portal de ofertas BBBSC',
+    fields: offerApplicationFields,
+  },
   {
     key: 'registration_work-and-travel-usa',
     label: 'Inscripción · Work and Travel USA',

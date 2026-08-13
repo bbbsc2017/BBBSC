@@ -6,6 +6,7 @@ import { PERMISSIONS } from '../lib/permissions.js'
 import { slugify, uniqueSlug } from '../lib/slugify.js'
 import { getUsers } from '../lib/bbbscApi.js'
 import { analyzeStoredPdf, downloadPdf, extractPdfText, inferOfferFields, MAX_PDF_BYTES, safeStoredPdfPath } from '../lib/offerPdfs.js'
+import { getCachedClientifyProducts, syncClientifyProducts, syncOfferApplicationToClientify } from '../lib/clientifyOffers.js'
 
 export const publicOffersRouter = Router()
 export const adminOffersRouter = Router()
@@ -35,7 +36,12 @@ function toOffer(row, { privateFields = false } = {}) {
     vacanciesTotal: row.vacancies_total, vacanciesLost: row.vacancies_lost, vacanciesAvailable,
     availableUntil: row.available_until, imageSrc: row.image_src, description: row.description, status,
     hasPdf: Boolean(row.pdf_file_name), pdfViewUrl: row.pdf_file_name ? `/api/offers/${encodeURIComponent(row.slug)}/pdf` : null,
-    ...(privateFields ? { storedStatus: row.status, pdfSourceUrl: row.pdf_source_url, pdfFileName: row.pdf_file_name, pdfText: row.pdf_text } : {}),
+    clientifyProductLinked: Boolean(row.clientify_product_id),
+    ...(privateFields ? {
+      storedStatus: row.status, pdfSourceUrl: row.pdf_source_url, pdfFileName: row.pdf_file_name, pdfText: row.pdf_text,
+      clientifyProductId: row.clientify_product_id, clientifyProductName: row.clientify_product_name,
+      clientifyProductSku: row.clientify_product_sku, clientifySyncedAt: row.clientify_synced_at,
+    } : {}),
     createdAt: row.created_at, updatedAt: row.updated_at,
   }
 }
@@ -62,6 +68,9 @@ function validateOffer(body) {
 }
 
 function offerValues(body, existing = {}) {
+  const requestedProductId = Object.hasOwn(body, 'clientifyProductId') ? body.clientifyProductId : existing.clientify_product_id
+  const productId = String(requestedProductId ?? '').trim()
+  const product = productId ? getDb().prepare('SELECT id,name,sku FROM clientify_products WHERE id=? AND active=1').get(productId) : null
   return {
     title: String(body.title).trim(), program: body.program, sponsor: String(body.sponsor).trim(), employer: String(body.employer).trim(),
     compensationType: body.compensationType, compensationMin: Number(body.compensationMin),
@@ -75,7 +84,34 @@ function offerValues(body, existing = {}) {
     pdfFileName: String(body.pdfFileName ?? existing.pdf_file_name ?? '').trim(),
     pdfText: String(body.pdfText ?? existing.pdf_text ?? ''),
     pdfExtractedData: JSON.stringify(body.pdfExtractedData || (() => { try { return JSON.parse(existing.pdf_extracted_data || '{}') } catch { return {} } })()),
+    clientifyProductId: product?.id || null,
+    clientifyProductName: product?.name || '',
+    clientifyProductSku: product?.sku || '',
   }
+}
+
+function todayInBogota() {
+  const parts = new Intl.DateTimeFormat('en-CA', {
+    timeZone: 'America/Bogota',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).formatToParts(new Date())
+  const values = Object.fromEntries(parts.map((part) => [part.type, part.value]))
+  return `${values.year}-${values.month}-${values.day}`
+}
+
+export function validateTravelDates(startDate, endDate, today = todayInBogota()) {
+  const isoDate = /^\d{4}-\d{2}-\d{2}$/
+  if (!isoDate.test(String(startDate || '')) || !isoDate.test(String(endDate || ''))) return 'Selecciona las dos fechas de viaje.'
+  const start = new Date(`${startDate}T00:00:00Z`)
+  const end = new Date(`${endDate}T00:00:00Z`)
+  if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime()) || start.toISOString().slice(0, 10) !== startDate || end.toISOString().slice(0, 10) !== endDate) return 'Las fechas de viaje no son válidas.'
+  if (startDate < today) return 'La fecha de inicio del viaje no puede estar en el pasado.'
+  if (endDate <= startDate) return 'La fecha de regreso debe ser posterior a la fecha de inicio.'
+  const maxEnd = new Date(start); maxEnd.setUTCFullYear(maxEnd.getUTCFullYear() + 3)
+  if (end > maxEnd) return 'El rango del viaje no puede superar tres años.'
+  return null
 }
 
 publicOffersRouter.get('/offers', (req, res) => {
@@ -118,16 +154,19 @@ publicOffersRouter.get('/offers/:slug/pdf', (req, res) => {
 
 publicOffersRouter.get('/offers/me', requireAuth, (req, res) => {
   const row = getDb().prepare(
-    `SELECT a.id AS application_id, a.applied_at, a.source, o.*, ${availableExpression('o')} AS vacancies_available
+    `SELECT a.id AS application_id, a.applied_at, a.source, a.travel_start_date, a.travel_end_date, a.clientify_sync_status, o.*, ${availableExpression('o')} AS vacancies_available
      FROM job_applications a JOIN job_offers o ON o.id = a.offer_id
      WHERE a.participant_id = ? AND a.status = 'active'`,
   ).get(req.user.id)
-  return res.json({ ok: true, application: row ? { id: row.application_id, appliedAt: row.applied_at, source: row.source, offer: toOffer(row) } : null })
+  return res.json({ ok: true, application: row ? { id: row.application_id, appliedAt: row.applied_at, source: row.source, travelStartDate: row.travel_start_date, travelEndDate: row.travel_end_date, clientifySyncStatus: row.clientify_sync_status, offer: toOffer(row) } : null })
 })
 
-publicOffersRouter.post('/offers/:id/apply', requireAuth, (req, res) => {
+publicOffersRouter.post('/offers/:id/apply', requireAuth, async (req, res) => {
   if (req.user.role !== 'STUDENT') return res.status(403).json({ ok: false, error: 'Solo los participantes activos pueden aplicar a una oferta.' })
+  const dateError = validateTravelDates(req.body?.travelStartDate, req.body?.travelEndDate)
+  if (dateError) return res.status(400).json({ ok: false, error: dateError })
   const db = getDb()
+  let committed = false
   db.exec('BEGIN IMMEDIATE')
   try {
     const existing = db.prepare("SELECT id FROM job_applications WHERE participant_id = ? AND status = 'active'").get(req.user.id)
@@ -135,15 +174,46 @@ publicOffersRouter.post('/offers/:id/apply', requireAuth, (req, res) => {
     const row = selectOffers("WHERE o.id = ? AND o.status = 'active'", [Number(req.params.id)])[0]
     if (!row || new Date(row.available_until) < new Date()) { db.exec('ROLLBACK'); return res.status(409).json({ ok: false, error: 'Esta oferta ya no está disponible.' }) }
     if (Number(row.vacancies_available) < 1) { db.exec('ROLLBACK'); return res.status(409).json({ ok: false, error: 'Esta oferta ya no tiene vacantes disponibles.' }) }
+    if (!row.clientify_product_id) { db.exec('ROLLBACK'); return res.status(409).json({ ok: false, error: 'Esta oferta todavía está enlazándose con Clientify. Intenta nuevamente en unos minutos.' }) }
+    const selectedProduct = db.prepare('SELECT id,name,sku,price,currency FROM clientify_products WHERE id=? AND active=1').get(String(row.clientify_product_id))
+    if (!selectedProduct) { db.exec('ROLLBACK'); return res.status(409).json({ ok: false, error: 'El producto enlazado ya no está disponible en Clientify. El equipo BBBSC debe sincronizar esta oferta.' }) }
     const timestamp = nowIso()
-    const result = db.prepare("INSERT INTO job_applications (participant_id, offer_id, status, source, applied_at) VALUES (?, ?, 'active', 'participant', ?)").run(req.user.id, row.id, timestamp)
+    const result = db.prepare(
+      `INSERT INTO job_applications
+        (participant_id,offer_id,status,source,travel_start_date,travel_end_date,participant_email,participant_first_name,participant_last_name,selected_product_id,selected_product_name,selected_product_sku,selected_product_price,selected_product_currency,clientify_sync_status,clientify_next_attempt_at,applied_at)
+       VALUES (?,?,'active','participant',?,?,?,?,?,?,?,?,?,?,'pending',?,?)`,
+    ).run(req.user.id, row.id, req.body.travelStartDate, req.body.travelEndDate, req.user.email, req.user.firstName || '', req.user.lastName || '', selectedProduct.id, selectedProduct.name, selectedProduct.sku, selectedProduct.price, selectedProduct.currency, timestamp, timestamp)
     db.prepare("INSERT INTO job_application_history (participant_id, offer_id, application_id, event_type, actor_id, created_at) VALUES (?, ?, ?, 'applied', ?, ?)").run(req.user.id, row.id, result.lastInsertRowid, req.user.id, timestamp)
     db.exec('COMMIT')
-    return res.status(201).json({ ok: true, application: { id: result.lastInsertRowid, appliedAt: timestamp, offer: toOffer({ ...row, vacancies_available: Number(row.vacancies_available) - 1 }) } })
+    committed = true
+    let clientifySyncStatus = 'pending'
+    try { clientifySyncStatus = (await syncOfferApplicationToClientify(result.lastInsertRowid)).status }
+    catch (error) { console.error(`[bbbsc-server] Aplicación ${result.lastInsertRowid} guardada; Clientify se reintentará:`, error instanceof Error ? error.message : error) }
+    return res.status(201).json({ ok: true, application: { id: result.lastInsertRowid, appliedAt: timestamp, travelStartDate: req.body.travelStartDate, travelEndDate: req.body.travelEndDate, clientifySyncStatus, offer: toOffer({ ...row, vacancies_available: Number(row.vacancies_available) - 1 }) } })
   } catch (error) {
-    db.exec('ROLLBACK'); console.error('[bbbsc-server] Error aplicando a oferta:', error)
+    if (!committed) db.exec('ROLLBACK'); console.error('[bbbsc-server] Error aplicando a oferta:', error)
     return res.status(500).json({ ok: false, error: 'No pudimos registrar la aplicación.' })
   }
+})
+
+adminOffersRouter.get('/clientify/products', requirePermission(PERMISSIONS.OFFERS_VIEW), (_req, res) => {
+  const products = getCachedClientifyProducts()
+  return res.json({ ok: true, products, syncedAt: products[0]?.syncedAt || null })
+})
+
+adminOffersRouter.post('/clientify/products/sync', requirePermission(PERMISSIONS.OFFERS_MANAGE), async (_req, res) => {
+  try { return res.json({ ok: true, ...(await syncClientifyProducts()), productsList: getCachedClientifyProducts() }) }
+  catch (error) {
+    console.error('[bbbsc-server] Error sincronizando productos:', error)
+    return res.status(error?.status === 401 ? 401 : 502).json({ ok: false, error: 'No pudimos sincronizar los productos de Clientify. Revisa la conexión e intenta nuevamente.' })
+  }
+})
+
+adminOffersRouter.post('/applications/:id/clientify/retry', requirePermission(PERMISSIONS.OFFERS_MANAGE), async (req, res) => {
+  const application = getDb().prepare('SELECT id FROM job_applications WHERE id=?').get(Number(req.params.id))
+  if (!application) return res.status(404).json({ ok: false, error: 'Aplicación no encontrada.' })
+  try { return res.json({ ok: true, sync: await syncOfferApplicationToClientify(application.id) }) }
+  catch { return res.status(502).json({ ok: false, error: 'La aplicación sigue pendiente de sincronización con Clientify.' }) }
 })
 
 adminOffersRouter.get('/offers', requirePermission(PERMISSIONS.OFFERS_VIEW), (_req, res) => res.json({ ok: true, offers: selectOffers().map((row) => toOffer(row, { privateFields: true })) }))
@@ -188,9 +258,9 @@ adminOffersRouter.post('/offers', requirePermission(PERMISSIONS.OFFERS_MANAGE), 
   const db = getDb(); const values = offerValues(req.body); const timestamp = nowIso()
   const slug = uniqueSlug(slugify(req.body.slug || values.title), (candidate) => !!db.prepare('SELECT id FROM job_offers WHERE slug = ?').get(candidate))
   const result = db.prepare(
-    `INSERT INTO job_offers (slug,title,program,sponsor,employer,compensation_type,compensation_min,compensation_max,compensation_currency,compensation_period,has_tips,english_level,city,state,offer_type,airport_pickup,overtime,bonuses,vacancies_total,available_until,image_src,description,pdf_source_url,pdf_file_name,pdf_text,pdf_extracted_data,status,created_by,created_at,updated_at)
-     VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
-  ).run(slug, values.title, values.program, values.sponsor, values.employer, values.compensationType, values.compensationMin, values.compensationMax, values.compensationCurrency, values.compensationPeriod, values.hasTips, values.englishLevel, values.city, values.state, values.offerType, values.airportPickup, values.overtime, values.bonuses, values.vacanciesTotal, values.availableUntil, values.imageSrc, values.description, values.pdfSourceUrl, values.pdfFileName, values.pdfText, values.pdfExtractedData, values.status, req.user.id, timestamp, timestamp)
+    `INSERT INTO job_offers (slug,title,program,sponsor,employer,compensation_type,compensation_min,compensation_max,compensation_currency,compensation_period,has_tips,english_level,city,state,offer_type,airport_pickup,overtime,bonuses,vacancies_total,available_until,image_src,description,pdf_source_url,pdf_file_name,pdf_text,pdf_extracted_data,clientify_product_id,clientify_product_name,clientify_product_sku,clientify_synced_at,status,created_by,created_at,updated_at)
+     VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
+  ).run(slug, values.title, values.program, values.sponsor, values.employer, values.compensationType, values.compensationMin, values.compensationMax, values.compensationCurrency, values.compensationPeriod, values.hasTips, values.englishLevel, values.city, values.state, values.offerType, values.airportPickup, values.overtime, values.bonuses, values.vacanciesTotal, values.availableUntil, values.imageSrc, values.description, values.pdfSourceUrl, values.pdfFileName, values.pdfText, values.pdfExtractedData, values.clientifyProductId, values.clientifyProductName, values.clientifyProductSku, values.clientifyProductId ? timestamp : null, values.status, req.user.id, timestamp, timestamp)
   return res.status(201).json({ ok: true, offer: toOffer(selectOffers('WHERE o.id = ?', [result.lastInsertRowid])[0]) })
 })
 
@@ -203,8 +273,8 @@ adminOffersRouter.put('/offers/:id', requirePermission(PERMISSIONS.OFFERS_MANAGE
   const values = offerValues(req.body, existing)
   if (values.vacanciesTotal < activeCount + existing.vacancies_lost) return res.status(400).json({ ok: false, error: `No puedes reducir las vacantes por debajo de ${activeCount + existing.vacancies_lost}; ya están ocupadas o perdidas.` })
   db.prepare(
-    `UPDATE job_offers SET title=?,program=?,sponsor=?,employer=?,compensation_type=?,compensation_min=?,compensation_max=?,compensation_currency=?,compensation_period=?,has_tips=?,english_level=?,city=?,state=?,offer_type=?,airport_pickup=?,overtime=?,bonuses=?,vacancies_total=?,available_until=?,image_src=?,description=?,pdf_source_url=?,pdf_file_name=?,pdf_text=?,pdf_extracted_data=?,status=?,updated_at=? WHERE id=?`,
-  ).run(values.title, values.program, values.sponsor, values.employer, values.compensationType, values.compensationMin, values.compensationMax, values.compensationCurrency, values.compensationPeriod, values.hasTips, values.englishLevel, values.city, values.state, values.offerType, values.airportPickup, values.overtime, values.bonuses, values.vacanciesTotal, values.availableUntil, values.imageSrc, values.description, values.pdfSourceUrl, values.pdfFileName, values.pdfText, values.pdfExtractedData, values.status, nowIso(), existing.id)
+    `UPDATE job_offers SET title=?,program=?,sponsor=?,employer=?,compensation_type=?,compensation_min=?,compensation_max=?,compensation_currency=?,compensation_period=?,has_tips=?,english_level=?,city=?,state=?,offer_type=?,airport_pickup=?,overtime=?,bonuses=?,vacancies_total=?,available_until=?,image_src=?,description=?,pdf_source_url=?,pdf_file_name=?,pdf_text=?,pdf_extracted_data=?,clientify_product_id=?,clientify_product_name=?,clientify_product_sku=?,clientify_synced_at=?,status=?,updated_at=? WHERE id=?`,
+  ).run(values.title, values.program, values.sponsor, values.employer, values.compensationType, values.compensationMin, values.compensationMax, values.compensationCurrency, values.compensationPeriod, values.hasTips, values.englishLevel, values.city, values.state, values.offerType, values.airportPickup, values.overtime, values.bonuses, values.vacanciesTotal, values.availableUntil, values.imageSrc, values.description, values.pdfSourceUrl, values.pdfFileName, values.pdfText, values.pdfExtractedData, values.clientifyProductId, values.clientifyProductName, values.clientifyProductSku, values.clientifyProductId ? nowIso() : null, values.status, nowIso(), existing.id)
   return res.json({ ok: true, offer: toOffer(selectOffers('WHERE o.id = ?', [existing.id])[0]) })
 })
 
@@ -213,8 +283,8 @@ adminOffersRouter.post('/offers/:id/duplicate', requirePermission(PERMISSIONS.OF
   if (!existing) return res.status(404).json({ ok: false, error: 'Oferta no encontrada.' })
   const timestamp = nowIso(); const slug = uniqueSlug(slugify(`${existing.slug}-copia`), (candidate) => !!db.prepare('SELECT id FROM job_offers WHERE slug = ?').get(candidate))
   const result = db.prepare(
-    `INSERT INTO job_offers (slug,title,program,sponsor,employer,compensation_type,compensation_min,compensation_max,compensation_currency,compensation_period,has_tips,english_level,city,state,offer_type,airport_pickup,overtime,bonuses,vacancies_total,available_until,image_src,description,pdf_source_url,pdf_file_name,pdf_text,pdf_extracted_data,status,created_by,created_at,updated_at)
-     SELECT ?, title || ' (copia)',program,sponsor,employer,compensation_type,compensation_min,compensation_max,compensation_currency,compensation_period,has_tips,english_level,city,state,offer_type,airport_pickup,overtime,bonuses,vacancies_total,available_until,image_src,description,pdf_source_url,pdf_file_name,pdf_text,pdf_extracted_data,'draft',?,?,? FROM job_offers WHERE id=?`,
+    `INSERT INTO job_offers (slug,title,program,sponsor,employer,compensation_type,compensation_min,compensation_max,compensation_currency,compensation_period,has_tips,english_level,city,state,offer_type,airport_pickup,overtime,bonuses,vacancies_total,available_until,image_src,description,pdf_source_url,pdf_file_name,pdf_text,pdf_extracted_data,clientify_product_id,clientify_product_name,clientify_product_sku,clientify_synced_at,status,created_by,created_at,updated_at)
+     SELECT ?, title || ' (copia)',program,sponsor,employer,compensation_type,compensation_min,compensation_max,compensation_currency,compensation_period,has_tips,english_level,city,state,offer_type,airport_pickup,overtime,bonuses,vacancies_total,available_until,image_src,description,pdf_source_url,pdf_file_name,pdf_text,pdf_extracted_data,clientify_product_id,clientify_product_name,clientify_product_sku,clientify_synced_at,'draft',?,?,? FROM job_offers WHERE id=?`,
   ).run(slug, req.user.id, timestamp, timestamp, existing.id)
   return res.status(201).json({ ok: true, offer: toOffer(selectOffers('WHERE o.id = ?', [result.lastInsertRowid])[0]) })
 })

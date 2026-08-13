@@ -17,10 +17,12 @@ import { adminRolesRouter } from './routes/roles.js'
 import { publicOffersRouter, adminOffersRouter } from './routes/offers.js'
 import { isRateLimited, getClientIp } from './lib/rateLimit.js'
 import { createClientifyContact } from './lib/clientify.js'
-import { publicFormsRouter, adminFormsRouter, buildClientifyPayload } from './routes/forms.js'
+import { publicFormsRouter, adminFormsRouter } from './routes/forms.js'
+import { buildClientifyPayload } from './lib/clientifyPayload.js'
 import { getFormDefinition } from './lib/formDefinitions.js'
 import { requireRecaptcha } from './lib/recaptcha.js'
 import { sitemapRouter } from './routes/sitemap.js'
+import { startClientifyOfferSyncWorker } from './lib/clientifyOffers.js'
 
 const PORT = process.env.PORT || 4000
 const CLIENTIFY_API_KEY = process.env.CLIENTIFY_API_KEY
@@ -51,6 +53,7 @@ if (!process.env.BBBSC_API_URL) {
 seedDatabase()
 cleanupExpiredSessions()
 setInterval(cleanupExpiredSessions, 60 * 60 * 1000)
+startClientifyOfferSyncWorker()
 
 const app = express()
 app.set('trust proxy', 1)

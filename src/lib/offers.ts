@@ -41,6 +41,11 @@ export interface JobOffer {
   pdfSourceUrl?: string
   pdfFileName?: string
   pdfText?: string
+  clientifyProductLinked: boolean
+  clientifyProductId?: string | null
+  clientifyProductName?: string
+  clientifyProductSku?: string
+  clientifySyncedAt?: string | null
   createdAt: string
   updatedAt: string
 }

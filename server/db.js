@@ -99,6 +99,19 @@ CREATE TABLE IF NOT EXISTS clientify_form_mappings (
   updated_at TEXT NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS clientify_products (
+  id TEXT PRIMARY KEY,
+  name TEXT NOT NULL,
+  sku TEXT NOT NULL DEFAULT '',
+  price REAL NOT NULL DEFAULT 0,
+  currency TEXT NOT NULL DEFAULT 'USD',
+  description TEXT NOT NULL DEFAULT '',
+  active INTEGER NOT NULL DEFAULT 1 CHECK (active IN (0,1)),
+  raw_json TEXT NOT NULL DEFAULT '{}',
+  synced_at TEXT NOT NULL
+);
+CREATE INDEX IF NOT EXISTS idx_clientify_products_name ON clientify_products(name);
+
 CREATE TABLE IF NOT EXISTS job_offers (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   slug TEXT NOT NULL UNIQUE,
@@ -128,6 +141,10 @@ CREATE TABLE IF NOT EXISTS job_offers (
   pdf_file_name TEXT NOT NULL DEFAULT '',
   pdf_text TEXT NOT NULL DEFAULT '',
   pdf_extracted_data TEXT NOT NULL DEFAULT '{}',
+  clientify_product_id TEXT,
+  clientify_product_name TEXT NOT NULL DEFAULT '',
+  clientify_product_sku TEXT NOT NULL DEFAULT '',
+  clientify_synced_at TEXT,
   status TEXT NOT NULL DEFAULT 'draft' CHECK (status IN ('draft','active','closed')),
   created_by TEXT,
   created_at TEXT NOT NULL,
@@ -145,6 +162,23 @@ CREATE TABLE IF NOT EXISTS job_applications (
   assigned_by TEXT,
   vacancy_returned INTEGER CHECK (vacancy_returned IN (0,1)),
   removal_reason TEXT,
+  travel_start_date TEXT,
+  travel_end_date TEXT,
+  participant_email TEXT,
+  participant_first_name TEXT,
+  participant_last_name TEXT,
+  selected_product_id TEXT,
+  selected_product_name TEXT,
+  selected_product_sku TEXT,
+  selected_product_price REAL,
+  selected_product_currency TEXT,
+  clientify_contact_id TEXT,
+  clientify_deal_id TEXT,
+  clientify_sync_status TEXT NOT NULL DEFAULT 'pending' CHECK (clientify_sync_status IN ('pending','syncing','synced','failed')),
+  clientify_sync_attempts INTEGER NOT NULL DEFAULT 0,
+  clientify_sync_error TEXT,
+  clientify_next_attempt_at TEXT,
+  clientify_synced_at TEXT,
   applied_at TEXT NOT NULL,
   removed_at TEXT
 );
@@ -191,9 +225,36 @@ export function getDb() {
     ['pdf_file_name', "TEXT NOT NULL DEFAULT ''"],
     ['pdf_text', "TEXT NOT NULL DEFAULT ''"],
     ['pdf_extracted_data', "TEXT NOT NULL DEFAULT '{}'"],
+    ['clientify_product_id', 'TEXT'],
+    ['clientify_product_name', "TEXT NOT NULL DEFAULT ''"],
+    ['clientify_product_sku', "TEXT NOT NULL DEFAULT ''"],
+    ['clientify_synced_at', 'TEXT'],
   ]
   for (const [name, definition] of offerMigrations) {
     if (!offerColumns.some((column) => column.name === name)) db.exec(`ALTER TABLE job_offers ADD COLUMN ${name} ${definition}`)
+  }
+  const applicationColumns = db.prepare('PRAGMA table_info(job_applications)').all()
+  const applicationMigrations = [
+    ['travel_start_date', 'TEXT'],
+    ['travel_end_date', 'TEXT'],
+    ['participant_email', 'TEXT'],
+    ['participant_first_name', 'TEXT'],
+    ['participant_last_name', 'TEXT'],
+    ['selected_product_id', 'TEXT'],
+    ['selected_product_name', 'TEXT'],
+    ['selected_product_sku', 'TEXT'],
+    ['selected_product_price', 'REAL'],
+    ['selected_product_currency', 'TEXT'],
+    ['clientify_contact_id', 'TEXT'],
+    ['clientify_deal_id', 'TEXT'],
+    ['clientify_sync_status', "TEXT NOT NULL DEFAULT 'pending'"],
+    ['clientify_sync_attempts', 'INTEGER NOT NULL DEFAULT 0'],
+    ['clientify_sync_error', 'TEXT'],
+    ['clientify_next_attempt_at', 'TEXT'],
+    ['clientify_synced_at', 'TEXT'],
+  ]
+  for (const [name, definition] of applicationMigrations) {
+    if (!applicationColumns.some((column) => column.name === name)) db.exec(`ALTER TABLE job_applications ADD COLUMN ${name} ${definition}`)
   }
   const timestamp = nowIso()
   const seedRole = db.prepare(
