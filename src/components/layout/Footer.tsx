@@ -126,11 +126,19 @@ export function Footer() {
               </a>
             </li>
             {SITE.offices.map((office) => (
-              <li key={office.city} className="flex items-start gap-2.5">
-                <MapPin className="mt-0.5 size-4 shrink-0 text-brand" />
-                <span>
-                  <strong className="text-white">{office.city}:</strong> {office.address}
-                </span>
+              <li key={office.city}>
+                <a
+                  href={office.mapsUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`Ver ${office.googleBusinessName} en Google Maps`}
+                  className="group flex items-start gap-2.5 rounded-lg transition-colors hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-ink"
+                >
+                  <MapPin className="mt-0.5 size-4 shrink-0 text-brand transition-transform group-hover:-translate-y-0.5" />
+                  <span className="underline-offset-4 group-hover:underline">
+                    <strong className="text-white">{office.city}:</strong> {office.address}
+                  </span>
+                </a>
               </li>
             ))}
           </ul>

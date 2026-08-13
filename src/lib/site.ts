@@ -16,11 +16,15 @@ export const SITE = {
       city: 'Ibagué',
       address: 'Cll 11 #4-24 Oficina 401, Tolima',
       phone: '3245961316',
+      googleBusinessName: 'BBB Student Centers',
+      mapsUrl: 'https://www.google.com/maps/search/?api=1&query=BBB%20Student%20Centers%20Ibagu%C3%A9',
     },
     {
       city: 'Bucaramanga',
       address: 'Cra. 36 #48-116, ColorWorking, Santander',
       phone: '3104735297',
+      googleBusinessName: 'BBB Student Center Sede Bucaramanga',
+      mapsUrl: 'https://www.google.com/maps/search/?api=1&query=BBB%20Student%20Center%20Sede%20Bucaramanga',
     },
   ],
   social: {
