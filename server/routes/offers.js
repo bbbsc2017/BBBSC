@@ -205,6 +205,7 @@ adminOffersRouter.post('/clientify/products/sync', requirePermission(PERMISSIONS
   try { return res.json({ ok: true, ...(await syncClientifyProducts()), productsList: getCachedClientifyProducts() }) }
   catch (error) {
     console.error('[bbbsc-server] Error sincronizando productos:', error)
+    if (error?.status === 403) return res.status(403).json({ ok: false, error: 'La clave de Clientify puede gestionar contactos, pero no tiene acceso a Productos y Oportunidades. Genera la clave desde un usuario habilitado como usuario de Ventas en la cuenta de BBBSC.' })
     return res.status(error?.status === 401 ? 401 : 502).json({ ok: false, error: 'No pudimos sincronizar los productos de Clientify. Revisa la conexión e intenta nuevamente.' })
   }
 })
