@@ -127,7 +127,13 @@ jobs:
             exit 1
           fi
           cd "$DEPLOY_PATH/releases"
-          ls -1dt */ 2>/dev/null | tail -n +6 | while read -r old_release; do rm -rf -- "$DEPLOY_PATH/releases/${old_release%/}"; done
+          find . -mindepth 1 -maxdepth 1 -type d ! -name bootstrap -printf '%T@ %f\n' \
+            | sort -nr \
+            | tail -n +6 \
+            | cut -d' ' -f2- \
+            | while IFS= read -r old_release; do
+                [ -n "$old_release" ] && rm -rf -- "$DEPLOY_PATH/releases/$old_release"
+              done
           cd "$DEPLOY_PATH/shared/server/backups"
           find . -maxdepth 1 -type f -name '*.sqlite3' -printf '%T@ %f\n' \
             | sort -nr \
