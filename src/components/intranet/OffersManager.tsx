@@ -1,13 +1,14 @@
 import { useEffect, useMemo, useState, type FormEvent } from 'react'
-import { BriefcaseBusiness, CalendarDays, Copy, Edit3, FileText, Link2, Loader2, MapPin, Plus, Save, Search, Upload, Users, X } from 'lucide-react'
+import { BriefcaseBusiness, CalendarDays, Copy, Edit3, FileText, Link2, Loader2, MapPin, Plus, RefreshCw, Save, Search, Upload, Users, X } from 'lucide-react'
 import { OFFER_PROGRAMS, compensationLabel, programLabel, type JobOffer } from '../../lib/offers'
 import { fieldClass } from '../ui/FormField'
 import { can, PANEL_PERMISSIONS, requestJson, type SessionUser } from './shared'
 
-type OfferForm = Omit<JobOffer, 'id' | 'slug' | 'vacanciesLost' | 'vacanciesAvailable' | 'createdAt' | 'updatedAt' | 'hasPdf' | 'pdfViewUrl' | 'storedStatus'> & { id?: number; slug?: string; pdfExtractedData?: Record<string, unknown> }
+type OfferForm = Omit<JobOffer, 'id' | 'slug' | 'vacanciesLost' | 'vacanciesAvailable' | 'createdAt' | 'updatedAt' | 'hasPdf' | 'pdfViewUrl' | 'storedStatus' | 'clientifyProductLinked'> & { id?: number; slug?: string; pdfExtractedData?: Record<string, unknown> }
 const initialForm: OfferForm = { title: '', program: 'work-travel-usa', sponsor: '', employer: '', compensationType: 'salary', compensationMin: 0, compensationMax: null, compensationCurrency: 'USD', compensationPeriod: 'hour', hasTips: false, englishLevel: 'Intermedio', city: '', state: '', offerType: '', airportPickup: false, overtime: false, bonuses: '', vacanciesTotal: 1, availableUntil: '', imageSrc: '', description: '', status: 'draft', pdfSourceUrl: '', pdfFileName: '', pdfText: '' }
 type OfferTab = JobOffer['status'] | 'all'
 const labels: Record<OfferTab, string> = { all: 'Todas', active: 'Publicadas', draft: 'Borradores', closed: 'Cerradas' }
+interface ClientifyProduct { id: string; name: string; sku: string; price: number; currency: string; active: boolean; syncedAt: string }
 
 export function OffersManager({ user }: { user: SessionUser }) {
   const [offers, setOffers] = useState<JobOffer[]>([])
@@ -20,10 +21,24 @@ export function OffersManager({ user }: { user: SessionUser }) {
   const [message, setMessage] = useState('')
   const [pdfUrl, setPdfUrl] = useState('')
   const [readingPdf, setReadingPdf] = useState(false)
+  const [products, setProducts] = useState<ClientifyProduct[]>([])
+  const [syncingProducts, setSyncingProducts] = useState(false)
   const mayManage = can(user, PANEL_PERMISSIONS.offersManage)
 
   async function loadOffers() { setLoading(true); try { const data = await requestJson('/api/admin/offers'); setOffers(data.offers) } catch (err) { setError(err instanceof Error ? err.message : 'No pudimos cargar las ofertas.') } finally { setLoading(false) } }
-  useEffect(() => { loadOffers() }, [])
+  async function loadProducts() { try { const data = await requestJson('/api/admin/clientify/products'); setProducts(data.products || []) } catch { setProducts([]) } }
+  useEffect(() => { loadOffers(); loadProducts() }, [])
+
+  async function syncProducts() {
+    setSyncingProducts(true); setError(''); setMessage('')
+    try {
+      const data = await requestJson('/api/admin/clientify/products/sync', { method: 'POST' })
+      setProducts(data.productsList || [])
+      setMessage(`Clientify sincronizado: ${data.products} productos, ${data.linked} ofertas enlazadas y ${data.unlinked} pendientes de enlace.`)
+      await loadOffers()
+    } catch (err) { setError(err instanceof Error ? err.message : 'No pudimos sincronizar Clientify.') }
+    finally { setSyncingProducts(false) }
+  }
 
   const visible = useMemo(() => { const query = search.trim().toLocaleLowerCase('es'); return offers.filter((offer) => (status === 'all' || offer.status === status) && (!query || `${offer.title} ${offer.employer} ${offer.sponsor} ${offer.city}`.toLocaleLowerCase('es').includes(query))) }, [offers, search, status])
   function edit(offer: JobOffer) { setError(''); setMessage(''); setForm({ ...offer, status: offer.storedStatus || offer.status, availableUntil: offer.availableUntil.slice(0, 16) }) }
@@ -68,6 +83,7 @@ export function OffersManager({ user }: { user: SessionUser }) {
 
   return <div className="flex flex-col gap-5">
     <section className="flex flex-col justify-between gap-4 rounded-3xl border border-white/10 bg-ink-800 p-5 sm:flex-row sm:items-center sm:p-6"><div><h2 className="flex items-center text-lg font-black"><BriefcaseBusiness className="mr-2 size-5 text-brand" />Ofertas de empleo</h2><p className="mt-1 text-sm text-white/45">Publica, modifica, duplica o genera borradores leyendo un PDF.</p></div>{mayManage && <button type="button" onClick={() => { setForm({ ...initialForm }); setError(''); setMessage('') }} className="inline-flex items-center justify-center rounded-full bg-brand px-5 py-3 text-sm font-black text-ink"><Plus className="mr-2 size-4" />Nueva oferta</button>}</section>
+    {mayManage && <section className="rounded-3xl border border-white/10 bg-ink-800 p-5 sm:flex sm:items-center sm:justify-between sm:gap-6 sm:p-6"><div><h3 className="flex items-center font-black"><Link2 className="mr-2 size-5 text-brand" />Productos de Clientify</h3><p className="mt-2 text-xs leading-5 text-white/45">Actualiza el catálogo y enlaza automáticamente las coincidencias exactas. Las ofertas restantes pueden vincularse desde su formulario de edición.</p><p className="mt-2 text-[11px] font-bold text-white/35">{products.length ? `${products.length} productos disponibles` : 'Catálogo aún no sincronizado'}</p></div><button type="button" disabled={syncingProducts} onClick={syncProducts} className="mt-4 inline-flex shrink-0 items-center justify-center rounded-full border border-brand/30 px-5 py-3 text-xs font-black text-brand transition hover:bg-brand hover:text-ink disabled:opacity-50 sm:mt-0"><RefreshCw className={`mr-2 size-4 ${syncingProducts ? 'animate-spin' : ''}`} />{syncingProducts ? 'Sincronizando...' : 'Sincronizar productos'}</button></section>}
     {mayManage && <section className="rounded-3xl border border-white/10 bg-ink-800 p-5 sm:p-6"><div className="flex items-center gap-2"><FileText className="size-5 text-brand" /><h3 className="font-black">Crear borrador desde un PDF</h3></div><p className="mt-2 text-xs leading-5 text-white/45">Carga un archivo o pega su enlace. El sistema extrae la información y abre el formulario para que la revises; nunca publica automáticamente.</p><div className="mt-4 grid gap-3 lg:grid-cols-[minmax(0,1fr)_auto_auto]"><label className="relative"><Link2 className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-white/30" /><input type="url" value={pdfUrl} onChange={(event) => setPdfUrl(event.target.value)} className={`${fieldClass} pl-10`} placeholder="https://sitio.com/oferta.pdf" /></label><button type="button" disabled={readingPdf || !pdfUrl.trim()} onClick={importPdfUrl} className="inline-flex items-center justify-center rounded-full border border-brand/30 px-5 py-3 text-xs font-black text-brand disabled:opacity-40">{readingPdf ? <Loader2 className="mr-2 size-4 animate-spin" /> : <Link2 className="mr-2 size-4" />}Leer enlace</button><label className="inline-flex cursor-pointer items-center justify-center rounded-full bg-brand px-5 py-3 text-xs font-black text-ink"><Upload className="mr-2 size-4" />Subir PDF<input type="file" accept="application/pdf,.pdf" disabled={readingPdf} onChange={(event) => { const file = event.target.files?.[0]; if (file) importPdfFile(file); event.target.value = '' }} className="sr-only" /></label></div></section>}
     {error && <p className="rounded-xl bg-red-400/10 p-3 text-sm text-red-300">{error}</p>}{message && <p className="rounded-xl bg-emerald-400/10 p-3 text-sm text-emerald-300">{message}</p>}
     {form && <form onSubmit={save} className="rounded-3xl border border-brand/25 bg-ink-800 p-5 sm:p-7"><div className="mb-6 flex items-center justify-between"><div><h3 className="text-xl font-black">{form.id ? 'Editar oferta' : 'Crear oferta'}</h3><p className="mt-1 text-xs text-white/40">Los campos marcados son necesarios para publicar.</p></div><button type="button" onClick={() => setForm(null)} className="rounded-full border border-white/10 p-2.5 text-white/50"><X className="size-4" /></button></div><div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
@@ -87,6 +103,7 @@ export function OffersManager({ user }: { user: SessionUser }) {
       <label className="text-xs font-bold text-white/60">Vacantes totales *<input required type="number" min="0" step="1" value={form.vacanciesTotal} onChange={(e) => update('vacanciesTotal', Number(e.target.value))} className={`${fieldClass} mt-2`} /></label>
       <label className="text-xs font-bold text-white/60">Fecha límite para postular *<input required type="datetime-local" value={form.availableUntil} onChange={(e) => { update('availableUntil', e.target.value); if (form.status === 'closed' && new Date(e.target.value) > new Date()) update('status', 'active') }} className={`${fieldClass} mt-2`} /><span className="mt-1 block font-normal text-white/35">Si la fecha es futura y hay vacantes, la oferta puede recibir postulaciones.</span></label>
       <label className="text-xs font-bold text-white/60">Estado<select value={form.status} onChange={(e) => update('status', e.target.value as JobOffer['status'])} className={`${fieldClass} mt-2`}><option value="draft">Borrador</option><option value="active">Publicada</option><option value="closed">Cerrada voluntariamente</option></select></label>
+      <label className="text-xs font-bold text-white/60 md:col-span-2 xl:col-span-3">Producto de Clientify<select value={form.clientifyProductId || ''} onChange={(e) => update('clientifyProductId', e.target.value || null)} className={`${fieldClass} mt-2`}><option value="">Sin enlazar</option>{products.filter((product) => product.active).map((product) => <option key={product.id} value={product.id}>{product.name}{product.sku ? ` · SKU ${product.sku}` : ''} · {product.currency} {product.price}</option>)}</select><span className="mt-1 block font-normal text-white/35">Este producto se añadirá a la oportunidad cuando el participante aplique.</span></label>
       <label className="text-xs font-bold text-white/60 md:col-span-2 xl:col-span-3">URL de imagen<input type="url" value={form.imageSrc} onChange={(e) => update('imageSrc', e.target.value)} className={`${fieldClass} mt-2`} placeholder="https://..." /></label>
       <label className="text-xs font-bold text-white/60 md:col-span-2 xl:col-span-3">Descripción<textarea value={form.description} onChange={(e) => update('description', e.target.value)} className={`${fieldClass} mt-2 min-h-32 resize-y`} /></label>
       <label className="text-xs font-bold text-white/60 md:col-span-2 xl:col-span-3">Bonos e incentivos<textarea value={form.bonuses} onChange={(e) => update('bonuses', e.target.value)} className={`${fieldClass} mt-2 min-h-20 resize-y`} /></label>
