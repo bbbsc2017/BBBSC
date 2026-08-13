@@ -162,10 +162,15 @@ app.post('/api/comments', jsonSmall, requireRecaptcha('blog_comment'), async (re
 
 const REGISTRATION_REQUIRED_FIELDS = [
   'firstName', 'lastName', 'email', 'pasaporte', 'nivelIngles', 'participacionPrevia', 'visaAplicada', 'visaNegada',
-  'condicionMedica', 'alergias', 'restriccionPeso', 'condicionFisicaMental', 'familiaresEEUU', 'fechaGrado', 'gdprAceptado',
+  'condicionMedica', 'alergias', 'restriccionPeso', 'condicionFisicaMental', 'familiaresEEUU', 'gdprAceptado',
 ]
 
-app.post('/api/registrations', jsonSmall, requireRecaptcha('work_travel_registration'), async (req, res) => {
+function requireRegistrationRecaptcha(req, res, next) {
+  const action = req.body?.formKey === 'registration_asia' ? 'asia_registration' : 'work_travel_registration'
+  return requireRecaptcha(action)(req, res, next)
+}
+
+app.post('/api/registrations', jsonSmall, requireRegistrationRecaptcha, async (req, res) => {
   const ip = getClientIp(req)
 
   if (isRateLimited(`registrations:${ip}`, 3)) {
@@ -173,10 +178,17 @@ app.post('/api/registrations', jsonSmall, requireRecaptcha('work_travel_registra
   }
 
   const body = req.body || {}
+  const form = getFormDefinition(String(body.formKey || 'registration_work-and-travel-usa'))
+  if (!form || !form.key.startsWith('registration_')) {
+    return res.status(400).json({ ok: false, error: 'El formulario de inscripción no es válido.' })
+  }
   if (hasInvalidPublicField(body)) {
     return res.status(400).json({ ok: false, error: 'Uno de los campos supera la longitud permitida.' })
   }
-  const missing = REGISTRATION_REQUIRED_FIELDS.filter((field) => {
+  const programRequiredFields = form.key === 'registration_asia'
+    ? ['tiempoExperiencia', 'areaExperiencia', 'cargoExperiencia', 'empresaExperiencia', 'disponibilidadViaje']
+    : ['fechaGrado']
+  const missing = [...REGISTRATION_REQUIRED_FIELDS, ...programRequiredFields].filter((field) => {
     const value = body[field]
     return value === undefined || value === null || value === '' || value === false
   })
@@ -193,19 +205,21 @@ app.post('/api/registrations', jsonSmall, requireRecaptcha('work_travel_registra
     .join(' · ')
 
   try {
-    const form = getFormDefinition('registration_work-and-travel-usa')
     const fullName = `${String(body.firstName).trim()} ${String(body.lastName).trim()}`
+    const asiaExperienceSummary = form.key === 'registration_asia'
+      ? ` Experiencia: ${body.tiempoExperiencia}; área: ${body.areaExperiencia}; cargo: ${body.cargoExperiencia}; empresa: ${body.empresaExperiencia}; disponibilidad para viajar: ${body.disponibilidadViaje}.`
+      : ''
     const payload = buildClientifyPayload(form, {
       ...body,
       universidadCompuesta,
       interestTag: form.interestTag,
-      message: `${fullName} se inscribió en el formulario de la página web de Work and Travel USA.`,
+      message: `${fullName} se inscribió en el formulario de la página web de ${form.title}.${asiaExperienceSummary}`,
       contactSource: form.source,
-      programaActual: 'Work & Travel USA',
-      tipoVisa: 'J1',
+      programaActual: form.title,
+      tipoVisa: form.visaType,
       terminosYCondiciones: body.gdprAceptado ? 'Aceptado' : '',
     })
-    payload.tags = [...new Set([...(payload.tags || []), 'inscripcion-web', 'work-and-travel-usa'])]
+    payload.tags = [...new Set([...(payload.tags || []), 'inscripcion-web', form.programTag])]
     payload.addresses =
         body.direccion || body.municipioNacimientoLabel || body.departamentoNacimientoLabel
           ? [

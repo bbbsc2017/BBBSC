@@ -41,6 +41,22 @@ const registrationFields = [
   { key: 'terminosYCondiciones', label: 'Términos y condiciones', defaultTarget: 'custom:BBB - Terminos Y Condiciones' },
 ]
 
+const asiaRegistrationFields = [
+  ...registrationFields
+    .filter(({ key }) => !['semestre', 'fechaGrado'].includes(key))
+    .map((field) => {
+      if (field.key === 'participacionPrevia') return { ...field, label: 'Participación previa en Asia', defaultTarget: 'ignore' }
+      if (field.key === 'numeroParticipaciones') return { ...field, label: 'Número de programas previos en Asia', defaultTarget: 'ignore' }
+      if (field.key === 'familiaresEEUU') return { ...field, label: 'Familiares en Asia', defaultTarget: 'ignore' }
+      return field
+    }),
+  { key: 'tiempoExperiencia', label: 'Tiempo de experiencia laboral', defaultTarget: 'ignore' },
+  { key: 'areaExperiencia', label: 'Área de experiencia laboral', defaultTarget: 'ignore' },
+  { key: 'cargoExperiencia', label: 'Cargo desempeñado', defaultTarget: 'ignore' },
+  { key: 'empresaExperiencia', label: 'Empresa de la experiencia', defaultTarget: 'ignore' },
+  { key: 'disponibilidadViaje', label: 'Disponibilidad para viajar', defaultTarget: 'ignore' },
+]
+
 const programs = [
   ['cultural_trainee-and-internship', 'Trainee and Internship USA', 'trainee_and_internship'],
   ['cultural_espana-ti', 'Trainee & Internship España', 'espana_ti'],
@@ -66,7 +82,19 @@ export const FORM_DEFINITIONS = [
     title: 'Work and Travel USA',
     interestTag: 'interesado_work_and_travel_usa',
     source: 'Formulario Web - Inscripción Work and Travel USA',
+    programTag: 'work-and-travel-usa',
+    visaType: 'J1',
     fields: registrationFields,
+  },
+  {
+    key: 'registration_asia',
+    label: 'Inscripción · Trainee & Internship Asia',
+    title: 'Trainee & Internship Asia',
+    interestTag: 'interesado_asia',
+    source: 'Formulario Web - Inscripción Trainee & Internship Asia',
+    programTag: 'asia',
+    visaType: 'Según destino',
+    fields: asiaRegistrationFields,
   },
   ...programs.map(([key, title, tag]) => ({
     key,

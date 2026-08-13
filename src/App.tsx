@@ -8,6 +8,7 @@ import { getUniversity } from './data/universities'
 
 const ProgramaCulturalDetalle = lazy(() => import('./pages/ProgramaCulturalDetalle'))
 const InscripcionWorkAndTravel = lazy(() => import('./pages/InscripcionWorkAndTravel'))
+const InscripcionAsia = lazy(() => import('./pages/InscripcionAsia'))
 const ProgramaAcademicoDetalle = lazy(() => import('./pages/ProgramaAcademicoDetalle'))
 const UniversidadesIndex = lazy(() => import('./pages/UniversidadesIndex'))
 const UniversidadDetalle = lazy(() => import('./pages/UniversidadDetalle'))
@@ -45,8 +46,10 @@ function App() {
         <Route element={<Layout />}>
           <Route index element={<Home />} />
           <Route path="work-and-travel-usa/inscripcion" element={<InscripcionWorkAndTravel />} />
+          <Route path="asia/inscripcion" element={<InscripcionAsia />} />
           <Route path="universidades" element={<UniversidadesIndex />} />
           <Route path="programas-culturales/work-and-travel-usa/inscripcion" element={<Navigate to="/work-and-travel-usa/inscripcion" replace />} />
+          <Route path="programas-culturales/asia/inscripcion" element={<Navigate to="/asia/inscripcion" replace />} />
           <Route path="programas-culturales/:slug" element={<LegacyDetailRedirect />} />
           <Route path="programas-academicos/:slug" element={<LegacyDetailRedirect />} />
           <Route path="universidades/:slug" element={<LegacyDetailRedirect />} />

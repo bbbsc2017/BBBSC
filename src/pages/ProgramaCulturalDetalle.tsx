@@ -17,6 +17,7 @@ export default function ProgramaCulturalDetalle() {
   if (!program) return <Navigate to="/" replace />
 
   const related = culturalPrograms.filter((item) => item.slug !== program.slug).slice(0, 3)
+  const registrationTo = program.slug === 'work-and-travel-usa' || program.slug === 'asia' ? `/${program.slug}/inscripcion` : undefined
 
   return (
     <>
@@ -43,7 +44,7 @@ export default function ProgramaCulturalDetalle() {
         country={program.country}
         image={program.image}
         requirements={program.requirements}
-        primaryTo={program.slug === 'work-and-travel-usa' ? '/work-and-travel-usa/inscripcion' : undefined}
+        primaryTo={registrationTo}
         breadcrumbs={[
           { label: 'Inicio', to: '/' },
           { label: 'Programas culturales' },
@@ -95,9 +96,9 @@ export default function ProgramaCulturalDetalle() {
             programTitle={program.title}
             image={program.image}
             pricing={program.pricing}
-            registrationTo={program.slug === 'work-and-travel-usa' ? '/work-and-travel-usa/inscripcion' : undefined}
-            formKey={program.slug === 'work-and-travel-usa' ? undefined : `cultural_${program.slug}`}
-            interestTag={program.slug === 'work-and-travel-usa' ? undefined : `interesado_${program.slug.replaceAll('-', '_')}`}
+            registrationTo={registrationTo}
+            formKey={registrationTo ? undefined : `cultural_${program.slug}`}
+            interestTag={registrationTo ? undefined : `interesado_${program.slug.replaceAll('-', '_')}`}
           />
         </Container>
       </section>
