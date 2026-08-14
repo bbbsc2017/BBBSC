@@ -53,6 +53,7 @@ function App() {
         <Route path="intranet" element={<IntranetPanel />} />
         <Route element={<Layout />}>
           <Route index element={<Home />} />
+          <Route path="work-and-travel" element={<Navigate to="/work-and-travel-usa" replace />} />
           <Route path="work-and-travel-usa/inscripcion" element={<InscripcionWorkAndTravel />} />
           <Route path="asia/inscripcion" element={<InscripcionAsia />} />
           <Route path="programas-academicos" element={<UniversidadesIndex />} />

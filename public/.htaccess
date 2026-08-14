@@ -2,6 +2,9 @@
   RewriteEngine On
   RewriteBase /
 
+  # Conserva la dirección histórica y transfiere su posicionamiento a la página actual.
+  RewriteRule ^work-and-travel/?$ /work-and-travel-usa [R=301,L,NE]
+
   # Las integraciones del servidor y sus archivos no pertenecen al router de React.
   RewriteCond %{REQUEST_URI} ^/(api|uploads|perfil)(/|$) [NC]
   RewriteRule ^ - [L]
