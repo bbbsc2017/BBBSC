@@ -353,6 +353,65 @@ export const culturalPrograms: CulturalProgram[] = [
       },
     ],
   },
+  {
+    slug: 'portugal',
+    title: 'Trainee & Internship Portugal',
+    country: 'Portugal',
+    tagline: 'Impulsa tu perfil en culinaria, hotelería y turismo',
+    description:
+      'Vive una experiencia profesional en Portugal con oportunidades de práctica en empresas de culinaria, hotelería y turismo. Fortalece tu perfil, desarrolla habilidades en un entorno internacional y descubre la cultura portuguesa mientras avanzas en tu carrera.',
+    cta: 'Impulsa tu carrera',
+    requirements: [
+      'Edad mínima de 18 años',
+      'Pasaporte vigente',
+      'Formación o experiencia relacionada con culinaria, hotelería o turismo',
+      'Nivel de idioma requerido según la vacante y el empleador',
+    ],
+    benefits: [
+      'Experiencia profesional internacional para fortalecer tu CV',
+      'Desarrollo de habilidades prácticas en tu área',
+      'Contacto con equipos y estándares de servicio europeos',
+      'Intercambio cultural y networking internacional',
+    ],
+    duration: 'La duración depende de la modalidad y de la vacante disponible',
+    keyFacts: [
+      'Prácticas en culinaria y gastronomía',
+      'Oportunidades en hoteles, restaurantes, resorts y turismo',
+      'Vacantes sujetas al perfil y nivel de idioma',
+      'Acompañamiento antes y durante el proceso',
+    ],
+    image: {
+      src: 'https://images.unsplash.com/photo-1555881400-74d7acaacd8b?auto=format&fit=crop&w=1600&q=85',
+      alt: 'Paisaje urbano de Portugal junto al río',
+    },
+    faq: [
+      {
+        question: '¿En qué áreas puedo realizar la práctica?',
+        answer: 'En culinaria, gastronomía, hotelería, restaurantes, resorts y actividades relacionadas con turismo.',
+      },
+      {
+        question: '¿Necesito experiencia previa?',
+        answer: 'Debes contar con formación o experiencia relacionada. Los requisitos específicos pueden variar según la vacante y el empleador.',
+      },
+      {
+        question: '¿Qué nivel de idioma necesito?',
+        answer: 'Depende de la posición. Un asesor revisará tu perfil y te explicará el nivel solicitado para cada oportunidad.',
+      },
+      {
+        question: '¿Cuánto dura el programa?',
+        answer: 'La duración depende de la modalidad y de la vacante disponible. Te confirmaremos las condiciones antes de iniciar el proceso.',
+      },
+    ],
+    pricing: {
+      badge: 'Costos referenciales',
+      headline: 'Inversión en Trainee & Internship Portugal',
+      items: [
+        'Inscripción: $250.000 COP',
+        'Valor del programa sujeto a la duración, el perfil y la vacante seleccionada',
+      ],
+      note: 'Tu asesor confirmará los valores y condiciones vigentes para tu perfil.',
+    },
+  },
 ]
 
 export function getCulturalProgram(slug: string) {

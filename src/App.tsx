@@ -11,7 +11,7 @@ const InscripcionWorkAndTravel = lazy(() => import('./pages/InscripcionWorkAndTr
 const InscripcionAsia = lazy(() => import('./pages/InscripcionAsia'))
 const ProgramaAcademicoDetalle = lazy(() => import('./pages/ProgramaAcademicoDetalle'))
 const UniversidadesIndex = lazy(() => import('./pages/UniversidadesIndex'))
-const UniversidadDetalle = lazy(() => import('./pages/UniversidadDetalle'))
+const ContratoSwt = lazy(() => import('./pages/ContratoSwt'))
 const Contacto = lazy(() => import('./pages/Contacto'))
 const BlogIndex = lazy(() => import('./pages/BlogIndex'))
 const BlogPost = lazy(() => import('./pages/BlogPost'))
@@ -30,10 +30,17 @@ function LegacyDetailRedirect() {
 
 function RootDetailRoute() {
   const { slug = '' } = useParams()
+  const universityDestinations: Record<string, string> = {
+    'gisma-university': 'alemania',
+    vistula: 'polonia',
+    'cape-breton': 'canada',
+    'woosong-university': 'corea-del-sur',
+    'troy-university': 'usa',
+  }
 
   if (getCulturalProgram(slug)) return <ProgramaCulturalDetalle />
   if (getAcademicProgram(slug)) return <ProgramaAcademicoDetalle />
-  if (getUniversity(slug)) return <UniversidadDetalle />
+  if (getUniversity(slug)) return <Navigate to={`/${universityDestinations[slug]}`} replace />
   return <NotFound />
 }
 
@@ -47,12 +54,15 @@ function App() {
           <Route index element={<Home />} />
           <Route path="work-and-travel-usa/inscripcion" element={<InscripcionWorkAndTravel />} />
           <Route path="asia/inscripcion" element={<InscripcionAsia />} />
-          <Route path="universidades" element={<UniversidadesIndex />} />
+          <Route path="programas-academicos" element={<UniversidadesIndex />} />
+          <Route path="universidades" element={<Navigate to="/programas-academicos" replace />} />
           <Route path="programas-culturales/work-and-travel-usa/inscripcion" element={<Navigate to="/work-and-travel-usa/inscripcion" replace />} />
           <Route path="programas-culturales/asia/inscripcion" element={<Navigate to="/asia/inscripcion" replace />} />
           <Route path="programas-culturales/:slug" element={<LegacyDetailRedirect />} />
           <Route path="programas-academicos/:slug" element={<LegacyDetailRedirect />} />
           <Route path="universidades/:slug" element={<LegacyDetailRedirect />} />
+          <Route path="contrato-swt-a" element={<ContratoSwt variant="a" />} />
+          <Route path="contrato-swt-acc" element={<ContratoSwt variant="acc" />} />
           <Route path="contacto" element={<Contacto />} />
           <Route path="blog" element={<BlogIndex />} />
           <Route path="blog/:slug" element={<BlogPost />} />

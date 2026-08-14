@@ -1,5 +1,5 @@
-import { Link, Navigate, useParams } from 'react-router-dom'
-import { GraduationCap, Sparkles } from 'lucide-react'
+import { Navigate, useParams } from 'react-router-dom'
+import { BookOpen, GraduationCap, MapPin, Sparkles, Star } from 'lucide-react'
 import { Seo } from '../components/Seo'
 import { ProgramHero } from '../components/ui/ProgramHero'
 import { Container } from '../components/ui/Container'
@@ -17,7 +17,7 @@ export default function ProgramaAcademicoDetalle() {
 
   if (!program) return <Navigate to="/" replace />
 
-  const relatedUniversities = program.universitySlugs.map((s) => getUniversity(s)).filter(Boolean)
+  const relatedUniversity = program.universitySlugs.map((s) => getUniversity(s)).find(Boolean)
   const otherDestinations = academicPrograms.filter((item) => item.slug !== program.slug)
 
   return (
@@ -78,21 +78,48 @@ export default function ProgramaAcademicoDetalle() {
 
             <ProgramFAQ items={program.faq} />
 
-            {relatedUniversities.length > 0 && (
-              <div>
-                <h3 className="mb-4 text-base font-bold text-white">Universidad asociada</h3>
-                <div className="flex flex-wrap gap-3">
-                  {relatedUniversities.map((university) => (
-                    <Link
-                      key={university!.slug}
-                      to={`/${university!.slug}`}
-                      className="rounded-2xl border border-white/10 bg-ink-800 px-5 py-4 text-sm font-semibold text-white transition-colors hover:border-brand/40 hover:text-brand"
-                    >
-                      {university!.name} — {university!.city}
-                    </Link>
-                  ))}
+            {relatedUniversity && (
+              <section className="overflow-hidden rounded-3xl border border-white/10 bg-ink-800">
+                <div className="relative h-56 overflow-hidden sm:h-72">
+                  <img
+                    src={relatedUniversity.image.src}
+                    alt={relatedUniversity.image.alt}
+                    loading="lazy"
+                    className="size-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-ink-800 via-ink-800/35 to-transparent" />
+                  <div className="absolute inset-x-0 bottom-0 p-6 sm:p-8">
+                    <p className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-brand">
+                      <MapPin className="size-4" /> {relatedUniversity.city}, {relatedUniversity.country}
+                    </p>
+                    <h2 className="text-2xl font-extrabold text-white sm:text-3xl">{relatedUniversity.name}</h2>
+                  </div>
                 </div>
-              </div>
+
+                <div className="flex flex-col gap-8 p-6 sm:p-8">
+                  <p className="text-base leading-relaxed text-white/70">{relatedUniversity.description}</p>
+                  <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
+                    <div>
+                      <h3 className="mb-4 flex items-center gap-2 text-base font-bold text-white">
+                        <BookOpen className="size-5 text-brand" /> Pregrado
+                      </h3>
+                      <InfoList items={relatedUniversity.undergrad} />
+                    </div>
+                    <div>
+                      <h3 className="mb-4 flex items-center gap-2 text-base font-bold text-white">
+                        <GraduationCap className="size-5 text-brand" /> Posgrado
+                      </h3>
+                      <InfoList items={relatedUniversity.graduate} />
+                    </div>
+                  </div>
+                  <div>
+                    <h3 className="mb-4 flex items-center gap-2 text-base font-bold text-white">
+                      <Star className="size-5 text-brand" /> Datos clave de la universidad
+                    </h3>
+                    <InfoList items={relatedUniversity.keyFacts} tone="ink" />
+                  </div>
+                </div>
+              </section>
             )}
           </div>
 
@@ -114,7 +141,7 @@ export default function ProgramaAcademicoDetalle() {
       <section className="border-t border-white/10 bg-black/15 py-16 sm:py-20">
         <Container className="flex flex-col gap-10">
           <h2 className="text-2xl font-bold text-white">Otros destinos académicos</h2>
-          <div className="grid grid-cols-1 gap-5 sm:grid-cols-3">
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {otherDestinations.map((item) => (
               <ImageLinkCard
                 key={item.slug}

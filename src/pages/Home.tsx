@@ -4,7 +4,6 @@ import { LatestNewsSection } from '../components/home/LatestNewsSection'
 import { AboutUs } from '../components/home/AboutUs'
 import { CulturalProgramsGrid } from '../components/home/CulturalProgramsGrid'
 import { AcademicProgramsGrid } from '../components/home/AcademicProgramsGrid'
-import { UniversitiesTeaser } from '../components/home/UniversitiesTeaser'
 import { TestimonialsSection } from '../components/home/TestimonialsSection'
 import { FAQSection } from '../components/home/FAQSection'
 import { SITE } from '../lib/site'
@@ -14,7 +13,7 @@ export default function Home() {
     <>
       <Seo
         title="Programas Work & Travel y experiencias internacionales"
-        description="BBB Student Center: agencia experta en Work and Travel USA, prácticas profesionales, intercambio docente y programas académicos en Estados Unidos, España, Asia, Canadá, Polonia y Australia."
+        description="BBB Student Center: Work and Travel, prácticas profesionales y estudios en universidades de Alemania, Polonia, Canadá, Corea del Sur, Estados Unidos y Australia."
         path="/"
         image={SITE.defaultSocialImage}
         imageAlt="Nueva York, uno de los destinos de los programas internacionales de BBB Student Center"
@@ -33,7 +32,6 @@ export default function Home() {
       <AboutUs />
       <CulturalProgramsGrid />
       <AcademicProgramsGrid />
-      <UniversitiesTeaser />
       <TestimonialsSection />
       <FAQSection />
     </>

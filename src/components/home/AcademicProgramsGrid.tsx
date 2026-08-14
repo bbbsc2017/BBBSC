@@ -11,17 +11,18 @@ export function AcademicProgramsGrid() {
       <Container className="relative flex flex-col items-center gap-14">
         <SectionHeading
           eyebrow="Programas académicos"
-          title="Despierta tu espíritu aventurero"
-          description="Embárcate en un viaje inolvidable: estudia una carrera vocacional o mejora tu inglés en cuatro destinos internacionales."
+          title="Estudia en universidades que conectan tu talento con el mundo"
+          description="Compara cada destino junto con su universidad, programas, requisitos y beneficios en un solo lugar."
         />
 
-        <div className="grid w-full grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid w-full grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {academicPrograms.map((program) => (
             <ImageLinkCard
               key={program.slug}
               to={`/${program.slug}`}
               eyebrow={program.country}
-              title={program.tagline}
+              title={program.title}
+              subtitle={program.tagline}
               image={program.image}
             />
           ))}

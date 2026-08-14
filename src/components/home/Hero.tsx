@@ -120,7 +120,7 @@ export function Hero() {
               <GraduationCap className="size-4 text-brand" /> Programas académicos
             </span>
             <span className="flex items-center gap-2">
-              <Globe2 className="size-4 text-brand" /> Universidades aliadas
+              <Globe2 className="size-4 text-brand" /> Universidades y destinos
             </span>
           </div>
         </div>

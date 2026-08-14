@@ -95,14 +95,6 @@ export function Navbar() {
           ))}
 
           <NavLink
-            to="/universidades"
-            className={({ isActive }) =>
-              `rounded-full px-4 py-2 text-sm font-semibold transition-colors ${isActive ? 'text-brand' : 'text-white/70 hover:text-brand'}`
-            }
-          >
-            Universidades
-          </NavLink>
-          <NavLink
             to="/ofertas"
             className={({ isActive }) =>
               `rounded-full px-4 py-2 text-sm font-semibold transition-colors ${isActive ? 'text-brand' : 'text-white/70 hover:text-brand'}`
@@ -158,9 +150,6 @@ export function Navbar() {
                 </div>
               </div>
             ))}
-            <Link to="/universidades" onClick={() => setOpen(false)} className="rounded-lg px-3 py-2.5 text-sm font-semibold text-white/80">
-              Universidades
-            </Link>
             <Link to="/ofertas" onClick={() => setOpen(false)} className="rounded-lg px-3 py-2.5 text-sm font-semibold text-white/80">
               Ofertas
             </Link>
