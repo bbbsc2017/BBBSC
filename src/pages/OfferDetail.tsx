@@ -27,6 +27,7 @@ import {
   programLabel,
   type JobOffer,
 } from "../lib/offers";
+import { apiCredentials, apiUrl } from "../lib/apiBase";
 
 interface Session {
   user: { id: string; role: string; firstName: string };
@@ -97,7 +98,7 @@ export default function OfferDetail() {
   useEffect(() => {
     setLoading(true);
     setError("");
-    fetch(`/api/offers/${encodeURIComponent(slug)}`)
+    fetch(apiUrl(`/api/offers/${encodeURIComponent(slug)}`), { credentials: apiCredentials })
       .then(async (response) => {
         const data = await response.json();
         if (!response.ok || !data.ok) throw new Error(data.error);
@@ -113,7 +114,7 @@ export default function OfferDetail() {
         setError(err instanceof Error ? err.message : "Oferta no encontrada."),
       )
       .finally(() => setLoading(false));
-    fetch("/api/auth/me")
+    fetch(apiUrl("/api/auth/me"), { credentials: apiCredentials })
       .then(async (response) => {
         if (!response.ok) return null;
         return response.json();
@@ -127,7 +128,7 @@ export default function OfferDetail() {
             firstName: data.firstName ?? "",
           },
         });
-        fetch("/api/offers/me")
+        fetch(apiUrl("/api/offers/me"), { credentials: apiCredentials })
           .then((response) => (response.ok ? response.json() : null))
           .then((own) => own?.ok && setApplication(own.application))
           .catch(() => undefined);
@@ -154,8 +155,9 @@ export default function OfferDetail() {
     setError("");
     setMessage("");
     try {
-      const response = await fetch(`/api/offers/${offer.id}/apply`, {
+      const response = await fetch(apiUrl(`/api/offers/${offer.id}/apply`), {
         method: "POST",
+        credentials: apiCredentials,
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ travelStartDate, travelEndDate }),
       });

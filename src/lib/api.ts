@@ -1,4 +1,5 @@
 import { blogPosts, getBlogPost, type BlogPost } from '../data/blogPosts'
+import { apiCredentials, apiUrl } from './apiBase'
 
 export interface PublicPost {
   slug: string
@@ -44,7 +45,7 @@ const localPosts = blogPosts.map(toPublicPost)
 
 export async function fetchPosts(): Promise<PublicPost[]> {
   try {
-    const response = await fetch('/api/web/posts')
+    const response = await fetch(apiUrl('/api/web/posts'), { credentials: apiCredentials })
     if (!response.ok) return localPosts
     const data = await response.json().catch(() => null)
     return data?.ok && Array.isArray(data.posts) && data.posts.length > 0 ? data.posts : localPosts
@@ -56,7 +57,7 @@ export async function fetchPosts(): Promise<PublicPost[]> {
 export async function fetchPost(slug: string): Promise<PublicPostDetail | null> {
   const localPost = getBlogPost(slug)
   try {
-    const response = await fetch(`/api/web/posts/${encodeURIComponent(slug)}`)
+    const response = await fetch(apiUrl(`/api/web/posts/${encodeURIComponent(slug)}`), { credentials: apiCredentials })
     if (!response.ok) return localPost ? toPublicPostDetail(localPost) : null
     const data = await response.json().catch(() => null)
     return data?.ok ? data.post : localPost ? toPublicPostDetail(localPost) : null
@@ -67,7 +68,7 @@ export async function fetchPost(slug: string): Promise<PublicPostDetail | null> 
 
 export async function fetchPostComments(slug: string): Promise<PublicComment[]> {
   try {
-    const response = await fetch(`/api/web/posts/${encodeURIComponent(slug)}/comments`)
+    const response = await fetch(apiUrl(`/api/web/posts/${encodeURIComponent(slug)}/comments`), { credentials: apiCredentials })
     if (!response.ok) return []
     const data = await response.json().catch(() => null)
     return data?.ok ? data.comments : []

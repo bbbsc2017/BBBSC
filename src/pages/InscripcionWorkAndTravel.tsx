@@ -12,6 +12,7 @@ import {
 import { whatsappLink } from '../lib/site'
 import { getCulturalProgram } from '../data/culturalPrograms'
 import { executeRecaptcha } from '../lib/recaptcha'
+import { apiCredentials, apiUrl } from '../lib/apiBase'
 import { RecaptchaNotice } from '../components/ui/RecaptchaNotice'
 
 type RegistrationProgram = 'usa' | 'asia'
@@ -160,8 +161,9 @@ export function ProgramRegistration({ program = 'usa' }: { program?: Registratio
 
     try {
       const recaptchaToken = await executeRecaptcha(registration.recaptchaAction)
-      const response = await fetch('/api/web/forms/registration', {
+      const response = await fetch(apiUrl('/api/web/forms/registration'), {
         method: 'POST',
+        credentials: apiCredentials,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ...form,
