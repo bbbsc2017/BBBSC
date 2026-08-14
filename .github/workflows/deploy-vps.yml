@@ -120,13 +120,28 @@ jobs:
             fi
             exit 1
           fi
+          # OpenLiteSpeed carga las reglas .htaccess al reiniciar. Esto activa
+          # inmediatamente las rutas de React Router de la nueva versión.
+          sudo -n systemctl restart lsws
           cd "$DEPLOY_PATH/releases"
-          ls -1dt */ 2>/dev/null | tail -n +6 | while read -r old_release; do rm -rf -- "$DEPLOY_PATH/releases/${old_release%/}"; done
+          ls -1dt */ 2>/dev/null | tail -n +6 | while read -r old_release; do
+            if ! rm -rf -- "$DEPLOY_PATH/releases/${old_release%/}"; then
+              echo "Aviso: no se pudo eliminar la versión antigua ${old_release%/}; el despliegue activo continúa válido."
+            fi
+          done
           cd "$DEPLOY_PATH/shared/server/backups"
-          ls -1t *.sqlite3 2>/dev/null | tail -n +11 | while read -r old_backup; do rm -f -- "$old_backup"; done
+          ls -1t *.sqlite3 2>/dev/null | tail -n +11 | while read -r old_backup; do
+            if ! rm -f -- "$old_backup"; then
+              echo "Aviso: no se pudo eliminar el respaldo antiguo $old_backup."
+            fi
+          done
           REMOTE
 
       - name: Verificar sitio público
         run: |
           curl --fail --silent --show-error --retry 4 --retry-delay 5 https://bbbsc.com/ >/dev/null
           curl --fail --silent --show-error --retry 4 --retry-delay 5 https://bbbsc.com/api/health >/dev/null
+          curl --fail --silent --show-error --retry 4 --retry-delay 5 https://bbbsc.com/programas-academicos >/dev/null
+          curl --fail --silent --show-error --retry 4 --retry-delay 5 https://bbbsc.com/portugal >/dev/null
+          curl --fail --silent --show-error --retry 4 --retry-delay 5 https://bbbsc.com/contrato-swt-a/ >/dev/null
+          curl --fail --silent --show-error --retry 4 --retry-delay 5 https://bbbsc.com/contrato-swt-acc/ >/dev/null
