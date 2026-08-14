@@ -80,7 +80,7 @@ const programs = [
   ['academic_canada', 'Estudia en Canadá', 'canada'],
   ['academic_polonia', 'Estudia en Polonia', 'polonia'],
   ['academic_australia', 'Estudia en Australia', 'australia'],
-  ['academic_malta', 'Estudia en Malta', 'malta'],
+  ['academic_portugal', 'Trainee & Internship Portugal', 'portugal'],
   ['university_troy-university', 'Troy University', 'troy_university'],
   ['university_gisma-university', 'GISMA University', 'gisma_university'],
   ['university_woosong-university', 'Woosong University', 'woosong_university'],
