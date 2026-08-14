@@ -32,7 +32,7 @@ export function InterestForm({ formKey, programTitle, interestTag }: InterestFor
     setError('')
     try {
       const recaptchaToken = await executeRecaptcha('interest_form')
-      const response = await fetch('/api/interest-forms', {
+      const response = await fetch('/api/web/forms/interest', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ formKey, ...form, interestTag, message: hiddenMessage, recaptchaToken }),

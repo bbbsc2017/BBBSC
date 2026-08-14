@@ -18,8 +18,6 @@ const BlogIndex = lazy(() => import('./pages/BlogIndex'))
 const BlogPost = lazy(() => import('./pages/BlogPost'))
 const TerminosCondiciones = lazy(() => import('./pages/TerminosCondiciones'))
 const TrabajaConNosotros = lazy(() => import('./pages/TrabajaConNosotros'))
-const IntranetLogin = lazy(() => import('./pages/IntranetLogin'))
-const IntranetPanel = lazy(() => import('./pages/IntranetPanel'))
 const OffersIndex = lazy(() => import('./pages/OffersIndex'))
 const OfferDetail = lazy(() => import('./pages/OfferDetail'))
 const NotFound = lazy(() => import('./pages/NotFound'))
@@ -49,8 +47,6 @@ function App() {
   return (
     <Suspense fallback={<div className="min-h-screen bg-ink" aria-busy="true" aria-label="Cargando página" />}>
       <Routes>
-        <Route path="intranet/login" element={<IntranetLogin />} />
-        <Route path="intranet" element={<IntranetPanel />} />
         <Route element={<Layout />}>
           <Route index element={<Home />} />
           <Route path="work-and-travel" element={<Navigate to="/work-and-travel-usa" replace />} />

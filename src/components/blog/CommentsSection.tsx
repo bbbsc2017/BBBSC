@@ -12,7 +12,7 @@ interface CommentsSectionProps {
 
 const emptyForm = { firstName: '', lastName: '', email: '', phone: '', comment: '' }
 
-export function CommentsSection({ postSlug, postTitle }: CommentsSectionProps) {
+export function CommentsSection({ postSlug }: CommentsSectionProps) {
   const [showForm, setShowForm] = useState(false)
   const [form, setForm] = useState(emptyForm)
   const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle')
@@ -34,7 +34,7 @@ export function CommentsSection({ postSlug, postTitle }: CommentsSectionProps) {
 
     try {
       const recaptchaToken = await executeRecaptcha('blog_comment')
-      const response = await fetch('/api/comments', {
+      const response = await fetch(`/api/web/posts/${encodeURIComponent(postSlug)}/comments`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -42,9 +42,7 @@ export function CommentsSection({ postSlug, postTitle }: CommentsSectionProps) {
           lastName: form.lastName,
           email: form.email,
           phone: form.phone,
-          comment: form.comment,
-          postSlug,
-          postTitle,
+          body: form.comment,
           recaptchaToken,
         }),
       })

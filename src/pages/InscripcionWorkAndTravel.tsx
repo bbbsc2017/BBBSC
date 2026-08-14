@@ -160,7 +160,7 @@ export function ProgramRegistration({ program = 'usa' }: { program?: Registratio
 
     try {
       const recaptchaToken = await executeRecaptcha(registration.recaptchaAction)
-      const response = await fetch('/api/registrations', {
+      const response = await fetch('/api/web/forms/registration', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

@@ -58,7 +58,7 @@ function injectClientify(siteId: string) {
 export function TrackingScripts({ enabled }: { enabled: boolean }) {
   useEffect(() => {
     if (!enabled) return
-    fetch('/api/settings/public')
+    fetch('/api/web/settings')
       .then((response) => (response.ok ? response.json() : null))
       .then((data: { ok: boolean } & PublicTrackingSettings | null) => {
         if (!data?.ok) return
