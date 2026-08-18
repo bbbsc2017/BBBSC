@@ -3,6 +3,7 @@ import { CheckCircle2, Loader2, Send } from 'lucide-react'
 import { fieldClass } from './FormField'
 import { executeRecaptcha } from '../../lib/recaptcha'
 import { RecaptchaNotice } from './RecaptchaNotice'
+import { SubmittingOverlay } from './SubmittingOverlay'
 import { apiCredentials, apiUrl } from '../../lib/apiBase'
 
 interface InterestFormProps {
@@ -52,6 +53,7 @@ export function InterestForm({ formKey, interestTag }: InterestFormProps) {
   }
 
   return <form onSubmit={submit} className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
+    <SubmittingOverlay show={status === 'submitting'} />
     <input type="hidden" name="formKey" value={formKey} />
     <input type="hidden" name="interestTag" value={interestTag} />
     <label className="sr-only" htmlFor={`${formKey}-firstName`}>Nombre</label>

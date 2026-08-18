@@ -18,6 +18,7 @@ import {
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { Seo } from "../components/Seo";
 import { Container } from "../components/ui/Container";
+import { SubmittingOverlay } from "../components/ui/SubmittingOverlay";
 import { OfferCountdown } from "../components/offers/OfferCountdown";
 import { OfferGallery } from "../components/offers/OfferGallery";
 import {
@@ -583,6 +584,7 @@ export default function OfferDetail() {
           </form>
         </div>
       )}
+      <SubmittingOverlay show={applying} label="Registrando tu aplicación…" />
       {pdfOpen && offer.pdfViewUrl && (
         <div
           className="fixed inset-0 z-[90] flex items-center justify-center bg-black/80 p-3 sm:p-6"

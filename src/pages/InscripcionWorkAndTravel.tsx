@@ -14,6 +14,7 @@ import { getCulturalProgram } from '../data/culturalPrograms'
 import { executeRecaptcha } from '../lib/recaptcha'
 import { apiCredentials, apiUrl } from '../lib/apiBase'
 import { RecaptchaNotice } from '../components/ui/RecaptchaNotice'
+import { SubmittingOverlay } from '../components/ui/SubmittingOverlay'
 
 type RegistrationProgram = 'usa' | 'asia'
 
@@ -374,6 +375,7 @@ export function ProgramRegistration({ program = 'usa' }: { program?: Registratio
           </div>
         </Container>
       </section>
+      <SubmittingOverlay show={status === 'submitting'} label="Enviando tu inscripción…" />
     </>
   )
 }
