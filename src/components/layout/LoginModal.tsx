@@ -1,4 +1,5 @@
 import { useEffect, useState, type FormEvent } from 'react'
+import { createPortal } from 'react-dom'
 import { Loader2, LogIn, X } from 'lucide-react'
 import { fieldClass } from '../ui/FormField'
 import { RecaptchaNotice } from '../ui/RecaptchaNotice'
@@ -59,7 +60,11 @@ export function LoginModal({ onClose, onSuccess }: { onClose: () => void; onSucc
     }
   }
 
-  return (
+  // Portal a document.body: el header usa backdrop-blur (backdrop-filter),
+  // que crea un containing block nuevo para los descendientes position:fixed
+  // y encerraría este overlay dentro de la barra de navegación en vez de
+  // cubrir toda la pantalla.
+  return createPortal(
     <div className="fixed inset-0 z-[95] flex items-center justify-center bg-[#1c1c1c]/90 p-4 backdrop-blur-sm" role="dialog" aria-modal="true" aria-labelledby="login-title">
       <button type="button" className="absolute inset-0" onClick={onClose} aria-label="Cerrar" />
       <form onSubmit={handleSubmit} className="relative w-full max-w-sm rounded-[2rem] border border-white/15 bg-[#1c1c1c] p-6 shadow-2xl sm:p-8">
@@ -104,6 +109,7 @@ export function LoginModal({ onClose, onSuccess }: { onClose: () => void; onSucc
           {status === 'submitting' ? 'Ingresando…' : 'Ingresar'}
         </button>
       </form>
-    </div>
+    </div>,
+    document.body,
   )
 }
