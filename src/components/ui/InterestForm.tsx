@@ -3,6 +3,7 @@ import { CheckCircle2, Loader2, Send } from 'lucide-react'
 import { fieldClass } from './FormField'
 import { executeRecaptcha } from '../../lib/recaptcha'
 import { RecaptchaNotice } from './RecaptchaNotice'
+import { apiCredentials, apiUrl } from '../../lib/apiBase'
 
 interface InterestFormProps {
   formKey: string
@@ -32,8 +33,9 @@ export function InterestForm({ formKey, programTitle, interestTag }: InterestFor
     setError('')
     try {
       const recaptchaToken = await executeRecaptcha('interest_form')
-      const response = await fetch('/api/interest-forms', {
+      const response = await fetch(apiUrl('/api/web/forms/interest'), {
         method: 'POST',
+        credentials: apiCredentials,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ formKey, ...form, interestTag, message: hiddenMessage, recaptchaToken }),
       })

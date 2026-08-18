@@ -11,14 +11,13 @@ const InscripcionWorkAndTravel = lazy(() => import('./pages/InscripcionWorkAndTr
 const InscripcionAsia = lazy(() => import('./pages/InscripcionAsia'))
 const ProgramaAcademicoDetalle = lazy(() => import('./pages/ProgramaAcademicoDetalle'))
 const UniversidadesIndex = lazy(() => import('./pages/UniversidadesIndex'))
-const UniversidadDetalle = lazy(() => import('./pages/UniversidadDetalle'))
+const ContratoSwt = lazy(() => import('./pages/ContratoSwt'))
+const HojaDeVidaSwt = lazy(() => import('./pages/HojaDeVidaSwt'))
 const Contacto = lazy(() => import('./pages/Contacto'))
 const BlogIndex = lazy(() => import('./pages/BlogIndex'))
 const BlogPost = lazy(() => import('./pages/BlogPost'))
 const TerminosCondiciones = lazy(() => import('./pages/TerminosCondiciones'))
 const TrabajaConNosotros = lazy(() => import('./pages/TrabajaConNosotros'))
-const IntranetLogin = lazy(() => import('./pages/IntranetLogin'))
-const IntranetPanel = lazy(() => import('./pages/IntranetPanel'))
 const OffersIndex = lazy(() => import('./pages/OffersIndex'))
 const OfferDetail = lazy(() => import('./pages/OfferDetail'))
 const NotFound = lazy(() => import('./pages/NotFound'))
@@ -30,10 +29,17 @@ function LegacyDetailRedirect() {
 
 function RootDetailRoute() {
   const { slug = '' } = useParams()
+  const universityDestinations: Record<string, string> = {
+    'gisma-university': 'alemania',
+    vistula: 'polonia',
+    'cape-breton': 'canada',
+    'woosong-university': 'corea-del-sur',
+    'troy-university': 'usa',
+  }
 
   if (getCulturalProgram(slug)) return <ProgramaCulturalDetalle />
   if (getAcademicProgram(slug)) return <ProgramaAcademicoDetalle />
-  if (getUniversity(slug)) return <UniversidadDetalle />
+  if (getUniversity(slug)) return <Navigate to={`/${universityDestinations[slug]}`} replace />
   return <NotFound />
 }
 
@@ -41,18 +47,21 @@ function App() {
   return (
     <Suspense fallback={<div className="min-h-screen bg-ink" aria-busy="true" aria-label="Cargando página" />}>
       <Routes>
-        <Route path="intranet/login" element={<IntranetLogin />} />
-        <Route path="intranet" element={<IntranetPanel />} />
         <Route element={<Layout />}>
           <Route index element={<Home />} />
+          <Route path="work-and-travel" element={<Navigate to="/work-and-travel-usa" replace />} />
           <Route path="work-and-travel-usa/inscripcion" element={<InscripcionWorkAndTravel />} />
           <Route path="asia/inscripcion" element={<InscripcionAsia />} />
-          <Route path="universidades" element={<UniversidadesIndex />} />
+          <Route path="programas-academicos" element={<UniversidadesIndex />} />
+          <Route path="universidades" element={<Navigate to="/programas-academicos" replace />} />
           <Route path="programas-culturales/work-and-travel-usa/inscripcion" element={<Navigate to="/work-and-travel-usa/inscripcion" replace />} />
           <Route path="programas-culturales/asia/inscripcion" element={<Navigate to="/asia/inscripcion" replace />} />
           <Route path="programas-culturales/:slug" element={<LegacyDetailRedirect />} />
           <Route path="programas-academicos/:slug" element={<LegacyDetailRedirect />} />
           <Route path="universidades/:slug" element={<LegacyDetailRedirect />} />
+          <Route path="contrato-swt-a" element={<ContratoSwt variant="a" />} />
+          <Route path="contrato-swt-acc" element={<ContratoSwt variant="acc" />} />
+          <Route path="hoja-de-vida-swt" element={<HojaDeVidaSwt />} />
           <Route path="contacto" element={<Contacto />} />
           <Route path="blog" element={<BlogIndex />} />
           <Route path="blog/:slug" element={<BlogPost />} />

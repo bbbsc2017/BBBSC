@@ -1,0 +1,19 @@
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  # Conserva la dirección histórica y transfiere su posicionamiento a la página actual.
+  RewriteRule ^work-and-travel/?$ /work-and-travel-usa [R=301,L,NE]
+
+  # Las integraciones del servidor y sus archivos no pertenecen al router de React.
+  RewriteCond %{REQUEST_URI} ^/(api|uploads|perfil)(/|$) [NC]
+  RewriteRule ^ - [L]
+
+  # Conserva assets, documentos, robots.txt y sitemap.xml cuando existen físicamente.
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  # El resto de las rutas públicas se resuelve en React Router.
+  RewriteRule ^ index.html [L]
+</IfModule>

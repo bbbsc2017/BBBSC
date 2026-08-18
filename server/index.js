@@ -7,17 +7,15 @@ import { seedDatabase } from './seed.js'
 import { cleanupExpiredSessions } from './auth.js'
 import { authRouter } from './routes/auth.js'
 import { participantRouter } from './routes/participant.js'
-import { publicPostsRouter, adminPostsRouter } from './routes/posts.js'
-import { publicCommentsRouter, adminCommentsRouter } from './routes/comments.js'
-import { adminUploadsRouter, UPLOADS_DIR } from './routes/uploads.js'
-import { publicVisitsRouter, adminVisitsRouter } from './routes/visits.js'
-import { publicSettingsRouter, adminSettingsRouter } from './routes/settings.js'
-import { adminUsersRouter } from './routes/users.js'
-import { adminRolesRouter } from './routes/roles.js'
-import { publicOffersRouter, adminOffersRouter } from './routes/offers.js'
+import { publicPostsRouter } from './routes/posts.js'
+import { publicCommentsRouter } from './routes/comments.js'
+import { UPLOADS_DIR } from './routes/uploads.js'
+import { publicVisitsRouter } from './routes/visits.js'
+import { publicSettingsRouter } from './routes/settings.js'
+import { publicOffersRouter } from './routes/offers.js'
 import { isRateLimited, getClientIp } from './lib/rateLimit.js'
 import { createClientifyContact } from './lib/clientify.js'
-import { publicFormsRouter, adminFormsRouter } from './routes/forms.js'
+import { publicFormsRouter } from './routes/forms.js'
 import { buildClientifyPayload } from './lib/clientifyPayload.js'
 import { getFormDefinition } from './lib/formDefinitions.js'
 import { requireRecaptcha } from './lib/recaptcha.js'
@@ -79,30 +77,19 @@ app.use(
   }),
 )
 
-// Límite chico (20kb) para los endpoints públicos de escritura; el editor de blog
-// de la intranet necesita uno más grande (2mb) por el HTML del contenido enriquecido.
+// Límite chico (20kb) para los endpoints públicos de escritura.
 const jsonSmall = express.json({ limit: '20kb' })
-const jsonLarge = express.json({ limit: '2mb' })
 
 app.use('/api/auth', jsonSmall, authRouter)
 app.use('/api', participantRouter)
 app.use('/api', publicPostsRouter)
-app.use('/api/admin', jsonLarge, adminPostsRouter)
 app.use('/api', publicCommentsRouter)
-app.use('/api/admin', jsonSmall, adminCommentsRouter)
-app.use('/api/admin', adminUploadsRouter)
 app.use('/api/uploads', express.static(UPLOADS_DIR, { maxAge: '30d', index: false, dotfiles: 'deny' }))
 app.use('/api', jsonSmall, publicVisitsRouter)
-app.use('/api/admin', adminVisitsRouter)
 app.use('/api', publicSettingsRouter)
 app.use('/api', sitemapRouter)
 app.use('/api', jsonSmall, publicFormsRouter)
 app.use('/api', jsonSmall, publicOffersRouter)
-app.use('/api/admin', jsonSmall, adminSettingsRouter)
-app.use('/api/admin', jsonSmall, adminFormsRouter)
-app.use('/api/admin', jsonSmall, adminUsersRouter)
-app.use('/api/admin', jsonSmall, adminRolesRouter)
-app.use('/api/admin', jsonLarge, adminOffersRouter)
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 const MAX_PUBLIC_FIELD_LENGTH = 500

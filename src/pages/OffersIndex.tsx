@@ -8,6 +8,7 @@ import { fieldClass } from '../components/ui/FormField'
 import { ShowcaseHero } from '../components/ui/ShowcaseHero'
 import { getCulturalProgram } from '../data/culturalPrograms'
 import { isOfferAvailable, OFFER_PROGRAMS, programLabel, type JobOffer, type OfferProgram } from '../lib/offers'
+import { apiCredentials, apiUrl } from '../lib/apiBase'
 
 const offerProgramImages: Record<OfferProgram, string> = {
   'work-travel-usa': 'work-and-travel-usa',
@@ -47,7 +48,7 @@ export default function OffersIndex() {
   useEffect(() => {
     if (program && !activeProgram) return
     setLoading(true); setError('')
-    fetch(`/api/offers${activeProgram ? `?program=${encodeURIComponent(activeProgram)}` : ''}`)
+    fetch(apiUrl(`/api/offers${activeProgram ? `?program=${encodeURIComponent(activeProgram)}` : ''}`), { credentials: apiCredentials })
       .then(async (response) => { const data = await response.json(); if (!response.ok || !data.ok) throw new Error(data.error); return data.offers })
       .then(setOffers).catch((err) => setError(err instanceof Error ? err.message : 'No pudimos cargar las ofertas.')).finally(() => setLoading(false))
   }, [activeProgram, program])

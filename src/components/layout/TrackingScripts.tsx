@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import { apiCredentials, apiUrl } from '../../lib/apiBase'
 
 interface PublicTrackingSettings {
   metaPixelId: string | null
@@ -58,7 +59,7 @@ function injectClientify(siteId: string) {
 export function TrackingScripts({ enabled }: { enabled: boolean }) {
   useEffect(() => {
     if (!enabled) return
-    fetch('/api/settings/public')
+    fetch(apiUrl('/api/web/settings'), { credentials: apiCredentials })
       .then((response) => (response.ok ? response.json() : null))
       .then((data: { ok: boolean } & PublicTrackingSettings | null) => {
         if (!data?.ok) return

@@ -77,15 +77,13 @@ const programs = [
   ['cultural_teacher-exchange', 'Teacher Exchange', 'teacher_exchange'],
   ['cultural_teacher-assistant', 'Teacher Assistant', 'teacher_assistant'],
   ['cultural_aupair', 'Au Pair', 'au_pair'],
-  ['academic_canada', 'Estudia en Canadá', 'canada'],
-  ['academic_polonia', 'Estudia en Polonia', 'polonia'],
+  ['cultural_portugal', 'Trainee & Internship Portugal', 'portugal'],
+  ['academic_alemania', 'Alemania - GISMA University', 'alemania_gisma_university'],
+  ['academic_polonia', 'Polonia - Vistula University', 'polonia_vistula_university'],
+  ['academic_canada', 'Canadá - Cape Breton University', 'canada_cape_breton_university'],
+  ['academic_corea-del-sur', 'Corea del Sur - Woosong University', 'corea_del_sur_woosong_university'],
+  ['academic_usa', 'USA - Troy University', 'usa_troy_university'],
   ['academic_australia', 'Estudia en Australia', 'australia'],
-  ['academic_portugal', 'Trainee & Internship Portugal', 'portugal'],
-  ['university_troy-university', 'Troy University', 'troy_university'],
-  ['university_gisma-university', 'GISMA University', 'gisma_university'],
-  ['university_woosong-university', 'Woosong University', 'woosong_university'],
-  ['university_vistula', 'Vistula University', 'vistula_university'],
-  ['university_cape-breton', 'Cape Breton University', 'cape_breton_university'],
 ]
 
 export const FORM_DEFINITIONS = [

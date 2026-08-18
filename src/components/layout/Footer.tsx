@@ -4,7 +4,6 @@ import { FacebookIcon, InstagramIcon, LinkedinIcon, SpotifyIcon, YoutubeIcon } f
 import logoMark from '../../assets/logo/bbb-mark-white.svg'
 import { culturalPrograms } from '../../data/culturalPrograms'
 import { academicPrograms } from '../../data/academicPrograms'
-import { universities } from '../../data/universities'
 import { SITE, whatsappLink } from '../../lib/site'
 
 const socialLinks = [
@@ -66,18 +65,7 @@ export function Footer() {
             {academicPrograms.map((program) => (
               <li key={program.slug}>
                 <Link to={`/${program.slug}`} className="transition-colors hover:text-white">
-                  {program.country}
-                </Link>
-              </li>
-            ))}
-          </ul>
-
-          <h3 className="mb-4 mt-8 text-sm font-bold uppercase tracking-wide text-brand">Universidades</h3>
-          <ul className="flex flex-col gap-2.5 text-sm text-white/70">
-            {universities.map((university) => (
-              <li key={university.slug}>
-                <Link to={`/${university.slug}`} className="transition-colors hover:text-white">
-                  {university.name}
+                  {program.title}
                 </Link>
               </li>
             ))}

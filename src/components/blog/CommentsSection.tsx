@@ -4,6 +4,7 @@ import { fetchPostComments, type PublicComment } from '../../lib/api'
 import { formatDate } from '../../lib/site'
 import { executeRecaptcha } from '../../lib/recaptcha'
 import { RecaptchaNotice } from '../ui/RecaptchaNotice'
+import { apiCredentials, apiUrl } from '../../lib/apiBase'
 
 interface CommentsSectionProps {
   postSlug: string
@@ -12,7 +13,7 @@ interface CommentsSectionProps {
 
 const emptyForm = { firstName: '', lastName: '', email: '', phone: '', comment: '' }
 
-export function CommentsSection({ postSlug, postTitle }: CommentsSectionProps) {
+export function CommentsSection({ postSlug }: CommentsSectionProps) {
   const [showForm, setShowForm] = useState(false)
   const [form, setForm] = useState(emptyForm)
   const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle')
@@ -34,17 +35,16 @@ export function CommentsSection({ postSlug, postTitle }: CommentsSectionProps) {
 
     try {
       const recaptchaToken = await executeRecaptcha('blog_comment')
-      const response = await fetch('/api/comments', {
+      const response = await fetch(apiUrl(`/api/web/posts/${encodeURIComponent(postSlug)}/comments`), {
         method: 'POST',
+        credentials: apiCredentials,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           firstName: form.firstName,
           lastName: form.lastName,
           email: form.email,
           phone: form.phone,
-          comment: form.comment,
-          postSlug,
-          postTitle,
+          body: form.comment,
           recaptchaToken,
         }),
       })
