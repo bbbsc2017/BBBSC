@@ -6,6 +6,7 @@ import { Container } from '../components/ui/Container'
 import { CTAButton } from '../components/ui/CTAButton'
 import { FormField, FileInput, SelectInput, TextInput } from '../components/ui/FormField'
 import { RecaptchaNotice } from '../components/ui/RecaptchaNotice'
+import { SubmittingOverlay } from '../components/ui/SubmittingOverlay'
 import { airlines } from '../data/airlines'
 import { executeRecaptcha } from '../lib/recaptcha'
 import { apiCredentials, apiUrl } from '../lib/apiBase'
@@ -173,6 +174,7 @@ export default function ReportaVuelo({ direction }: { direction: Direction }) {
           </form>
         </Container>
       </section>
+      <SubmittingOverlay show={status === 'submitting'} label="Enviando tu reporte…" />
     </>
   )
 }
