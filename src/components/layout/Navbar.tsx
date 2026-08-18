@@ -4,6 +4,9 @@ import { ChevronDown, LogIn, Menu, X } from 'lucide-react'
 import logoMark from '../../assets/logo/bbb-mark-white.svg'
 import { culturalPrograms } from '../../data/culturalPrograms'
 import { academicPrograms } from '../../data/academicPrograms'
+import { useSession } from '../../lib/session'
+import { LoginModal } from './LoginModal'
+import { UserMenu } from './UserMenu'
 
 interface NavGroup {
   label: string
@@ -19,6 +22,8 @@ export function Navbar() {
   const location = useLocation()
   const [open, setOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
+  const [loginOpen, setLoginOpen] = useState(false)
+  const { user, photoUrl, loading, refresh, logout } = useSession()
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8)
@@ -45,7 +50,17 @@ export function Navbar() {
         <NavLink to="/blog" className={({isActive}) => `rounded-full px-4 py-2 text-sm font-semibold transition-colors ${isActive ? 'text-brand' : 'text-white/70 hover:text-brand'}`}>Blog</NavLink>
       </nav>
 
-      <a href="/perfil" className="hidden items-center rounded-full bg-brand px-5 py-2.5 text-sm font-extrabold text-white transition hover:-translate-y-0.5 hover:bg-brand-400 lg:inline-flex"><LogIn className="mr-2 size-4" />Portal participante</a>
+      {!loading && (
+        <div className="hidden lg:flex">
+          {user ? (
+            <UserMenu user={user} photoUrl={photoUrl} onLogout={logout} />
+          ) : (
+            <button type="button" onClick={() => setLoginOpen(true)} className="inline-flex items-center rounded-full bg-brand px-5 py-2.5 text-sm font-extrabold text-white transition hover:-translate-y-0.5 hover:bg-brand-400">
+              <LogIn className="mr-2 size-4" />Iniciar sesión
+            </button>
+          )}
+        </div>
+      )}
       <button type="button" onClick={() => setOpen(value => !value)} className="inline-flex size-10 items-center justify-center rounded-full border border-white/15 text-white lg:hidden" aria-expanded={open} aria-label={open ? 'Cerrar menú' : 'Abrir menú'}>{open ? <X className="size-5" /> : <Menu className="size-5" />}</button>
     </div>
 
@@ -53,7 +68,23 @@ export function Navbar() {
       {groups.map(group => <div key={group.label} className="py-1"><span className="block rounded-lg px-3 py-2.5 text-sm font-bold text-white">{group.label}</span><div className="flex flex-col">{group.items.map(item => <Link key={item.to} to={item.to} onClick={() => setOpen(false)} className="rounded-lg px-6 py-2 text-sm text-white/60">{item.label}</Link>)}</div></div>)}
       <Link to="/ofertas" onClick={() => setOpen(false)} className="rounded-lg px-3 py-2.5 text-sm font-semibold text-white/80">Ofertas</Link>
       <Link to="/blog" onClick={() => setOpen(false)} className="rounded-lg px-3 py-2.5 text-sm font-semibold text-white/80">Blog</Link>
-      <div className="mt-3 border-t border-white/10 pt-4"><a href="/perfil" className="flex w-full items-center justify-center rounded-full bg-brand px-5 py-3 text-sm font-extrabold text-white"><LogIn className="mr-2 size-4" />Portal participante</a></div>
+      <div className="mt-3 border-t border-white/10 pt-4">
+        {user ? (
+          <div className="flex flex-col gap-2">
+            <a href="/perfil" className="flex w-full items-center justify-center rounded-full bg-brand px-5 py-3 text-sm font-extrabold text-white">Panel de Control</a>
+            <button type="button" onClick={() => { logout(); setOpen(false) }} className="flex w-full items-center justify-center rounded-full border border-white/15 px-5 py-3 text-sm font-bold text-white/70">Cerrar sesión</button>
+          </div>
+        ) : (
+          <button type="button" onClick={() => { setLoginOpen(true); setOpen(false) }} className="flex w-full items-center justify-center rounded-full bg-brand px-5 py-3 text-sm font-extrabold text-white"><LogIn className="mr-2 size-4" />Iniciar sesión</button>
+        )}
+      </div>
     </nav></div>}
+
+    {loginOpen && (
+      <LoginModal
+        onClose={() => setLoginOpen(false)}
+        onSuccess={() => { setLoginOpen(false); refresh() }}
+      />
+    )}
   </header>
 }
