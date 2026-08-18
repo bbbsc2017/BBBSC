@@ -33,6 +33,7 @@ export interface JobOffer {
   vacanciesAvailable: number
   availableUntil: string
   imageSrc: string
+  images?: string[]
   description: string
   status: 'draft' | 'active' | 'closed'
   storedStatus?: 'draft' | 'active' | 'closed'

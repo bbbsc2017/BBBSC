@@ -19,6 +19,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { Seo } from "../components/Seo";
 import { Container } from "../components/ui/Container";
 import { OfferCountdown } from "../components/offers/OfferCountdown";
+import { OfferGallery } from "../components/offers/OfferGallery";
 import {
   compensationLabel,
   isOfferAvailable,
@@ -286,17 +287,11 @@ export default function OfferDetail() {
             Volver a {programLabel(offer.program)}
           </Link>
           <section className="mt-6 grid overflow-hidden rounded-[2rem] border border-white/10 bg-ink-800 lg:grid-cols-[1.15fr_.85fr]">
-            <div className="relative min-h-72 overflow-hidden bg-gradient-to-br from-brand/25 via-ink-700 to-ink sm:min-h-[470px]">
-              {offer.imageSrc ? (
-                <img
-                  src={offer.imageSrc}
-                  alt={`${offer.title} en ${offer.employer}, ${offer.city}`}
-                  className="absolute inset-0 size-full object-cover"
-                />
-              ) : (
-                <Building2 className="absolute left-1/2 top-1/2 size-28 -translate-x-1/2 -translate-y-1/2 text-white/10" />
-              )}
-              <div className="absolute inset-0 bg-gradient-to-t from-ink via-transparent to-transparent" />
+            <div className="relative min-h-72 sm:min-h-[470px]">
+              <OfferGallery
+                images={offer.images?.length ? offer.images : [offer.imageSrc]}
+                alt={`${offer.title} en ${offer.employer}, ${offer.city}`}
+              />
               <span className="absolute left-5 top-5 rounded-full bg-ink/80 px-4 py-2 text-xs font-extrabold uppercase tracking-wider text-brand backdrop-blur">
                 {programLabel(offer.program)}
               </span>
