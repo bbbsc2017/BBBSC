@@ -1,4 +1,4 @@
-import { useMemo, useState, type FormEvent } from 'react'
+import { useState, type FormEvent } from 'react'
 import { CheckCircle2, Loader2, Send } from 'lucide-react'
 import { fieldClass } from './FormField'
 import { executeRecaptcha } from '../../lib/recaptcha'
@@ -13,15 +13,10 @@ interface InterestFormProps {
 
 const emptyForm = { firstName: '', lastName: '', email: '', phone: '' }
 
-export function InterestForm({ formKey, programTitle, interestTag }: InterestFormProps) {
+export function InterestForm({ formKey, interestTag }: InterestFormProps) {
   const [form, setForm] = useState(emptyForm)
   const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle')
   const [error, setError] = useState('')
-  const fullName = `${form.firstName.trim()} ${form.lastName.trim()}`.trim()
-  const hiddenMessage = useMemo(
-    () => `${fullName || 'La persona'} se inscribió en el formulario de la página web de ${programTitle}.`,
-    [fullName, programTitle],
-  )
 
   function update(key: keyof typeof emptyForm, value: string) {
     setForm((current) => ({ ...current, [key]: value }))
@@ -32,12 +27,15 @@ export function InterestForm({ formKey, programTitle, interestTag }: InterestFor
     setStatus('submitting')
     setError('')
     try {
+      // El mensaje y la etiqueta de interés ya los calcula la API central (plantillas
+      // configurables en admin.bbbsc.com); enviarlos aquí los rechaza porque el DTO
+      // solo acepta los campos del formulario visible.
       const recaptchaToken = await executeRecaptcha('interest_form')
       const response = await fetch(apiUrl('/api/web/forms/interest'), {
         method: 'POST',
         credentials: apiCredentials,
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ formKey, ...form, interestTag, message: hiddenMessage, recaptchaToken }),
+        headers: { 'Content-Type': 'application/json', 'x-recaptcha-token': recaptchaToken },
+        body: JSON.stringify({ formKey, ...form }),
       })
       const data = await response.json().catch(() => ({ ok: false }))
       if (!response.ok || !data.ok) throw new Error(data.error || 'No pudimos enviar tus datos.')
@@ -56,7 +54,6 @@ export function InterestForm({ formKey, programTitle, interestTag }: InterestFor
   return <form onSubmit={submit} className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
     <input type="hidden" name="formKey" value={formKey} />
     <input type="hidden" name="interestTag" value={interestTag} />
-    <input type="hidden" name="message" value={hiddenMessage} />
     <label className="sr-only" htmlFor={`${formKey}-firstName`}>Nombre</label>
     <input id={`${formKey}-firstName`} required autoComplete="given-name" value={form.firstName} onChange={(event) => update('firstName', event.target.value)} className={fieldClass} placeholder="Nombre" />
     <label className="sr-only" htmlFor={`${formKey}-lastName`}>Apellidos</label>

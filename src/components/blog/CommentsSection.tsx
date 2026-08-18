@@ -34,18 +34,19 @@ export function CommentsSection({ postSlug }: CommentsSectionProps) {
     setErrorMessage('')
 
     try {
+      // recaptchaToken va por header: el DTO de este endpoint no declara ese campo
+      // en el body y la API lo rechaza (400) si llega ahí.
       const recaptchaToken = await executeRecaptcha('blog_comment')
       const response = await fetch(apiUrl(`/api/web/posts/${encodeURIComponent(postSlug)}/comments`), {
         method: 'POST',
         credentials: apiCredentials,
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'x-recaptcha-token': recaptchaToken },
         body: JSON.stringify({
           firstName: form.firstName,
           lastName: form.lastName,
           email: form.email,
           phone: form.phone,
           body: form.comment,
-          recaptchaToken,
         }),
       })
 
