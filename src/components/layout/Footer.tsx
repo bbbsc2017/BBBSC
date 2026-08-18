@@ -23,7 +23,7 @@ export function Footer() {
         aria-hidden="true"
         className="pointer-events-none absolute -right-24 -top-24 size-96 rounded-full bg-brand/20 blur-3xl"
       />
-      <div className="relative mx-auto grid w-full max-w-7xl gap-10 px-5 py-16 sm:px-8 lg:grid-cols-[1.4fr_1fr_1fr_1fr_1.2fr]">
+      <div className="relative mx-auto grid w-full max-w-7xl gap-10 px-5 py-16 sm:px-8 lg:grid-cols-[1.4fr_1fr_1fr_1fr_1fr_1fr]">
         <div className="flex flex-col gap-4">
           <Link to="/" className="flex items-center gap-2.5">
             <img src={logoMark} alt="BBB Student Center" className="h-9 w-auto" />
@@ -113,6 +113,12 @@ export function Footer() {
                 {SITE.email}
               </a>
             </li>
+          </ul>
+        </div>
+
+        <div>
+          <h3 className="mb-4 text-sm font-bold uppercase tracking-wide text-brand">Nuestras Sedes</h3>
+          <ul className="flex flex-col gap-4 text-sm text-white/70">
             {SITE.offices.map((office) => (
               <li key={office.city}>
                 <a
@@ -126,6 +132,15 @@ export function Footer() {
                   <span className="underline-offset-4 group-hover:underline">
                     <strong className="text-white">{office.city}:</strong> {office.address}
                   </span>
+                </a>
+                <a
+                  href={whatsappLink(`¡Hola! Quiero más información sobre la sede de ${office.city}.`, office.phone)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-1 flex items-start gap-2.5 transition-colors hover:text-white"
+                >
+                  <Phone className="mt-0.5 size-4 shrink-0 text-brand" />
+                  {office.phone}
                 </a>
               </li>
             ))}

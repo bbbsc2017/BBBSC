@@ -21,7 +21,7 @@ export const SITE = {
     },
     {
       city: 'Bucaramanga',
-      address: 'Cra. 36 #48-116, ColorWorking, Santander',
+      address: 'Cra. 36 #48-20, Santander',
       phone: '3104735297',
       googleBusinessName: 'BBB Student Center Sede Bucaramanga',
       mapsUrl: 'https://www.google.com/maps/search/?api=1&query=BBB%20Student%20Center%20Sede%20Bucaramanga',
@@ -37,8 +37,10 @@ export const SITE = {
   },
 } as const
 
-export function whatsappLink(message?: string) {
-  const base = `https://wa.me/${SITE.whatsapp.replace('+', '')}`
+export function whatsappLink(message?: string, phone?: string) {
+  const digits = (phone ?? SITE.whatsapp).replace(/\D/g, '')
+  const full = phone && !digits.startsWith('57') ? `57${digits}` : digits
+  const base = `https://wa.me/${full}`
   return message ? `${base}?text=${encodeURIComponent(message)}` : base
 }
 
