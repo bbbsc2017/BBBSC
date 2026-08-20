@@ -5,7 +5,7 @@ import { requireAuth, requirePermission } from '../auth.js'
 import { PERMISSIONS } from '../lib/permissions.js'
 import { slugify, uniqueSlug } from '../lib/slugify.js'
 import { getUsers } from '../lib/bbbscApi.js'
-import { analyzeStoredPdf, downloadPdf, extractPdfText, inferOfferFields, MAX_PDF_BYTES, safeStoredPdfPath } from '../lib/offerPdfs.js'
+import { analyzeStoredPdf, downloadPdf, extractPdfText, inferOfferFields, MAX_PDF_BYTES } from '../lib/offerPdfs.js'
 import { getCachedClientifyProducts, syncClientifyProducts, syncOfferApplicationToClientify } from '../lib/clientifyOffers.js'
 import {
   listOffers as listCentralOffers,
@@ -138,8 +138,9 @@ export function validateTravelDates(startDate, endDate, today = todayInBogota())
 
 function adaptCentralOffer(o) {
   if (!o) return null
-  const pdfViewUrl = o.pdfViewUrl
-    ? new URL(o.pdfViewUrl, `${CENTRAL_API_URL}/`).toString()
+  const centralPdfUrl = o.pdfViewUrl ?? o.infoPdf
+  const pdfViewUrl = centralPdfUrl
+    ? `/api/offers/${encodeURIComponent(o.slug)}/pdf`
     : null
   return {
     id: o.id,
@@ -262,19 +263,37 @@ publicOffersRouter.get('/offers/:slug', async (req, res, next) => {
   }
 })
 
-publicOffersRouter.get('/offers/:slug/pdf', (req, res) => {
-  const row = getDb().prepare("SELECT slug, title, pdf_file_name FROM job_offers WHERE slug = ? AND status IN ('active', 'closed')").get(req.params.slug)
-  if (!row) return res.status(404).json({ ok: false, error: 'Documento no encontrado.' })
-  const filePath = safeStoredPdfPath(row.pdf_file_name)
-  if (!filePath) return res.status(404).json({ ok: false, error: 'El PDF todavía no está disponible.' })
-  res.set({
-    'Content-Type': 'application/pdf',
-    'Content-Disposition': 'inline; filename="documento-oferta-bbbsc.pdf"',
-    'Cache-Control': 'private, no-store',
-    'X-Content-Type-Options': 'nosniff',
-    'Content-Security-Policy': "default-src 'none'; frame-ancestors 'self'",
-  })
-  return res.sendFile(filePath)
+publicOffersRouter.get('/offers/:slug/pdf', async (req, res) => {
+  try {
+    const central = await getCentralOfferBySlug(req.params.slug)
+    const rawPdfUrl = central?.pdfViewUrl ?? central?.infoPdf
+    if (!rawPdfUrl) return res.status(404).json({ ok: false, error: 'El PDF todavía no está disponible.' })
+    const upstreamUrl = new URL(String(rawPdfUrl), `${CENTRAL_API_URL}/`)
+    if (upstreamUrl.origin !== new URL(CENTRAL_API_URL).origin) {
+      return res.status(400).json({ ok: false, error: 'La ubicación del PDF no es válida.' })
+    }
+    const response = await fetch(upstreamUrl, { signal: AbortSignal.timeout(30_000) })
+    if (!response.ok) return res.status(502).json({ ok: false, error: 'No pudimos cargar el PDF.' })
+    const contentLength = Number(response.headers.get('content-length') || 0)
+    if (contentLength > 25 * 1024 * 1024) {
+      return res.status(413).json({ ok: false, error: 'El PDF supera el tamaño permitido.' })
+    }
+    const buffer = Buffer.from(await response.arrayBuffer())
+    if (buffer.subarray(0, 5).toString('ascii') !== '%PDF-') {
+      return res.status(502).json({ ok: false, error: 'El documento recibido no es un PDF válido.' })
+    }
+    res.set({
+      'Content-Type': 'application/pdf',
+      'Content-Disposition': 'inline; filename="documento-oferta-bbbsc.pdf"',
+      'Cache-Control': 'public, max-age=3600',
+      'X-Content-Type-Options': 'nosniff',
+      'Content-Security-Policy': "default-src 'none'; frame-ancestors 'self'",
+    })
+    return res.send(buffer)
+  } catch (error) {
+    console.error('[bbbsc-server] Error sirviendo PDF de oferta:', error)
+    return res.status(502).json({ ok: false, error: 'No pudimos cargar el PDF.' })
+  }
 })
 
 publicOffersRouter.get('/offers/me', requireAuth, async (req, res) => {
