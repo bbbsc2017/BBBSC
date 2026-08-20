@@ -163,9 +163,7 @@ export default function OfferDetail() {
       setOffer(data.application.offer);
       setApplyOpen(false);
       setMessage(
-        data.application.clientifySyncStatus === "synced"
-          ? "Tu aplicación quedó registrada. La oferta y tus fechas de viaje fueron enviadas a Clientify."
-          : "Tu aplicación quedó registrada. La sincronización con Clientify continuará automáticamente.",
+        "¡Felicidades! Tu postulación quedó registrada. Ponte en contacto con tu gurú para continuar con tu proceso.",
       );
     } catch (err) {
       setError(
@@ -558,10 +556,9 @@ export default function OfferDetail() {
             </div>
             <div className="mt-5 rounded-2xl border border-brand/15 bg-brand/[0.06] p-4 text-xs leading-5 text-white/55">
               <strong className="text-white">Revisa antes de confirmar:</strong>{" "}
-              solo puedes mantener una oferta activa. Se creará una oportunidad
-              con el producto enlazado y se agregará la etiqueta{" "}
-              <span className="font-mono text-brand">oferta_elegida</span> a tu
-              contacto.
+              solo puedes mantener una oferta activa. ¡Felicidades por aplicar a
+              esta oferta! Ponte en contacto con tu gurú para continuar con tu
+              proceso.
             </div>
             {error && (
               <p className="mt-4 rounded-xl bg-red-400/10 p-3 text-sm text-red-300">
