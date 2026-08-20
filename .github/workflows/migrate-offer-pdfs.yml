@@ -56,9 +56,9 @@ jobs:
           DATABASE_PATH="$database" PDF_DIRECTORY="$pdf_dir" MIGRATION_SECRET="$migration_secret" node --input-type=module <<'NODE'
           import fs from 'node:fs'
           import path from 'node:path'
-          import Database from 'better-sqlite3'
+          import { DatabaseSync } from 'node:sqlite'
 
-          const db = new Database(process.env.DATABASE_PATH, { readonly: true })
+          const db = new DatabaseSync(process.env.DATABASE_PATH, { readOnly: true })
           const rows = db.prepare("SELECT slug, title, pdf_file_name FROM job_offers WHERE pdf_file_name <> '' ORDER BY id").all()
           db.close()
           let migrated = 0
