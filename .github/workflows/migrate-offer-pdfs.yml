@@ -1,0 +1,94 @@
+name: Migrar PDF de ofertas a S3
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm_migration:
+        description: Escribe MIGRAR para confirmar
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: bbbsc-offer-pdf-migration
+  cancel-in-progress: false
+
+jobs:
+  migrate:
+    if: inputs.confirm_migration == 'MIGRAR'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    environment: production
+    env:
+      DEPLOY_PATH: ${{ secrets.VPS_DEPLOY_PATH }}
+    steps:
+      - name: Preparar acceso SSH
+        env:
+          VPS_SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
+          VPS_KNOWN_HOSTS: ${{ secrets.VPS_KNOWN_HOSTS }}
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$VPS_SSH_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          printf '%s\n' "$VPS_KNOWN_HOSTS" > ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/known_hosts
+
+      - name: Copiar PDF antiguos a S3 y vincular ofertas
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_PORT: ${{ secrets.VPS_PORT }}
+          VPS_USER: ${{ secrets.VPS_USER }}
+        run: |
+          ssh -p "${VPS_PORT:-22}" "$VPS_USER@$VPS_HOST" "DEPLOY_PATH='$DEPLOY_PATH' bash -s" <<'REMOTE'
+          set -euo pipefail
+          database="$DEPLOY_PATH/shared/server/data/bbbsc.sqlite3"
+          pdf_dir="$DEPLOY_PATH/shared/server/data/offer-pdfs"
+          server_dir="$DEPLOY_PATH/current/server"
+          test -s "$database"
+          test -d "$pdf_dir"
+          test -d "$server_dir/node_modules/better-sqlite3"
+          migration_secret="$(docker exec bbbsc_api printenv WEBHOOK_SECRET)"
+          test -n "$migration_secret"
+
+          cd "$server_dir"
+          DATABASE_PATH="$database" PDF_DIRECTORY="$pdf_dir" MIGRATION_SECRET="$migration_secret" node --input-type=module <<'NODE'
+          import fs from 'node:fs'
+          import path from 'node:path'
+          import Database from 'better-sqlite3'
+
+          const db = new Database(process.env.DATABASE_PATH, { readonly: true })
+          const rows = db.prepare("SELECT slug, title, pdf_file_name FROM job_offers WHERE pdf_file_name <> '' ORDER BY id").all()
+          db.close()
+          let migrated = 0
+          let missing = 0
+          let failed = 0
+          for (const row of rows) {
+            const safeName = path.basename(String(row.pdf_file_name || ''))
+            const filePath = path.join(process.env.PDF_DIRECTORY, safeName)
+            if (!safeName || !fs.existsSync(filePath)) {
+              missing += 1
+              console.log(`FALTA\t${row.slug}\t${safeName}`)
+              continue
+            }
+            const form = new FormData()
+            form.append('file', new Blob([fs.readFileSync(filePath)], { type: 'application/pdf' }), safeName)
+            const response = await fetch(`http://127.0.0.1:3333/api/offers/internal/migrate-pdf/${encodeURIComponent(row.slug)}`, {
+              method: 'POST',
+              headers: { 'x-migration-secret': process.env.MIGRATION_SECRET },
+              body: form,
+            })
+            if (!response.ok) {
+              failed += 1
+              const body = await response.text()
+              console.log(`ERROR\t${row.slug}\t${response.status}\t${body.slice(0, 180)}`)
+              continue
+            }
+            migrated += 1
+            console.log(`OK\t${row.slug}`)
+          }
+          console.log(`RESUMEN\ttotal=${rows.length}\tmigrados=${migrated}\tfaltantes=${missing}\terrores=${failed}`)
+          if (failed > 0) process.exitCode = 1
+          NODE
+          REMOTE
