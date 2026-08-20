@@ -43,14 +43,14 @@ jobs:
         run: |
           ssh -p "${VPS_PORT:-22}" "$VPS_USER@$VPS_HOST" "DEPLOY_PATH='$DEPLOY_PATH' bash -s" <<'REMOTE'
           set -euo pipefail
-          database="$DEPLOY_PATH/shared/server/data/bbbsc.sqlite3"
-          pdf_dir="$DEPLOY_PATH/shared/server/data/offer-pdfs"
+          database="$(find "$DEPLOY_PATH" -type f -name 'bbbsc.sqlite3' -print -quit 2>/dev/null || true)"
+          pdf_dir="$(find "$DEPLOY_PATH" -type d -name 'offer-pdfs' -print -quit 2>/dev/null || true)"
           server_dir="$DEPLOY_PATH/current/server"
-          test -s "$database"
-          test -d "$pdf_dir"
-          test -d "$server_dir/node_modules/better-sqlite3"
+          if [ -z "$database" ] || [ ! -s "$database" ]; then echo 'No se encontró la base SQLite persistente.'; exit 1; fi
+          if [ -z "$pdf_dir" ] || [ ! -d "$pdf_dir" ]; then echo 'No se encontró la carpeta persistente offer-pdfs.'; exit 1; fi
+          if [ ! -d "$server_dir" ]; then echo 'No se encontró el servidor activo de BBBSC.'; exit 1; fi
           migration_secret="$(docker exec bbbsc_api printenv WEBHOOK_SECRET)"
-          test -n "$migration_secret"
+          if [ -z "$migration_secret" ]; then echo 'La API no tiene disponible la credencial interna de migración.'; exit 1; fi
 
           cd "$server_dir"
           DATABASE_PATH="$database" PDF_DIRECTORY="$pdf_dir" MIGRATION_SECRET="$migration_secret" node --input-type=module <<'NODE'
