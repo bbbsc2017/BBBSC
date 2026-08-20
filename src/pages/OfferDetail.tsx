@@ -395,6 +395,13 @@ export default function OfferDetail() {
               <h2 className="text-2xl font-black">
                 Detalles de la oportunidad
               </h2>
+              <div className="mt-5 rounded-3xl border border-white/10 bg-ink-800 p-6 sm:p-8">
+                <h3 className="text-xl font-black">Descripción</h3>
+                <p className="mt-4 whitespace-pre-line text-sm leading-7 text-white/60">
+                  {offer.description ||
+                    "Consulta con tu asesor BBBSC para conocer todos los detalles de esta oportunidad."}
+                </p>
+              </div>
               <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
                 <Fact
                   icon={Building2}
@@ -429,14 +436,9 @@ export default function OfferDetail() {
                   value={offer.hasTips ? "Sí" : "No"}
                 />
               </div>
-              <div className="mt-8 rounded-3xl border border-white/10 bg-ink-800 p-6 sm:p-8">
-                <h2 className="text-xl font-black">Descripción</h2>
-                <p className="mt-4 whitespace-pre-line text-sm leading-7 text-white/60">
-                  {offer.description ||
-                    "Consulta con tu asesor BBBSC para conocer todos los detalles de esta oportunidad."}
-                </p>
-                {offer.bonuses && (
-                  <div className="mt-6 rounded-2xl bg-brand/[0.07] p-5">
+              {offer.bonuses && (
+                <div className="mt-8 rounded-3xl border border-white/10 bg-ink-800 p-6 sm:p-8">
+                  <div className="rounded-2xl bg-brand/[0.07] p-5">
                     <p className="flex items-center font-bold text-brand">
                       <Sparkles className="mr-2 size-4" />
                       Bonos e incentivos
@@ -445,21 +447,41 @@ export default function OfferDetail() {
                       {offer.bonuses}
                     </p>
                   </div>
-                )}
-                {offer.hasPdf && (
+                </div>
+              )}
+            </div>
+            <aside className="rounded-3xl border border-white/10 bg-ink-800 p-6 lg:sticky lg:top-24">
+              {offer.hasPdf && (
+                <div className="mb-6 border-b border-white/10 pb-6">
+                  <div className="mb-3 flex items-center justify-between gap-3">
+                    <div>
+                      <p className="text-[10px] font-black uppercase tracking-[0.18em] text-brand">
+                        Documento de la oferta
+                      </p>
+                      <p className="mt-1 text-xs text-white/45">Vista previa</p>
+                    </div>
+                    <FileText className="size-5 text-brand" />
+                  </div>
                   <button
                     type="button"
                     onClick={() => setPdfOpen(true)}
-                    className="mt-6 inline-flex items-center rounded-full border border-brand/30 bg-brand/10 px-5 py-3 text-sm font-black text-brand transition hover:bg-brand hover:text-ink"
+                    className="group relative block h-52 w-full overflow-hidden rounded-2xl bg-ink text-left shadow-lg transition hover:-translate-y-0.5"
+                    aria-label={`Abrir documento de ${offer.title}`}
                   >
-                    <FileText className="mr-2 size-4" />
-                    Ver documento de la oferta
-                    <Eye className="ml-2 size-4" />
+                    <iframe
+                      src={`${localPdfViewUrl}#page=1&view=FitH&toolbar=0&navpanes=0&scrollbar=0`}
+                      title={`Vista previa del PDF de ${offer.title}`}
+                      loading="lazy"
+                      tabIndex={-1}
+                      className="pointer-events-none absolute -inset-y-1 left-0 h-[calc(100%+8px)] w-[calc(100%+18px)] bg-white"
+                    />
+                    <span className="pointer-events-none absolute inset-0 rounded-2xl ring-[3px] ring-inset ring-ink-800" />
+                    <span className="absolute inset-x-0 bottom-0 flex items-center justify-center bg-gradient-to-t from-ink via-ink/90 to-transparent px-3 pb-3 pt-10 text-xs font-black text-brand">
+                      <Eye className="mr-2 size-4" /> Ver PDF completo
+                    </span>
                   </button>
-                )}
-              </div>
-            </div>
-            <aside className="rounded-3xl border border-white/10 bg-ink-800 p-6 lg:sticky lg:top-24">
+                </div>
+              )}
               <CalendarDays className="size-7 text-brand" />
               <h2 className="mt-4 text-lg font-black">Disponible hasta</h2>
               <p className="mt-2 text-white/60">
@@ -485,36 +507,6 @@ export default function OfferDetail() {
                   available={available}
                 />
               </div>
-              {offer.hasPdf && (
-                <div className="mt-5 border-t border-white/10 pt-5">
-                  <div className="mb-3 flex items-center justify-between gap-3">
-                    <div>
-                      <p className="text-[10px] font-black uppercase tracking-[0.18em] text-brand">
-                        Documento de la oferta
-                      </p>
-                      <p className="mt-1 text-xs text-white/45">Vista previa</p>
-                    </div>
-                    <FileText className="size-5 text-brand" />
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => setPdfOpen(true)}
-                    className="group relative block h-52 w-full overflow-hidden rounded-2xl border border-white/10 bg-white text-left shadow-lg transition hover:-translate-y-0.5 hover:border-brand/50"
-                    aria-label={`Abrir documento de ${offer.title}`}
-                  >
-                    <iframe
-                      src={`${localPdfViewUrl}#page=1&view=FitH&toolbar=0&navpanes=0&scrollbar=0`}
-                      title={`Vista previa del PDF de ${offer.title}`}
-                      loading="lazy"
-                      tabIndex={-1}
-                      className="pointer-events-none h-full w-full bg-white"
-                    />
-                    <span className="absolute inset-x-0 bottom-0 flex items-center justify-center bg-gradient-to-t from-ink via-ink/90 to-transparent px-3 pb-3 pt-10 text-xs font-black text-brand">
-                      <Eye className="mr-2 size-4" /> Ver PDF completo
-                    </span>
-                  </button>
-                </div>
-              )}
             </aside>
           </section>
         </Container>
