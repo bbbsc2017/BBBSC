@@ -481,6 +481,36 @@ export default function OfferDetail() {
                   available={available}
                 />
               </div>
+              {offer.hasPdf && offer.pdfViewUrl && (
+                <div className="mt-5 border-t border-white/10 pt-5">
+                  <div className="mb-3 flex items-center justify-between gap-3">
+                    <div>
+                      <p className="text-[10px] font-black uppercase tracking-[0.18em] text-brand">
+                        Documento de la oferta
+                      </p>
+                      <p className="mt-1 text-xs text-white/45">Vista previa</p>
+                    </div>
+                    <FileText className="size-5 text-brand" />
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setPdfOpen(true)}
+                    className="group relative block h-52 w-full overflow-hidden rounded-2xl border border-white/10 bg-white text-left shadow-lg transition hover:-translate-y-0.5 hover:border-brand/50"
+                    aria-label={`Abrir documento de ${offer.title}`}
+                  >
+                    <iframe
+                      src={`${offer.pdfViewUrl}#page=1&view=FitH&toolbar=0&navpanes=0&scrollbar=0`}
+                      title={`Vista previa del PDF de ${offer.title}`}
+                      loading="lazy"
+                      tabIndex={-1}
+                      className="pointer-events-none h-full w-full bg-white"
+                    />
+                    <span className="absolute inset-x-0 bottom-0 flex items-center justify-center bg-gradient-to-t from-ink via-ink/90 to-transparent px-3 pb-3 pt-10 text-xs font-black text-brand">
+                      <Eye className="mr-2 size-4" /> Ver PDF completo
+                    </span>
+                  </button>
+                </div>
+              )}
             </aside>
           </section>
         </Container>

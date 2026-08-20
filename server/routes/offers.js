@@ -17,6 +17,7 @@ import {
 
 export const publicOffersRouter = Router()
 export const adminOffersRouter = Router()
+const CENTRAL_API_URL = (process.env.BBBSC_API_URL || 'https://api.bbbsc.com').replace(/\/$/, '')
 
 const PROGRAMS = ['work-travel-usa', 'work-travel-asia', 'trainee-internship', 'teacher-assistant', 'teacher-exchange']
 const STATUSES = ['draft', 'active', 'closed']
@@ -137,6 +138,9 @@ export function validateTravelDates(startDate, endDate, today = todayInBogota())
 
 function adaptCentralOffer(o) {
   if (!o) return null
+  const pdfViewUrl = o.pdfViewUrl
+    ? new URL(o.pdfViewUrl, `${CENTRAL_API_URL}/`).toString()
+    : null
   return {
     id: o.id,
     slug: o.slug,
@@ -164,8 +168,8 @@ function adaptCentralOffer(o) {
     imageSrc: o.imageSrc ?? o.imageMain,
     description: o.description,
     status: o.status,
-    hasPdf: Boolean(o.hasPdf),
-    pdfViewUrl: o.pdfViewUrl,
+    hasPdf: Boolean(pdfViewUrl),
+    pdfViewUrl,
     // La API central ya no tiene el concepto de "producto" de Clientify por
     // oferta (esa dependencia se quitó a propósito) — se deja fijo en true
     // porque el frontend compilado de bbbsc.com todavía revisa este campo
