@@ -77,8 +77,9 @@ export function Hero() {
     <section className="relative overflow-hidden bg-ink">
       <div className="absolute inset-0" aria-hidden="true">
         <img key={destinations[index].image.src} src={destinations[index].image.src} alt="" fetchPriority="high" className="absolute inset-0 size-full animate-[fadeIn_1.2s_ease-in-out] object-cover" />
-        <div className="absolute inset-0 bg-gradient-to-r from-ink via-ink/85 to-ink/40" />
-        <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/20 to-ink/30" />
+        <div className="absolute inset-0 bg-gradient-to-r from-ink/85 via-ink/60 to-ink/10" />
+        <div className="absolute inset-0 bg-gradient-to-t from-ink/75 via-ink/10 to-ink/15" />
+        <div className="home-hero-grid absolute inset-0" />
       </div>
 
       <Container className="relative flex flex-col gap-12 py-16 sm:py-20 lg:flex-row lg:items-center lg:justify-between lg:gap-10 lg:py-28">
