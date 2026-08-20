@@ -203,6 +203,10 @@ export default function OfferDetail() {
   const ownOffer = application?.offer.id === offer.id;
   const hasOtherOffer = Boolean(application && !ownOffer);
   const available = isOfferAvailable(offer, now);
+  // El visor siempre usa el proxy del mismo dominio. No usamos directamente
+  // pdfViewUrl porque la API central puede responder desde api.bbbsc.com y su
+  // CSP impide que ese dominio se inserte en un iframe de bbbsc.com.
+  const localPdfViewUrl = `/api/offers/${encodeURIComponent(offer.slug)}/pdf`;
   const localNow = new Date(now);
   const today = new Date(
     localNow.getTime() - localNow.getTimezoneOffset() * 60_000,
@@ -481,7 +485,7 @@ export default function OfferDetail() {
                   available={available}
                 />
               </div>
-              {offer.hasPdf && offer.pdfViewUrl && (
+              {offer.hasPdf && (
                 <div className="mt-5 border-t border-white/10 pt-5">
                   <div className="mb-3 flex items-center justify-between gap-3">
                     <div>
@@ -499,7 +503,7 @@ export default function OfferDetail() {
                     aria-label={`Abrir documento de ${offer.title}`}
                   >
                     <iframe
-                      src={`${offer.pdfViewUrl}#page=1&view=FitH&toolbar=0&navpanes=0&scrollbar=0`}
+                      src={`${localPdfViewUrl}#page=1&view=FitH&toolbar=0&navpanes=0&scrollbar=0`}
                       title={`Vista previa del PDF de ${offer.title}`}
                       loading="lazy"
                       tabIndex={-1}
@@ -606,7 +610,7 @@ export default function OfferDetail() {
         </div>
       )}
       <SubmittingOverlay show={applying} label="Registrando tu aplicación…" />
-      {pdfOpen && offer.pdfViewUrl && (
+      {pdfOpen && offer.hasPdf && (
         <div
           className="fixed inset-0 z-[90] flex items-center justify-center bg-black/80 p-3 sm:p-6"
           role="dialog"
@@ -639,7 +643,7 @@ export default function OfferDetail() {
               </button>
             </header>
             <iframe
-              src={`${offer.pdfViewUrl}#toolbar=0&navpanes=0&scrollbar=1`}
+              src={`${localPdfViewUrl}#toolbar=0&navpanes=0&scrollbar=1`}
               title={`PDF de ${offer.title}`}
               className="min-h-0 flex-1 bg-white"
             />
