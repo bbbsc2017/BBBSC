@@ -2,7 +2,8 @@ import { Router } from 'express'
 import { getDb, nowIso } from '../db.js'
 import { requirePermission } from '../auth.js'
 import { PERMISSIONS } from '../lib/permissions.js'
-import { createClientifyContact, getClientifyCustomFields } from '../lib/clientify.js'
+import { getClientifyCustomFields } from '../lib/clientify.js'
+import { submitBasicLead } from '../lib/bbbscApi.js'
 import { defaultMappings, FORM_DEFINITIONS, getFormDefinition } from '../lib/formDefinitions.js'
 import { buildClientifyPayload, readSavedMappings } from '../lib/clientifyPayload.js'
 import { getClientIp, isRateLimited } from '../lib/rateLimit.js'
@@ -29,15 +30,18 @@ publicFormsRouter.post('/interest-forms', requireRecaptcha('interest_form'), asy
   if (!EMAIL_REGEX.test(email.trim())) return res.status(400).json({ ok: false, error: 'El correo no es válido.' })
 
   const fullName = `${firstName.trim()} ${lastName.trim()}`
-  const values = {
-    firstName, lastName, email, phone,
-    interestTag: form.interestTag,
-    message: `${fullName} se inscribió en el formulario de la página web de ${form.title}.`,
-    contactSource: form.source,
-  }
 
+  // Ya no se crea el contacto de Clientify directamente desde bbbsc-app —
+  // se delega a la API central (POST /leads/basic), que hace su propio
+  // upsert de contacto en Clientify. buildClientifyPayload/createClientifyContact
+  // se dejan intactos para las rutas admin de este archivo, que no cambian.
   try {
-    await createClientifyContact(buildClientifyPayload(form, values))
+    await submitBasicLead({
+      nombre: fullName,
+      celular: phone.trim(),
+      correo: email.trim(),
+      origen: form.source || form.title || form.key,
+    })
     return res.status(201).json({ ok: true })
   } catch {
     return res.status(502).json({ ok: false, error: 'No pudimos enviar tus datos en este momento. Intenta nuevamente o escríbenos por WhatsApp.' })

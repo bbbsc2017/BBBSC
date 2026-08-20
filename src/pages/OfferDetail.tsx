@@ -141,12 +141,6 @@ export default function OfferDetail() {
   async function apply(event: FormEvent) {
     event.preventDefault();
     if (!offer) return;
-    if (!offer.clientifyProductLinked) {
-      setError(
-        "Esta oferta todavía se está enlazando con Clientify. Intenta nuevamente en unos minutos.",
-      );
-      return;
-    }
     if (!applyOpen) {
       setApplyOpen(true);
       setError("");

@@ -7,6 +7,13 @@ import { slugify, uniqueSlug } from '../lib/slugify.js'
 import { getUsers } from '../lib/bbbscApi.js'
 import { analyzeStoredPdf, downloadPdf, extractPdfText, inferOfferFields, MAX_PDF_BYTES, safeStoredPdfPath } from '../lib/offerPdfs.js'
 import { getCachedClientifyProducts, syncClientifyProducts, syncOfferApplicationToClientify } from '../lib/clientifyOffers.js'
+import {
+  listOffers as listCentralOffers,
+  getOfferBySlug as getCentralOfferBySlug,
+  getMyCurrentOffer,
+  applyToOffer,
+  OffersApiError,
+} from '../lib/offersApi.js'
 
 export const publicOffersRouter = Router()
 export const adminOffersRouter = Router()
@@ -114,27 +121,141 @@ export function validateTravelDates(startDate, endDate, today = todayInBogota())
   return null
 }
 
-publicOffersRouter.get('/offers', (req, res) => {
-  let where = "WHERE o.status IN ('active', 'closed')"
-  const params = []
-  if (PROGRAMS.includes(req.query.program)) { where += ' AND o.program = ?'; params.push(req.query.program) }
-  if (req.query.search?.trim()) { where += ' AND (o.title LIKE ? OR o.employer LIKE ?)'; const term = `%${req.query.search.trim()}%`; params.push(term, term) }
-  if (req.query.city?.trim()) { where += ' AND o.city LIKE ?'; params.push(`%${req.query.city.trim()}%`) }
-  if (req.query.sponsor?.trim()) { where += ' AND o.sponsor LIKE ?'; params.push(`%${req.query.sponsor.trim()}%`) }
-  const minSalary = Number(req.query.minSalary)
-  const maxSalary = Number(req.query.maxSalary)
-  if (Number.isFinite(minSalary) && req.query.minSalary !== '') { where += ' AND COALESCE(o.compensation_max, o.compensation_min) >= ?'; params.push(minSalary) }
-  if (Number.isFinite(maxSalary) && req.query.maxSalary !== '') { where += ' AND o.compensation_min <= ?'; params.push(maxSalary) }
-  const offers = selectOffers(where, params, "CASE WHEN o.status = 'active' THEN 0 ELSE 1 END, o.available_until DESC, o.updated_at DESC").map((row) => toOffer(row))
-  const facets = getDb().prepare("SELECT DISTINCT program, city, sponsor FROM job_offers WHERE status IN ('active', 'closed') ORDER BY program, city, sponsor").all()
-  return res.json({ ok: true, offers, facets })
+// ─────────────────────────────────────────────────────────────────────────
+// Adaptador API central → shape legacy (público)
+//
+// bbbsc.com (este backend) ya no es la fuente de verdad para ofertas: eso
+// vive en la API central (api.bbbsc.com / Postgres). Las rutas PÚBLICAS de
+// abajo llaman a la API central y traducen su respuesta al mismo shape que
+// ya devolvía toOffer() con SQLite, para que el frontend compilado (del que
+// no tenemos el código fuente) siga funcionando sin cambios.
+//
+// Las rutas ADMIN de este archivo (CRUD, Clientify products, asignación
+// manual) NO se tocan — siguen usando SQLite local, confirmado que ya no se
+// usan pero se dejan intactas por ahora.
+// ─────────────────────────────────────────────────────────────────────────
+
+function adaptCentralOffer(o) {
+  if (!o) return null
+  return {
+    id: o.id,
+    slug: o.slug,
+    title: o.title,
+    program: o.programSlug ?? o.program ?? null,
+    sponsor: o.sponsor,
+    employer: o.employer ?? o.empleador,
+    compensationType: o.compensationType,
+    compensationMin: o.compensationMin,
+    compensationMax: o.compensationMax,
+    compensationCurrency: o.compensationCurrency,
+    compensationPeriod: o.compensationPeriod,
+    hasTips: Boolean(o.hasTips),
+    englishLevel: o.englishLevel ?? o.nivelIngles,
+    city: o.city ?? o.ciudad,
+    state: o.state ?? o.estado,
+    offerType: o.offerType ?? o.tipoOferta,
+    airportPickup: Boolean(o.airportPickup),
+    overtime: Boolean(o.overtime ?? o.extraHours),
+    bonuses: o.bonuses ?? '',
+    vacanciesTotal: o.vacanciesTotal,
+    vacanciesLost: o.vacanciesLost,
+    vacanciesAvailable: o.vacanciesAvailable,
+    availableUntil: o.availableUntil,
+    imageSrc: o.imageSrc ?? o.imageMain,
+    description: o.description,
+    status: o.status,
+    hasPdf: Boolean(o.hasPdf),
+    pdfViewUrl: o.pdfViewUrl,
+    // La API central ya no tiene el concepto de "producto" de Clientify por
+    // oferta (esa dependencia se quitó a propósito) — se deja fijo en true
+    // porque el frontend compilado de bbbsc.com todavía revisa este campo
+    // antes de dejar postularse, y no tenemos su código fuente para quitar
+    // esa validación del lado del cliente.
+    clientifyProductLinked: true,
+    createdAt: o.createdAt,
+    updatedAt: o.updatedAt,
+  }
+}
+
+// Cache corta en memoria: el listado público se pide seguido (cada carga de
+// /ofertas) y no necesita estar al segundo — evita pegarle a la API central
+// por las 163+ ofertas en cada request. El detalle por slug se deja sin
+// cache (una sola oferta, se pide poco comparado con el listado completo).
+let offersCache = { data: null, expiresAt: 0 }
+const OFFERS_CACHE_TTL_MS = 30_000
+
+async function fetchPublicCentralOffers() {
+  if (offersCache.data && offersCache.expiresAt > Date.now()) return offersCache.data
+  const central = await listCentralOffers()
+  const offers = Array.isArray(central?.offers) ? central.offers : []
+  const adapted = offers.filter((o) => o.status === 'active' || o.status === 'closed').map(adaptCentralOffer)
+  offersCache = { data: adapted, expiresAt: Date.now() + OFFERS_CACHE_TTL_MS }
+  return adapted
+}
+
+function centralErrorResponse(res, error, fallbackMessage) {
+  const status = error instanceof OffersApiError && error.status >= 400 && error.status < 600 ? error.status : 502
+  const message = error instanceof OffersApiError && error.message ? error.message : fallbackMessage
+  return res.status(status).json({ ok: false, error: message })
+}
+
+publicOffersRouter.get('/offers', async (req, res) => {
+  try {
+    const allOffers = await fetchPublicCentralOffers()
+    const facets = Array.from(
+      new Map(allOffers.map((o) => [`${o.program}|${o.city}|${o.sponsor}`, { program: o.program, city: o.city, sponsor: o.sponsor }])).values(),
+    )
+
+    let offers = allOffers
+    if (PROGRAMS.includes(req.query.program)) offers = offers.filter((o) => o.program === req.query.program)
+    if (req.query.search?.trim()) {
+      const term = req.query.search.trim().toLowerCase()
+      offers = offers.filter((o) => o.title?.toLowerCase().includes(term) || o.employer?.toLowerCase().includes(term))
+    }
+    if (req.query.city?.trim()) {
+      const term = req.query.city.trim().toLowerCase()
+      offers = offers.filter((o) => o.city?.toLowerCase().includes(term))
+    }
+    if (req.query.sponsor?.trim()) {
+      const term = req.query.sponsor.trim().toLowerCase()
+      offers = offers.filter((o) => o.sponsor?.toLowerCase().includes(term))
+    }
+    const minSalary = Number(req.query.minSalary)
+    if (Number.isFinite(minSalary) && req.query.minSalary !== '') {
+      offers = offers.filter((o) => Number(o.compensationMax ?? o.compensationMin ?? 0) >= minSalary)
+    }
+    const maxSalary = Number(req.query.maxSalary)
+    if (Number.isFinite(maxSalary) && req.query.maxSalary !== '') {
+      offers = offers.filter((o) => Number(o.compensationMin ?? 0) <= maxSalary)
+    }
+
+    offers = [...offers].sort((a, b) => {
+      if (a.status !== b.status) return a.status === 'active' ? -1 : 1
+      return new Date(b.availableUntil).getTime() - new Date(a.availableUntil).getTime()
+    })
+
+    return res.json({ ok: true, offers, facets })
+  } catch (error) {
+    console.error('[bbbsc-server] Error consultando ofertas en la API central:', error)
+    return centralErrorResponse(res, error, 'No pudimos cargar las ofertas en este momento.')
+  }
 })
 
-publicOffersRouter.get('/offers/:slug', (req, res, next) => {
+publicOffersRouter.get('/offers/:slug', async (req, res, next) => {
   if (req.params.slug === 'me') return next()
-  const row = selectOffers("WHERE o.slug = ? AND o.status IN ('active', 'closed')", [req.params.slug])[0]
-  if (!row) return res.status(404).json({ ok: false, error: 'Oferta no encontrada.' })
-  return res.json({ ok: true, offer: toOffer(row) })
+  try {
+    const central = await getCentralOfferBySlug(req.params.slug)
+    if (!central || !['active', 'closed'].includes(central.status)) {
+      return res.status(404).json({ ok: false, error: 'Oferta no encontrada.' })
+    }
+    return res.json({ ok: true, offer: adaptCentralOffer(central) })
+  } catch (error) {
+    if (error instanceof OffersApiError && error.status === 404) {
+      return res.status(404).json({ ok: false, error: 'Oferta no encontrada.' })
+    }
+    console.error('[bbbsc-server] Error consultando oferta en la API central:', error)
+    return centralErrorResponse(res, error, 'No pudimos cargar la oferta en este momento.')
+  }
 })
 
 publicOffersRouter.get('/offers/:slug/pdf', (req, res) => {
@@ -152,47 +273,35 @@ publicOffersRouter.get('/offers/:slug/pdf', (req, res) => {
   return res.sendFile(filePath)
 })
 
-publicOffersRouter.get('/offers/me', requireAuth, (req, res) => {
-  const row = getDb().prepare(
-    `SELECT a.id AS application_id, a.applied_at, a.source, a.travel_start_date, a.travel_end_date, a.clientify_sync_status, o.*, ${availableExpression('o')} AS vacancies_available
-     FROM job_applications a JOIN job_offers o ON o.id = a.offer_id
-     WHERE a.participant_id = ? AND a.status = 'active'`,
-  ).get(req.user.id)
-  return res.json({ ok: true, application: row ? { id: row.application_id, appliedAt: row.applied_at, source: row.source, travelStartDate: row.travel_start_date, travelEndDate: row.travel_end_date, clientifySyncStatus: row.clientify_sync_status, offer: toOffer(row) } : null })
+publicOffersRouter.get('/offers/me', requireAuth, async (req, res) => {
+  try {
+    const central = await getMyCurrentOffer(req.bbbscAccessToken)
+    const application = central?.application
+      ? { ...central.application, offer: adaptCentralOffer(central.application.offer) }
+      : null
+    return res.json({ ok: true, application })
+  } catch (error) {
+    console.error('[bbbsc-server] Error consultando mi postulación en la API central:', error)
+    return centralErrorResponse(res, error, 'No pudimos consultar tu postulación en este momento.')
+  }
 })
 
 publicOffersRouter.post('/offers/:id/apply', requireAuth, async (req, res) => {
   if (req.user.role !== 'STUDENT') return res.status(403).json({ ok: false, error: 'Solo los participantes activos pueden aplicar a una oferta.' })
   const dateError = validateTravelDates(req.body?.travelStartDate, req.body?.travelEndDate)
   if (dateError) return res.status(400).json({ ok: false, error: dateError })
-  const db = getDb()
-  let committed = false
-  db.exec('BEGIN IMMEDIATE')
   try {
-    const existing = db.prepare("SELECT id FROM job_applications WHERE participant_id = ? AND status = 'active'").get(req.user.id)
-    if (existing) { db.exec('ROLLBACK'); return res.status(409).json({ ok: false, error: 'Ya tienes una oferta asignada. Puedes seguir consultando las demás, pero no aplicar nuevamente.' }) }
-    const row = selectOffers("WHERE o.id = ? AND o.status = 'active'", [Number(req.params.id)])[0]
-    if (!row || new Date(row.available_until) < new Date()) { db.exec('ROLLBACK'); return res.status(409).json({ ok: false, error: 'Esta oferta ya no está disponible.' }) }
-    if (Number(row.vacancies_available) < 1) { db.exec('ROLLBACK'); return res.status(409).json({ ok: false, error: 'Esta oferta ya no tiene vacantes disponibles.' }) }
-    if (!row.clientify_product_id) { db.exec('ROLLBACK'); return res.status(409).json({ ok: false, error: 'Esta oferta todavía está enlazándose con Clientify. Intenta nuevamente en unos minutos.' }) }
-    const selectedProduct = db.prepare('SELECT id,name,sku,price,currency FROM clientify_products WHERE id=? AND active=1').get(String(row.clientify_product_id))
-    if (!selectedProduct) { db.exec('ROLLBACK'); return res.status(409).json({ ok: false, error: 'El producto enlazado ya no está disponible en Clientify. El equipo BBBSC debe sincronizar esta oferta.' }) }
-    const timestamp = nowIso()
-    const result = db.prepare(
-      `INSERT INTO job_applications
-        (participant_id,offer_id,status,source,travel_start_date,travel_end_date,participant_email,participant_first_name,participant_last_name,selected_product_id,selected_product_name,selected_product_sku,selected_product_price,selected_product_currency,clientify_sync_status,clientify_next_attempt_at,applied_at)
-       VALUES (?,?,'active','participant',?,?,?,?,?,?,?,?,?,?,'pending',?,?)`,
-    ).run(req.user.id, row.id, req.body.travelStartDate, req.body.travelEndDate, req.user.email, req.user.firstName || '', req.user.lastName || '', selectedProduct.id, selectedProduct.name, selectedProduct.sku, selectedProduct.price, selectedProduct.currency, timestamp, timestamp)
-    db.prepare("INSERT INTO job_application_history (participant_id, offer_id, application_id, event_type, actor_id, created_at) VALUES (?, ?, ?, 'applied', ?, ?)").run(req.user.id, row.id, result.lastInsertRowid, req.user.id, timestamp)
-    db.exec('COMMIT')
-    committed = true
-    let clientifySyncStatus = 'pending'
-    try { clientifySyncStatus = (await syncOfferApplicationToClientify(result.lastInsertRowid)).status }
-    catch (error) { console.error(`[bbbsc-server] Aplicación ${result.lastInsertRowid} guardada; Clientify se reintentará:`, error instanceof Error ? error.message : error) }
-    return res.status(201).json({ ok: true, application: { id: result.lastInsertRowid, appliedAt: timestamp, travelStartDate: req.body.travelStartDate, travelEndDate: req.body.travelEndDate, clientifySyncStatus, offer: toOffer({ ...row, vacancies_available: Number(row.vacancies_available) - 1 }) } })
+    const central = await applyToOffer(req.bbbscAccessToken, req.params.id, {
+      travelStartDate: req.body.travelStartDate,
+      travelEndDate: req.body.travelEndDate,
+    })
+    const application = central?.application
+      ? { ...central.application, offer: adaptCentralOffer(central.application.offer) }
+      : null
+    return res.status(201).json({ ok: true, application })
   } catch (error) {
-    if (!committed) db.exec('ROLLBACK'); console.error('[bbbsc-server] Error aplicando a oferta:', error)
-    return res.status(500).json({ ok: false, error: 'No pudimos registrar la aplicación.' })
+    console.error('[bbbsc-server] Error aplicando a oferta vía API central:', error)
+    return centralErrorResponse(res, error, 'No pudimos registrar la aplicación.')
   }
 })
 

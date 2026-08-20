@@ -168,6 +168,13 @@ export function setInitialPassword(accessToken, newPassword) {
   })
 }
 
+export function submitBasicLead(payload) {
+  return callBbbscApi('/leads/basic', {
+    method: 'POST',
+    body: JSON.stringify(payload),
+  })
+}
+
 export function decodeTokenExpiry(accessToken) {
   const payloadSegment = accessToken.split('.')[1]
   if (!payloadSegment) return null

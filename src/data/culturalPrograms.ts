@@ -75,8 +75,8 @@ export const culturalPrograms: CulturalProgram[] = [
       headline: 'Work and Travel USA',
       price: { amount: '$3,000', unit: 'USD' },
       items: [
-        'Valor de la inscripción: $250.000 COP',
-        'El programa se paga en 8 abonos desde $275 USD, según las fechas del contrato',
+        'Valor de la inscripción: $260.000 COP',
+        'El programa se paga en 8 abonos desde $300 USD, según las fechas del contrato',
         'Por pronto pago, descuento desde $25 USD en el abono a realizar',
       ],
       note: 'Valores de referencia; tu asesor te confirma el plan de pagos exacto según tu fecha de inscripción.',
