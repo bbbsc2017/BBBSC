@@ -51,6 +51,14 @@ export function LinkedinIcon(props: IconProps) {
   )
 }
 
+export function TikTokIcon(props: IconProps) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" {...props}>
+      <path d="M14.1 2.5v10.6a4.6 4.6 0 1 1-3.5-4.5V12a1.6 1.6 0 1 0 .6 1.2V2.5h2.9c.3 2.2 1.7 3.6 4.1 3.9v3.1a8 8 0 0 1-4.1-1.6V2.5Z" />
+    </svg>
+  )
+}
+
 export function SpotifyIcon(props: IconProps) {
   return (
     <svg {...base} {...props}>

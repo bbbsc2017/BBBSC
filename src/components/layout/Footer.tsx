@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { Mail, MapPin, Phone } from 'lucide-react'
-import { FacebookIcon, InstagramIcon, LinkedinIcon, SpotifyIcon, YoutubeIcon } from '../icons/SocialIcons'
+import { FacebookIcon, InstagramIcon, LinkedinIcon, SpotifyIcon, TikTokIcon, YoutubeIcon } from '../icons/SocialIcons'
 import logoMark from '../../assets/logo/bbb-mark-white.svg'
 import { culturalPrograms } from '../../data/culturalPrograms'
 import { academicPrograms } from '../../data/academicPrograms'
@@ -11,6 +11,7 @@ const socialLinks = [
   { label: 'Instagram', href: SITE.social.instagram, Icon: InstagramIcon },
   { label: 'YouTube', href: SITE.social.youtube, Icon: YoutubeIcon },
   { label: 'LinkedIn', href: SITE.social.linkedin, Icon: LinkedinIcon },
+  { label: 'TikTok', href: SITE.social.tiktok, Icon: TikTokIcon },
   { label: 'Spotify', href: SITE.social.spotify, Icon: SpotifyIcon },
 ]
 

@@ -31,11 +31,11 @@ export const SITE = {
   ],
   social: {
     facebook: 'https://www.facebook.com/bbbstudentcenter',
-    instagram: 'https://www.instagram.com/bbbstudentcenter',
-    youtube: 'https://www.youtube.com/@bbbstudentcenter',
-    linkedin: 'https://www.linkedin.com/company/bbb-student-center',
-    tiktok: 'https://www.tiktok.com/@bbbstudentcenter',
-    spotify: 'https://open.spotify.com/show/bbbstudentcenter',
+    instagram: 'https://www.instagram.com/bbbsc_world/',
+    youtube: 'https://www.youtube.com/@BBBStudentCenter',
+    linkedin: 'https://www.linkedin.com/company/81942496/',
+    tiktok: 'https://www.tiktok.com/@bbbsc_world',
+    spotify: 'https://open.spotify.com/show/2cc0yNVMG5VcGBNQ30GFdj?si=fUi8QRw8REeBauhV--zJDA',
   },
 } as const
 
