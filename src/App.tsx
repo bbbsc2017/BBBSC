@@ -14,6 +14,7 @@ const UniversidadesIndex = lazy(() => import('./pages/UniversidadesIndex'))
 const ContratoSwt = lazy(() => import('./pages/ContratoSwt'))
 const HojaDeVidaSwt = lazy(() => import('./pages/HojaDeVidaSwt'))
 const ReportaVuelo = lazy(() => import('./pages/ReportaVuelo'))
+const Hunters = lazy(() => import('./pages/Hunters'))
 const Contacto = lazy(() => import('./pages/Contacto'))
 const BlogIndex = lazy(() => import('./pages/BlogIndex'))
 const BlogPost = lazy(() => import('./pages/BlogPost'))
@@ -65,6 +66,7 @@ function App() {
           <Route path="hoja-de-vida-swt" element={<HojaDeVidaSwt />} />
           <Route path="reporte-vuelo-ida" element={<ReportaVuelo direction="ida" />} />
           <Route path="reporte-vuelo-regreso" element={<ReportaVuelo direction="regreso" />} />
+          <Route path="hunters" element={<Hunters />} />
           <Route path="contacto" element={<Contacto />} />
           <Route path="blog" element={<BlogIndex />} />
           <Route path="blog/:slug" element={<BlogPost />} />

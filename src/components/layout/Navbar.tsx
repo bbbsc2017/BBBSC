@@ -47,6 +47,7 @@ export function Navbar() {
           <div className="invisible absolute left-0 top-full w-72 translate-y-1 opacity-0 transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100"><div className="mt-2 overflow-hidden rounded-2xl border border-white/10 bg-ink-800 p-2 shadow-xl shadow-black/40">{group.items.map(item => <Link key={item.to} to={item.to} className="block rounded-xl px-4 py-2.5 text-sm font-medium text-white/70 transition-colors hover:bg-brand/10 hover:text-brand">{item.label}</Link>)}</div></div>
         </div>)}
         <NavLink to="/ofertas" className={({isActive}) => `rounded-full px-4 py-2 text-sm font-semibold transition-colors ${isActive ? 'text-brand' : 'text-white/70 hover:text-brand'}`}>Ofertas</NavLink>
+        <NavLink to="/hunters" className={({isActive}) => `rounded-full px-4 py-2 text-sm font-semibold transition-colors ${isActive ? 'text-brand' : 'text-white/70 hover:text-brand'}`}>Hunters</NavLink>
         <NavLink to="/blog" className={({isActive}) => `rounded-full px-4 py-2 text-sm font-semibold transition-colors ${isActive ? 'text-brand' : 'text-white/70 hover:text-brand'}`}>Blog</NavLink>
       </nav>
 
@@ -67,6 +68,7 @@ export function Navbar() {
     {open && <div className="border-t border-white/10 bg-ink px-5 py-4 lg:hidden"><nav className="flex flex-col gap-1" aria-label="Principal móvil">
       {groups.map(group => <div key={group.label} className="py-1"><span className="block rounded-lg px-3 py-2.5 text-sm font-bold text-white">{group.label}</span><div className="flex flex-col">{group.items.map(item => <Link key={item.to} to={item.to} onClick={() => setOpen(false)} className="rounded-lg px-6 py-2 text-sm text-white/60">{item.label}</Link>)}</div></div>)}
       <Link to="/ofertas" onClick={() => setOpen(false)} className="rounded-lg px-3 py-2.5 text-sm font-semibold text-white/80">Ofertas</Link>
+      <Link to="/hunters" onClick={() => setOpen(false)} className="rounded-lg px-3 py-2.5 text-sm font-semibold text-white/80">Hunters</Link>
       <Link to="/blog" onClick={() => setOpen(false)} className="rounded-lg px-3 py-2.5 text-sm font-semibold text-white/80">Blog</Link>
       <div className="mt-3 border-t border-white/10 pt-4">
         {user ? (
