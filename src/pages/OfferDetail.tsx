@@ -6,7 +6,6 @@ import {
   CalendarDays,
   Check,
   Clock3,
-  Eye,
   FileText,
   House,
   Languages,
@@ -74,7 +73,6 @@ export default function OfferDetail() {
   const [applying, setApplying] = useState(false);
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
-  const [pdfOpen, setPdfOpen] = useState(false);
   const [applyOpen, setApplyOpen] = useState(false);
   const [travelStartDate, setTravelStartDate] = useState("");
   const [travelEndDate, setTravelEndDate] = useState("");
@@ -479,12 +477,7 @@ export default function OfferDetail() {
                     </div>
                     <FileText className="size-5 text-brand" />
                   </div>
-                  <button
-                    type="button"
-                    onClick={() => setPdfOpen(true)}
-                    className="group relative block h-52 w-full overflow-hidden rounded-2xl bg-ink text-left shadow-lg transition hover:-translate-y-0.5"
-                    aria-label={`Abrir documento de ${offer.title}`}
-                  >
+                  <div className="relative block h-52 w-full overflow-hidden rounded-2xl bg-ink shadow-lg">
                     <iframe
                       src={`${localPdfViewUrl}#page=1&view=FitH&toolbar=0&navpanes=0&scrollbar=0`}
                       title={`Vista previa del PDF de ${offer.title}`}
@@ -493,10 +486,7 @@ export default function OfferDetail() {
                       className="pointer-events-none absolute -inset-y-1 left-0 h-[calc(100%+8px)] w-[calc(100%+18px)] bg-white"
                     />
                     <span className="pointer-events-none absolute inset-0 rounded-2xl ring-[3px] ring-inset ring-ink-800" />
-                    <span className="absolute inset-x-0 bottom-0 flex items-center justify-center bg-gradient-to-t from-ink via-ink/90 to-transparent px-3 pb-3 pt-10 text-xs font-black text-brand">
-                      <Eye className="mr-2 size-4" /> Ver PDF completo
-                    </span>
-                  </button>
+                  </div>
                 </div>
               )}
               <CalendarDays className="size-7 text-brand" />
@@ -619,46 +609,6 @@ export default function OfferDetail() {
         </div>
       )}
       <SubmittingOverlay show={applying} label="Registrando tu aplicación…" />
-      {pdfOpen && offer.hasPdf && (
-        <div
-          className="fixed inset-0 z-[90] flex items-center justify-center bg-black/80 p-3 sm:p-6"
-          role="dialog"
-          aria-modal="true"
-          aria-label={`Documento de ${offer.title}`}
-        >
-          <button
-            type="button"
-            className="absolute inset-0"
-            onClick={() => setPdfOpen(false)}
-            aria-label="Cerrar documento"
-          />
-          <section className="relative flex h-[92vh] w-full max-w-6xl flex-col overflow-hidden rounded-2xl border border-white/15 bg-ink-800 shadow-2xl">
-            <header className="flex items-center justify-between gap-4 border-b border-white/10 px-4 py-3 sm:px-6">
-              <div className="min-w-0">
-                <p className="text-[10px] font-black uppercase tracking-widest text-brand">
-                  Documento de la oferta
-                </p>
-                <h2 className="truncate text-sm font-black sm:text-base">
-                  {offer.title}
-                </h2>
-              </div>
-              <button
-                type="button"
-                onClick={() => setPdfOpen(false)}
-                className="shrink-0 rounded-full border border-white/10 p-2 text-white/60 transition hover:border-brand/40 hover:text-brand"
-                aria-label="Cerrar visor"
-              >
-                <X className="size-5" />
-              </button>
-            </header>
-            <iframe
-              src={`${localPdfViewUrl}#toolbar=0&navpanes=0&scrollbar=1`}
-              title={`PDF de ${offer.title}`}
-              className="min-h-0 flex-1 bg-white"
-            />
-          </section>
-        </div>
-      )}
     </>
   );
 }

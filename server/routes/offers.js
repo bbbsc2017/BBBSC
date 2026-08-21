@@ -5,7 +5,7 @@ import { requireAuth, requirePermission } from '../auth.js'
 import { PERMISSIONS } from '../lib/permissions.js'
 import { slugify, uniqueSlug } from '../lib/slugify.js'
 import { getUsers } from '../lib/bbbscApi.js'
-import { analyzeStoredPdf, downloadPdf, extractPdfText, inferOfferFields, MAX_PDF_BYTES } from '../lib/offerPdfs.js'
+import { analyzeStoredPdf, downloadPdf, extractPdfText, inferOfferFields, MAX_PDF_BYTES, safeStoredPdfPath } from '../lib/offerPdfs.js'
 import { getCachedClientifyProducts, syncClientifyProducts, syncOfferApplicationToClientify } from '../lib/clientifyOffers.js'
 import {
   listOffers as listCentralOffers,
@@ -136,10 +136,15 @@ export function validateTravelDates(startDate, endDate, today = todayInBogota())
 // usan pero se dejan intactas por ahora.
 // ─────────────────────────────────────────────────────────────────────────
 
+function localOfferPdfPath(slug) {
+  const row = getDb().prepare("SELECT pdf_file_name FROM job_offers WHERE slug = ? AND status IN ('active', 'closed')").get(String(slug || ''))
+  return safeStoredPdfPath(row?.pdf_file_name)
+}
+
 function adaptCentralOffer(o) {
   if (!o) return null
   const centralPdfUrl = o.pdfViewUrl ?? o.infoPdf
-  const pdfViewUrl = centralPdfUrl
+  const pdfViewUrl = centralPdfUrl || localOfferPdfPath(o.slug)
     ? `/api/offers/${encodeURIComponent(o.slug)}/pdf`
     : null
   return {
@@ -267,6 +272,18 @@ publicOffersRouter.get('/offers/:slug', async (req, res, next) => {
 
 publicOffersRouter.get('/offers/:slug/pdf', async (req, res) => {
   try {
+    const localPdfPath = localOfferPdfPath(req.params.slug)
+    if (localPdfPath) {
+      res.set({
+        'Content-Type': 'application/pdf',
+        'Content-Disposition': 'inline; filename="documento-oferta-bbbsc.pdf"',
+        'Cache-Control': 'public, max-age=3600',
+        'X-Content-Type-Options': 'nosniff',
+        'Content-Security-Policy': "default-src 'none'; frame-ancestors 'self'",
+      })
+      return res.sendFile(localPdfPath)
+    }
+
     const central = await getCentralOfferBySlug(req.params.slug)
     const rawPdfUrl = central?.pdfViewUrl ?? central?.infoPdf
     if (!rawPdfUrl) return res.status(404).json({ ok: false, error: 'El PDF todavía no está disponible.' })
