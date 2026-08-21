@@ -16,10 +16,12 @@ interface ProgramHeroProps {
   secondaryTo?: string
   secondaryLabel?: string
   requirementsLabel?: string
+  itemLabel?: string
+  transparentBackground?: boolean
 }
 
-export function ProgramHero({ eyebrow, title, description, country, image, requirements, breadcrumbs, primaryTo, primaryLabel, secondaryTo = '#contenido-programa', secondaryLabel = 'Conoce el programa', requirementsLabel = 'Requisitos principales' }: ProgramHeroProps) {
-  return <section className="relative bg-[#1c1c1c] pb-8 pt-6 sm:pb-12 sm:pt-8">
+export function ProgramHero({ eyebrow, title, description, country, image, requirements, breadcrumbs, primaryTo, primaryLabel, secondaryTo = '#contenido-programa', secondaryLabel = 'Conoce el programa', requirementsLabel = 'Requisitos principales', itemLabel = 'Requisito', transparentBackground = false }: ProgramHeroProps) {
+  return <section className={`relative pb-8 pt-6 sm:pb-12 sm:pt-8 ${transparentBackground ? 'bg-transparent' : 'bg-[#1c1c1c]'}`}>
     <Container>
       <Breadcrumbs items={breadcrumbs} />
       <div className="relative mt-5 min-h-[660px] overflow-hidden rounded-[2rem] border border-white/10 bg-[#1c1c1c] shadow-2xl shadow-[#1c1c1c]/70 sm:min-h-[720px] lg:min-h-[680px]">
@@ -44,13 +46,13 @@ export function ProgramHero({ eyebrow, title, description, country, image, requi
             <div className={`grid gap-3 ${requirements.length === 3 ? 'sm:grid-cols-3' : 'sm:grid-cols-2 lg:grid-cols-4'}`}>
               {requirements.slice(0, 4).map((requirement, index) => <div key={requirement} className="group flex items-start gap-3 rounded-2xl border border-white/[0.08] bg-[#1c1c1c]/45 p-4 backdrop-blur-md transition hover:border-brand/25 hover:bg-[#1c1c1c]/70">
                 <span className="mt-0.5 flex size-7 shrink-0 items-center justify-center rounded-full bg-brand text-white"><CheckCircle2 className="size-4" /></span>
-                <div><span className="text-[9px] font-black uppercase tracking-[.18em] text-white/30">Requisito {String(index + 1).padStart(2, '0')}</span><p className="mt-1 text-xs font-semibold leading-5 text-white/80">{requirement}</p></div>
+                <div><span className="text-[9px] font-black uppercase tracking-[.18em] text-white/30">{itemLabel} {String(index + 1).padStart(2, '0')}</span><p className="mt-1 text-xs font-semibold leading-5 text-white/80">{requirement}</p></div>
               </div>)}
             </div>
           </div>
         </div>
       </div>
     </Container>
-    <div className="pointer-events-none absolute inset-x-0 bottom-0 h-28 bg-gradient-to-b from-transparent to-[#1c1c1c]" />
+    {!transparentBackground && <div className="pointer-events-none absolute inset-x-0 bottom-0 h-28 bg-gradient-to-b from-transparent to-[#1c1c1c]" />}
   </section>
 }

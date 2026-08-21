@@ -1,6 +1,5 @@
 import { useEffect, useState, type FormEvent } from 'react'
 import {
-  BadgeDollarSign,
   CheckCircle2,
   Copy,
   Download,
@@ -9,7 +8,6 @@ import {
   Send,
   Share2,
   ShieldCheck,
-  Users,
   X,
 } from 'lucide-react'
 import { Seo } from '../components/Seo'
@@ -27,6 +25,14 @@ const TERMS_URL = 'https://na4.documents.adobe.com/public/esignWidget?wid=CBFCIB
 const emptyForm = { firstName: '', lastName: '', email: '', phone: '', cedula: '', applicantType: '', referrerCode: '' }
 type ApplicantType = 'hunter' | 'referred'
 type Status = 'idle' | 'submitting' | 'success' | 'error'
+
+function HuntersBackground() {
+  return <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
+    <div className="hunters-glow -left-64 top-[4%]" />
+    <div className="hunters-glow hunters-glow-delayed -right-60 top-[38%]" />
+    <div className="hunters-glow hunters-glow-slow left-[8%] top-[76%]" />
+  </div>
+}
 
 function loadCanvasImage(source: string) {
   return new Promise<HTMLImageElement>((resolve, reject) => {
@@ -244,7 +250,8 @@ export default function Hunters() {
 
   if (status === 'success') {
     return (
-      <>
+      <div className="relative isolate">
+        <HuntersBackground />
         <Seo title="Hunters" description="Refiere nuevos participantes a BBB Student Center y gana por cada referido." path="/hunters/" />
         <section className="relative min-h-[70vh] overflow-hidden bg-ink-mesh py-24">
           <Container className="flex flex-col items-center gap-5 text-center">
@@ -256,12 +263,13 @@ export default function Hunters() {
             <button type="button" onClick={() => { setStatus('idle'); setHunterCode(''); setCardUrl('') }} className="mt-3 rounded-full bg-brand px-7 py-3 text-sm font-black text-white transition hover:-translate-y-0.5">Registrar otra persona</button>
           </Container>
         </section>
-      </>
+      </div>
     )
   }
 
   return (
-    <>
+    <div className="relative isolate">
+      <HuntersBackground />
       <Seo title="Iniciativa Hunters" description="Refiere a familiares y amigos, gana dinero e impulsa tu próxima experiencia con BBB Student Center." path="/hunters/" image={huntersHero} imageAlt="Jóvenes compartiendo oportunidades de la iniciativa Hunters" />
 
       <ProgramHero
@@ -270,31 +278,18 @@ export default function Hunters() {
         description="Haz que tus conexiones te acerquen a tu próxima experiencia. Refiere a familiares y amigos, gana dinero y avanza hacia el pago de tu programa con BBB Student Center."
         country="BBB Student Center"
         image={{ src: huntersHero, alt: 'Jóvenes compartiendo oportunidades de la iniciativa Hunters' }}
-        requirements={['Refiere a familiares y amigos', 'Comparte tu código Hunter', 'Avanza hacia el pago de tu programa']}
+        requirements={['Invita a familiares y amigos', 'Ellos se registran con tu código', 'Gana dinero por cada referido válido']}
         breadcrumbs={[{ label: 'Inicio', to: '/' }, { label: 'Iniciativa Hunters' }]}
         primaryTo="#registro-hunters"
         primaryLabel="Quiero participar"
-        secondaryTo="#como-funciona"
-        secondaryLabel="Cómo funciona"
+        secondaryTo="#registro-hunters"
+        secondaryLabel="Ir al formulario"
         requirementsLabel="Convierte tus conexiones en oportunidades"
+        itemLabel="Paso"
+        transparentBackground
       />
 
-      <section id="como-funciona" className="scroll-mt-24 py-16 sm:py-20">
-        <Container>
-          <div className="grid gap-5 md:grid-cols-3">
-            {[
-              [Users, 'Refiere', 'Invita a personas interesadas en vivir una experiencia internacional.'],
-              [Share2, 'Comparte tu código', 'Recibe una pieza personalizada lista para descargar y compartir.'],
-              [BadgeDollarSign, 'Gana dinero', 'Impulsa el pago de tu programa compartiendo la oportunidad con las personas que conoces.'],
-            ].map(([Icon, title, text]) => {
-              const CardIcon = Icon as typeof Users
-              return <article key={String(title)} className="rounded-3xl border border-white/10 bg-ink-800 p-6"><CardIcon className="size-7 text-brand" /><h2 className="mt-5 text-xl font-black text-white">{String(title)}</h2><p className="mt-2 text-sm leading-6 text-white/55">{String(text)}</p></article>
-            })}
-          </div>
-        </Container>
-      </section>
-
-      <section id="registro-hunters" className="scroll-mt-24 pb-20">
+      <section id="registro-hunters" className="scroll-mt-24 py-16 sm:py-20">
         <Container className="grid items-start gap-8 lg:grid-cols-[.72fr_1.28fr]">
           <div className="lg:sticky lg:top-24">
             <p className="text-xs font-black uppercase tracking-[.2em] text-brand">Únete a la iniciativa</p>
@@ -361,6 +356,6 @@ export default function Hunters() {
       )}
 
       <SubmittingOverlay show={status === 'submitting'} label="Enviando tu registro Hunter…" />
-    </>
+    </div>
   )
 }

@@ -226,4 +226,43 @@ body {
       radial-gradient(circle at 50% 100%, rgba(255, 255, 255, 0.05), transparent 55%),
       linear-gradient(160deg, #1c1c1c 0%, #302a1f 100%);
   }
+
+  .hunters-glow {
+    position: absolute;
+    width: min(52rem, 88vw);
+    aspect-ratio: 1;
+    border-radius: 9999px;
+    background: radial-gradient(circle, rgba(249, 176, 0, 0.1) 0%, rgba(249, 176, 0, 0.035) 38%, transparent 72%);
+    opacity: 0.12;
+    contain: layout paint;
+    will-change: opacity, transform;
+    animation: hunters-glow-pulse 24s ease-in-out infinite;
+  }
+
+  .hunters-glow-delayed {
+    animation-delay: -9s;
+    animation-duration: 29s;
+  }
+
+  .hunters-glow-slow {
+    animation-delay: -17s;
+    animation-duration: 34s;
+  }
+}
+
+@keyframes hunters-glow-pulse {
+  0%, 18%, 100% {
+    opacity: 0.08;
+    transform: translate3d(0, 0, 0) scale(0.94);
+  }
+
+  42% {
+    opacity: 0.5;
+    transform: translate3d(2.5rem, -1.5rem, 0) scale(1.04);
+  }
+
+  68% {
+    opacity: 0.16;
+    transform: translate3d(-1rem, 1rem, 0) scale(0.98);
+  }
 }
