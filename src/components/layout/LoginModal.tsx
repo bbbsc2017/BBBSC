@@ -103,7 +103,7 @@ export function LoginModal({ onClose, onSuccess }: { onClose: () => void; onSucc
         <button
           type="submit"
           disabled={status === 'submitting'}
-          className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full bg-brand px-6 py-3.5 text-sm font-black text-ink transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:bg-white/10 disabled:text-white/35"
+          className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full bg-brand px-6 py-3.5 text-sm font-black text-white transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:bg-white/10 disabled:text-white/35"
         >
           {status === 'submitting' ? <Loader2 className="size-4 animate-spin" /> : <LogIn className="size-4" />}
           {status === 'submitting' ? 'Ingresando…' : 'Ingresar'}

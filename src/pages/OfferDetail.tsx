@@ -208,7 +208,7 @@ export default function OfferDetail() {
           <p className="mt-3 text-white/50">{error}</p>
           <Link
             to="/ofertas"
-            className="mt-6 inline-flex rounded-full bg-brand px-6 py-3 font-bold text-ink"
+            className="mt-6 inline-flex rounded-full bg-brand px-6 py-3 font-bold text-white"
           >
             Volver a ofertas
           </Link>
@@ -367,7 +367,7 @@ export default function OfferDetail() {
                 ) : !session ? (
                   <a
                     href="/perfil"
-                    className="block rounded-full bg-brand px-6 py-4 text-center text-sm font-black text-ink transition hover:-translate-y-0.5"
+                    className="block rounded-full bg-brand px-6 py-4 text-center text-sm font-black text-white transition hover:-translate-y-0.5"
                   >
                     Ir al portal para aplicar
                   </a>
@@ -383,7 +383,7 @@ export default function OfferDetail() {
                     type="button"
                     disabled={applying}
                     onClick={apply}
-                    className="w-full rounded-full bg-brand px-6 py-4 text-sm font-black text-ink transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:bg-white/10 disabled:text-white/35"
+                    className="w-full rounded-full bg-brand px-6 py-4 text-sm font-black text-white transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:bg-white/10 disabled:text-white/35"
                   >
                     {applying ? "Registrando..." : "Aplicar a esta oferta"}
                   </button>
@@ -508,7 +508,7 @@ export default function OfferDetail() {
                     />
                     <span className="pointer-events-none absolute inset-0 rounded-2xl ring-[3px] ring-inset ring-ink-800" />
                     <span className="pointer-events-none absolute inset-0 flex items-center justify-center bg-black/55 transition-all duration-300 group-hover:bg-black/20 group-focus-visible:bg-black/20">
-                      <span className="flex items-center gap-2 rounded-full border border-white/20 bg-black/75 px-4 py-2 text-xs font-black uppercase tracking-wider text-white shadow-xl backdrop-blur-sm transition-all duration-300 group-hover:-translate-y-1 group-hover:scale-105 group-hover:bg-brand group-hover:text-ink group-focus-visible:-translate-y-1 group-focus-visible:scale-105 group-focus-visible:bg-brand group-focus-visible:text-ink">
+                      <span className="flex items-center gap-2 rounded-full border border-white/20 bg-black/75 px-4 py-2 text-xs font-black uppercase tracking-wider text-white shadow-xl backdrop-blur-sm transition-all duration-300 group-hover:-translate-y-1 group-hover:scale-105 group-hover:bg-brand group-hover:text-white group-focus-visible:-translate-y-1 group-focus-visible:scale-105 group-focus-visible:bg-brand group-focus-visible:text-white">
                         <Eye className="size-4" />
                         Ver PDF
                       </span>
@@ -628,7 +628,7 @@ export default function OfferDetail() {
             <button
               type="submit"
               disabled={applying || !travelStartDate || !travelEndDate}
-              className="mt-6 inline-flex w-full items-center justify-center rounded-full bg-brand px-6 py-3.5 text-sm font-black text-ink transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:bg-white/10 disabled:text-white/35"
+              className="mt-6 inline-flex w-full items-center justify-center rounded-full bg-brand px-6 py-3.5 text-sm font-black text-white transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:bg-white/10 disabled:text-white/35"
             >
               {applying ? "Registrando aplicación..." : "Confirmar aplicación"}
             </button>

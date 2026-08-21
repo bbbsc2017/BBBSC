@@ -23,7 +23,7 @@ export function UserMenu({ user, photoUrl, onLogout }: { user: SessionUser; phot
         aria-haspopup="menu"
         aria-expanded={open}
         aria-label="Menú de tu cuenta"
-        className="flex size-10 items-center justify-center overflow-hidden rounded-full border border-white/15 bg-[#f9b000] text-sm font-black text-ink transition hover:-translate-y-0.5"
+        className="flex size-10 items-center justify-center overflow-hidden rounded-full border border-white/15 bg-[#f9b000] text-sm font-black text-white transition hover:-translate-y-0.5"
       >
         {photoUrl ? (
           <img src={photoUrl} alt="" className="size-full object-cover" />

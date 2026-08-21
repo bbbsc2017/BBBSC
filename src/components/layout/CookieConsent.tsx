@@ -26,7 +26,7 @@ export function CookieConsent({ consent, onChange }: { consent: TrackingConsent;
         <Link to="/terminos-y-condiciones" className="font-semibold text-brand underline underline-offset-2">términos y tratamiento de datos</Link>.
       </p>
       <div className="mt-4 flex flex-wrap gap-3">
-        <button type="button" onClick={() => choose('accepted')} className="rounded-full bg-brand px-5 py-2 text-sm font-bold text-ink">
+        <button type="button" onClick={() => choose('accepted')} className="rounded-full bg-brand px-5 py-2 text-sm font-bold text-white">
           Aceptar analítica
         </button>
         <button type="button" onClick={() => choose('rejected')} className="rounded-full border border-white/20 px-5 py-2 text-sm font-semibold text-white">
