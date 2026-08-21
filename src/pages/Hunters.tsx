@@ -26,14 +26,6 @@ const emptyForm = { firstName: '', lastName: '', email: '', phone: '', cedula: '
 type ApplicantType = 'hunter' | 'referred'
 type Status = 'idle' | 'submitting' | 'success' | 'error'
 
-function HuntersBackground() {
-  return <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
-    <div className="hunters-glow -left-64 top-[4%]" />
-    <div className="hunters-glow hunters-glow-delayed -right-60 top-[38%]" />
-    <div className="hunters-glow hunters-glow-slow left-[8%] top-[76%]" />
-  </div>
-}
-
 function loadCanvasImage(source: string) {
   return new Promise<HTMLImageElement>((resolve, reject) => {
     const image = new Image()
@@ -251,7 +243,6 @@ export default function Hunters() {
   if (status === 'success') {
     return (
       <div className="relative isolate">
-        <HuntersBackground />
         <Seo title="Hunters" description="Refiere nuevos participantes a BBB Student Center y gana por cada referido." path="/hunters/" />
         <section className="relative min-h-[70vh] overflow-hidden bg-ink-mesh py-24">
           <Container className="flex flex-col items-center gap-5 text-center">
@@ -269,7 +260,6 @@ export default function Hunters() {
 
   return (
     <div className="relative isolate">
-      <HuntersBackground />
       <Seo title="Iniciativa Hunters" description="Refiere a familiares y amigos, gana dinero e impulsa tu próxima experiencia con BBB Student Center." path="/hunters/" image={huntersHero} imageAlt="Jóvenes compartiendo oportunidades de la iniciativa Hunters" />
 
       <ProgramHero
@@ -286,7 +276,6 @@ export default function Hunters() {
         secondaryLabel="Ir al formulario"
         requirementsLabel="Convierte tus conexiones en oportunidades"
         itemLabel="Paso"
-        transparentBackground
       />
 
       <section id="registro-hunters" className="scroll-mt-24 py-16 sm:py-20">

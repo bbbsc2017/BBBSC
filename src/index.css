@@ -218,42 +218,47 @@ body {
       linear-gradient(160deg, #1c1c1c 0%, #302a1f 100%);
   }
 
-  .hunters-glow {
+  .site-glow {
     position: absolute;
     width: min(52rem, 88vw);
     aspect-ratio: 1;
     border-radius: 9999px;
-    background: radial-gradient(circle, rgba(249, 176, 0, 0.1) 0%, rgba(249, 176, 0, 0.035) 38%, transparent 72%);
-    opacity: 0.12;
+    background: radial-gradient(circle, rgba(249, 176, 0, 0.14) 0%, rgba(249, 176, 0, 0.05) 38%, transparent 72%);
+    opacity: 0.18;
     contain: layout paint;
     will-change: opacity, transform;
-    animation: hunters-glow-pulse 24s ease-in-out infinite;
+    animation: site-glow-pulse 24s ease-in-out infinite;
   }
 
-  .hunters-glow-delayed {
+  .site-glow-delayed {
     animation-delay: -9s;
     animation-duration: 29s;
   }
 
-  .hunters-glow-slow {
+  .site-glow-slow {
     animation-delay: -17s;
     animation-duration: 34s;
   }
+
+  .site-glow-late {
+    animation-delay: -24s;
+    animation-duration: 38s;
+  }
 }
 
-@keyframes hunters-glow-pulse {
+@keyframes site-glow-pulse {
   0%, 18%, 100% {
-    opacity: 0.08;
+    opacity: 0.12;
     transform: translate3d(0, 0, 0) scale(0.94);
   }
 
   42% {
-    opacity: 0.5;
+    opacity: 0.66;
     transform: translate3d(2.5rem, -1.5rem, 0) scale(1.04);
   }
 
   68% {
-    opacity: 0.16;
+    opacity: 0.22;
     transform: translate3d(-1rem, 1rem, 0) scale(0.98);
   }
 }

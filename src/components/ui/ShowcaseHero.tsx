@@ -39,7 +39,7 @@ function Action({ action, primary }: { action: ShowcaseAction; primary?: boolean
 export function ShowcaseHero({ eyebrow, title, description, image, items = [], itemHeading = 'Información destacada', breadcrumbs, primaryAction, secondaryAction, imageKey }: ShowcaseHeroProps) {
   const hasItems = items.length > 0
 
-  return <section className={`relative bg-[#1c1c1c] pt-6 sm:pt-8 ${hasItems ? 'pb-8 sm:pb-12' : 'pb-2 sm:pb-4'}`}>
+  return <section className={`relative bg-transparent pt-6 sm:pt-8 ${hasItems ? 'pb-8 sm:pb-12' : 'pb-2 sm:pb-4'}`}>
     <Container>
       {breadcrumbs && <Breadcrumbs items={breadcrumbs} />}
       <div className={`relative overflow-hidden rounded-[2rem] border border-white/10 bg-[#1c1c1c] shadow-2xl shadow-[#1c1c1c]/70 ${hasItems ? 'min-h-[600px] sm:min-h-[640px]' : 'min-h-[500px] sm:min-h-[540px]'} ${breadcrumbs ? 'mt-5' : ''}`}>
@@ -68,6 +68,5 @@ export function ShowcaseHero({ eyebrow, title, description, image, items = [], i
         </div>
       </div>
     </Container>
-    <div className="pointer-events-none absolute inset-x-0 bottom-0 h-28 bg-gradient-to-b from-transparent to-[#1c1c1c]" />
   </section>
 }

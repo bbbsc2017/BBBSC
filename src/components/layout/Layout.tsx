@@ -16,7 +16,13 @@ export function Layout() {
   const trackingEnabled = trackingConsent === 'accepted'
 
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="relative isolate flex min-h-screen flex-col">
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
+        <div className="site-glow -left-64 top-[3%]" />
+        <div className="site-glow site-glow-delayed -right-60 top-[30%]" />
+        <div className="site-glow site-glow-slow left-[5%] top-[62%]" />
+        <div className="site-glow site-glow-late right-[8%] top-[86%]" />
+      </div>
       <a href="#main-content" className="fixed left-4 top-4 z-[80] -translate-y-24 rounded-full bg-brand px-4 py-2 font-bold text-white transition-transform focus:translate-y-0">
         Saltar al contenido
       </a>

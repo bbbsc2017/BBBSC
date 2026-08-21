@@ -17,11 +17,10 @@ interface ProgramHeroProps {
   secondaryLabel?: string
   requirementsLabel?: string
   itemLabel?: string
-  transparentBackground?: boolean
 }
 
-export function ProgramHero({ eyebrow, title, description, country, image, requirements, breadcrumbs, primaryTo, primaryLabel, secondaryTo = '#contenido-programa', secondaryLabel = 'Conoce el programa', requirementsLabel = 'Requisitos principales', itemLabel = 'Requisito', transparentBackground = false }: ProgramHeroProps) {
-  return <section className={`relative pb-8 pt-6 sm:pb-12 sm:pt-8 ${transparentBackground ? 'bg-transparent' : 'bg-[#1c1c1c]'}`}>
+export function ProgramHero({ eyebrow, title, description, country, image, requirements, breadcrumbs, primaryTo, primaryLabel, secondaryTo = '#contenido-programa', secondaryLabel = 'Conoce el programa', requirementsLabel = 'Requisitos principales', itemLabel = 'Requisito' }: ProgramHeroProps) {
+  return <section className="relative bg-transparent pb-8 pt-6 sm:pb-12 sm:pt-8">
     <Container>
       <Breadcrumbs items={breadcrumbs} />
       <div className="relative mt-5 min-h-[660px] overflow-hidden rounded-[2rem] border border-white/10 bg-[#1c1c1c] shadow-2xl shadow-[#1c1c1c]/70 sm:min-h-[720px] lg:min-h-[680px]">
@@ -53,6 +52,5 @@ export function ProgramHero({ eyebrow, title, description, country, image, requi
         </div>
       </div>
     </Container>
-    {!transparentBackground && <div className="pointer-events-none absolute inset-x-0 bottom-0 h-28 bg-gradient-to-b from-transparent to-[#1c1c1c]" />}
   </section>
 }
