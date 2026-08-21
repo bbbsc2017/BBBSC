@@ -2,6 +2,12 @@
   RewriteEngine On
   RewriteBase /
 
+  # www.bbbsc.com y bbbsc.com servían el mismo contenido en dos dominios
+  # distintos (contenido duplicado, y los backlinks quedaban repartidos entre
+  # los dos en vez de sumar a uno solo). El canónico es bbbsc.com sin www.
+  RewriteCond %{HTTP_HOST} ^www\.bbbsc\.com$ [NC]
+  RewriteRule ^(.*)$ https://bbbsc.com/$1 [R=301,L]
+
   # Conserva la dirección histórica y transfiere su posicionamiento a la página actual.
   RewriteRule ^work-and-travel/?$ /work-and-travel-usa [R=301,L,NE]
 

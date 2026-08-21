@@ -37,7 +37,7 @@ export function Navbar() {
   return <header className={`sticky top-0 z-50 border-b transition-colors duration-300 ${scrolled ? 'border-white/10 bg-ink/95 backdrop-blur-lg' : 'border-transparent bg-ink/70 backdrop-blur-md'}`}>
     <div className="mx-auto flex w-full max-w-7xl items-center justify-between gap-4 px-5 py-3 sm:px-8">
       <Link to="/" className="flex items-center gap-2.5" aria-label="BBB Student Center — Inicio">
-        <span className="flex size-10 items-center justify-center rounded-xl bg-[#f9b000] p-2"><img src={logoMark} alt="" className="size-full" /></span>
+        <span className="flex size-10 items-center justify-center rounded-xl bg-[#f9b000] p-2"><img src={logoMark} alt="BBB Student Center" className="size-full" /></span>
         <span className="text-base font-extrabold tracking-tight text-white">BBB Student Center</span>
       </Link>
 

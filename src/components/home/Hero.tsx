@@ -76,7 +76,7 @@ export function Hero() {
   return (
     <section className="relative overflow-hidden bg-ink">
       <div className="absolute inset-0" aria-hidden="true">
-        <img key={destinations[index].image.src} src={destinations[index].image.src} alt="" fetchPriority="high" className="absolute inset-0 size-full animate-[fadeIn_1.2s_ease-in-out] object-cover" />
+        <img key={destinations[index].image.src} src={destinations[index].image.src} alt={destinations[index].image.alt} fetchPriority="high" className="absolute inset-0 size-full animate-[fadeIn_1.2s_ease-in-out] object-cover" />
         <div className="absolute inset-0 bg-gradient-to-r from-ink/85 via-ink/60 to-ink/10" />
         <div className="absolute inset-x-0 bottom-0 h-[52%] bg-gradient-to-t from-[#1c1c1c] via-[#1c1c1c]/65 to-transparent" />
         <div className="absolute inset-x-0 top-0 h-1/3 bg-gradient-to-b from-[#1c1c1c]/20 to-transparent" />

@@ -11,8 +11,8 @@ export default function Home() {
   return (
     <>
       <Seo
-        title="Programas Work & Travel y experiencias internacionales"
-        description="BBB Student Center: Work and Travel, prácticas profesionales y estudios en universidades de Alemania, Polonia, Canadá, Corea del Sur, Estados Unidos y Australia."
+        title="Programas Work and Travel y al exterior"
+        description="BBB Student Center: Work and Travel, prácticas profesionales y estudios en universidades de Alemania, Polonia, Canadá, Corea del Sur y Estados Unidos."
         path="/"
         image={SITE.defaultSocialImage}
         imageAlt="Nueva York, uno de los destinos de los programas internacionales de BBB Student Center"
@@ -23,6 +23,12 @@ export default function Home() {
             url: SITE.url, logo: `${SITE.url}/favicon.svg`, image: SITE.defaultSocialImage, description: SITE.tagline, email: SITE.email,
             sameAs: Object.values(SITE.social), areaServed: 'Colombia',
             contactPoint: [{ '@type': 'ContactPoint', telephone: SITE.whatsapp, contactType: 'customer service', areaServed: 'CO', availableLanguage: ['Spanish'] }],
+            // Esquema de negocio local (dirección/teléfono de la sede principal) —
+            // ayuda a búsquedas locales, además del EducationalOrganization general.
+            address: {
+              '@type': 'PostalAddress', streetAddress: SITE.offices[0].address, addressLocality: SITE.offices[0].city,
+              addressCountry: 'CO',
+            },
           },
         ]}
       />
