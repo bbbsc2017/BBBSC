@@ -162,6 +162,8 @@ function adaptCentralOffer(o) {
     airportPickup: Boolean(o.airportPickup),
     overtime: Boolean(o.overtime ?? o.extraHours),
     bonuses: o.bonuses ?? '',
+    housing: o.housing ?? null,
+    deposit: o.deposit ?? null,
     vacanciesTotal: o.vacanciesTotal,
     vacanciesLost: o.vacanciesLost,
     vacanciesAvailable: o.vacanciesAvailable,

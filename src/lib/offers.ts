@@ -28,6 +28,8 @@ export interface JobOffer {
   airportPickup: boolean
   overtime: boolean
   bonuses: string
+  housing: string | null
+  deposit: string | null
   vacanciesTotal: number
   vacanciesLost: number
   vacanciesAvailable: number

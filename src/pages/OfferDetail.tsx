@@ -8,11 +8,13 @@ import {
   Clock3,
   Eye,
   FileText,
+  House,
   Languages,
   MapPin,
   Plane,
   Sparkles,
   Users,
+  Wallet,
   X,
 } from "lucide-react";
 import { Link, useNavigate, useParams } from "react-router-dom";
@@ -434,6 +436,21 @@ export default function OfferDetail() {
                   icon={BadgeDollarSign}
                   label="Propinas"
                   value={offer.hasTips ? "Sí" : "No"}
+                />
+                <Fact
+                  icon={Building2}
+                  label="Empleador"
+                  value={offer.employer || "No informado"}
+                />
+                <Fact
+                  icon={House}
+                  label="Valor del housing"
+                  value={offer.housing || "No informado"}
+                />
+                <Fact
+                  icon={Wallet}
+                  label="Depósito del housing"
+                  value={offer.deposit || "No informado"}
                 />
               </div>
               {offer.bonuses && (
