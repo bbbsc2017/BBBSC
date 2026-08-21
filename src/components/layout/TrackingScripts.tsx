@@ -10,6 +10,7 @@ interface PublicTrackingSettings {
 const META_PIXEL_PATTERN = /^\d{5,30}$/
 const GOOGLE_GTAG_PATTERN = /^(G|GT|AW)-[A-Z0-9-]{4,30}$/i
 const CLIENTIFY_PATTERN = /^[A-Za-z0-9_-]{4,80}$/
+const CLIENTIFY_ANALYTICS_PLUS_URL = 'https://analyticsplusdev.clientify.net/analytics_plus/pixel/q40nJyHrCObS5ebr'
 
 function injectMetaPixel(pixelId: string) {
   if (document.getElementById('meta-pixel-script')) return
@@ -56,9 +57,20 @@ function injectClientify(siteId: string) {
   document.head.appendChild(script)
 }
 
+function injectClientifyAnalyticsPlus() {
+  if (document.getElementById('clientify-analytics-plus-script')) return
+
+  const script = document.createElement('script')
+  script.id = 'clientify-analytics-plus-script'
+  script.defer = true
+  script.src = CLIENTIFY_ANALYTICS_PLUS_URL
+  document.head.appendChild(script)
+}
+
 export function TrackingScripts({ enabled }: { enabled: boolean }) {
   useEffect(() => {
     if (!enabled) return
+    injectClientifyAnalyticsPlus()
     fetch(apiUrl('/api/web/settings'), { credentials: apiCredentials })
       .then((response) => (response.ok ? response.json() : null))
       .then((data: { ok: boolean } & PublicTrackingSettings | null) => {
