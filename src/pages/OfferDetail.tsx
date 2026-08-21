@@ -100,7 +100,7 @@ export default function OfferDetail() {
   useEffect(() => {
     setLoading(true);
     setError("");
-    fetch(apiUrl(`/api/offers/${encodeURIComponent(slug)}`), { credentials: apiCredentials })
+    fetch(`/api/offers/${encodeURIComponent(slug)}`, { credentials: apiCredentials })
       .then(async (response) => {
         const data = await response.json();
         if (!response.ok || !data.ok) throw new Error(data.error);
