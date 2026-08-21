@@ -1,25 +1,24 @@
 import { useEffect, useState, type FormEvent } from 'react'
 import {
-  ArrowRight,
   BadgeDollarSign,
   CheckCircle2,
   Copy,
   Download,
   FileSignature,
   Gift,
-  Megaphone,
   Send,
   Share2,
   ShieldCheck,
-  Sparkles,
   Users,
   X,
 } from 'lucide-react'
 import { Seo } from '../components/Seo'
 import { Container } from '../components/ui/Container'
 import { FormField, TextInput } from '../components/ui/FormField'
+import { ProgramHero } from '../components/ui/ProgramHero'
 import { RecaptchaNotice } from '../components/ui/RecaptchaNotice'
 import { SubmittingOverlay } from '../components/ui/SubmittingOverlay'
+import huntersHero from '../assets/hunters/hunters-hero.png'
 import { apiCredentials, apiUrl } from '../lib/apiBase'
 import { executeRecaptcha } from '../lib/recaptcha'
 
@@ -80,10 +79,10 @@ async function createHunterCard(name: string, code: string) {
   context.roundRect(72, 520, 936, 142, 34)
   context.fill()
   context.fillStyle = '#11110f'
-  context.font = '900 30px Arial, sans-serif'
-  context.fillText('GANA HASTA', 112, 578)
-  context.font = '900 56px Arial, sans-serif'
-  context.fillText('USD 50 POR CADA REFERIDO', 112, 635)
+  context.font = '900 29px Arial, sans-serif'
+  context.fillText('REFIERE A TU FAMILIA Y AMIGOS', 112, 578)
+  context.font = '900 43px Arial, sans-serif'
+  context.fillText('Y AVANZA HACIA TU PROGRAMA', 112, 635)
 
   context.fillStyle = 'rgba(255,255,255,.08)'
   context.beginPath()
@@ -171,7 +170,7 @@ export default function Hunters() {
     }
     if (applicantType === 'referred' && !/^\d{5,15}SWT27$/i.test(form.referrerCode.trim())) {
       setStatus('error')
-      setErrorMessage('El código del Hunter debe tener el formato 1104544508SWT27.')
+      setErrorMessage('El código del Hunter debe tener el formato 1234567890SWT27.')
       return
     }
 
@@ -243,35 +242,30 @@ export default function Hunters() {
 
   return (
     <>
-      <Seo title="Hunters" description="Recomienda los programas de BBB Student Center y gana hasta USD 50 por cada referido." path="/hunters/" />
+      <Seo title="Iniciativa Hunters" description="Refiere a familiares y amigos, gana dinero e impulsa tu próxima experiencia con BBB Student Center." path="/hunters/" image={huntersHero} imageAlt="Jóvenes compartiendo oportunidades de la iniciativa Hunters" />
 
-      <section className="relative overflow-hidden border-b border-white/10 bg-ink-mesh py-20 sm:py-28">
-        <div aria-hidden="true" className="absolute -right-40 -top-40 size-[32rem] rounded-full bg-brand/20 blur-3xl" />
-        <Container className="relative grid items-center gap-12 lg:grid-cols-[1.08fr_.92fr]">
-          <div>
-            <span className="inline-flex items-center gap-2 rounded-full border border-brand/25 bg-brand/10 px-4 py-2 text-xs font-black uppercase tracking-[0.2em] text-brand"><Sparkles className="size-4" /> Iniciativa BBBSC</span>
-            <h1 className="mt-6 text-balance text-5xl font-black leading-[.95] text-white sm:text-7xl">Conecta personas.<br /><span className="text-brand">Gana como Hunter.</span></h1>
-            <p className="mt-6 max-w-2xl text-balance text-lg leading-8 text-white/65">Comparte las oportunidades de BBB Student Center, refiere nuevos participantes y gana hasta <strong className="text-white">USD 50 por cada referido</strong>, según las condiciones de la iniciativa.</p>
-            <a href="#registro-hunters" className="mt-8 inline-flex items-center gap-2 rounded-full bg-brand px-7 py-3.5 text-sm font-black text-ink shadow-brand transition hover:-translate-y-0.5">Quiero participar <ArrowRight className="size-4" /></a>
-          </div>
-          <div className="relative mx-auto aspect-square w-full max-w-lg overflow-hidden rounded-[2.5rem] border border-white/10 bg-ink-800 p-8 shadow-2xl shadow-black/35">
-            <div className="absolute -right-16 -top-16 size-64 rounded-full bg-brand/30 blur-3xl" />
-            <div className="relative flex h-full flex-col justify-between rounded-[2rem] border border-white/10 bg-white/[.035] p-7">
-              <div className="flex items-center justify-between"><span className="flex size-14 items-center justify-center rounded-2xl bg-brand text-ink"><Megaphone className="size-7" /></span><span className="text-xs font-black uppercase tracking-[.22em] text-white/40">BBB Hunters</span></div>
-              <div><p className="text-6xl font-black text-brand">USD 50</p><p className="mt-2 text-2xl font-black text-white">por cada referido</p><p className="mt-3 text-sm leading-6 text-white/55">Tu recomendación puede abrirle una oportunidad internacional a alguien más.</p></div>
-              <div className="flex items-center gap-3 text-sm font-bold text-white/70"><Users className="size-5 text-brand" /> Más personas, más oportunidades.</div>
-            </div>
-          </div>
-        </Container>
-      </section>
+      <ProgramHero
+        eyebrow="Programa de referidos"
+        title="Iniciativa Hunters"
+        description="Haz que tus conexiones te acerquen a tu próxima experiencia. Refiere a familiares y amigos, gana dinero y avanza hacia el pago de tu programa con BBB Student Center."
+        country="BBB Student Center"
+        image={{ src: huntersHero, alt: 'Jóvenes compartiendo oportunidades de la iniciativa Hunters' }}
+        requirements={['Refiere a familiares y amigos', 'Comparte tu código Hunter', 'Avanza hacia el pago de tu programa']}
+        breadcrumbs={[{ label: 'Inicio', to: '/' }, { label: 'Iniciativa Hunters' }]}
+        primaryTo="#registro-hunters"
+        primaryLabel="Quiero participar"
+        secondaryTo="#como-funciona"
+        secondaryLabel="Cómo funciona"
+        requirementsLabel="Convierte tus conexiones en oportunidades"
+      />
 
-      <section className="py-16 sm:py-20">
+      <section id="como-funciona" className="scroll-mt-24 py-16 sm:py-20">
         <Container>
           <div className="grid gap-5 md:grid-cols-3">
             {[
               [Users, 'Refiere', 'Invita a personas interesadas en vivir una experiencia internacional.'],
               [Share2, 'Comparte tu código', 'Recibe una pieza personalizada lista para descargar y compartir.'],
-              [BadgeDollarSign, 'Gana', 'Recibe hasta USD 50 por cada referido que cumpla las condiciones.'],
+              [BadgeDollarSign, 'Gana dinero', 'Impulsa el pago de tu programa compartiendo la oportunidad con las personas que conoces.'],
             ].map(([Icon, title, text]) => {
               const CardIcon = Icon as typeof Users
               return <article key={String(title)} className="rounded-3xl border border-white/10 bg-ink-800 p-6"><CardIcon className="size-7 text-brand" /><h2 className="mt-5 text-xl font-black text-white">{String(title)}</h2><p className="mt-2 text-sm leading-6 text-white/55">{String(text)}</p></article>
@@ -295,7 +289,7 @@ export default function Hunters() {
               <FormField label="Apellidos" required><TextInput required autoComplete="family-name" placeholder="Escribe tus apellidos" value={form.lastName} onChange={(event) => update('lastName', event.target.value)} /></FormField>
               <FormField label="Correo electrónico" required><TextInput required type="email" autoComplete="email" placeholder="nombre@correo.com" value={form.email} onChange={(event) => update('email', event.target.value)} /></FormField>
               <FormField label="Teléfono" required><TextInput required type="tel" autoComplete="tel" placeholder="300 000 0000" value={form.phone} onChange={(event) => update('phone', event.target.value)} /></FormField>
-              <FormField label="Cédula" required hint="Solo números, sin puntos ni espacios." className="sm:col-span-2"><TextInput required inputMode="numeric" pattern="[0-9]{5,15}" placeholder="1104544508" value={form.cedula} onChange={(event) => update('cedula', event.target.value.replace(/\D/g, '').slice(0, 15))} /></FormField>
+              <FormField label="Cédula" required hint="Solo números, sin puntos ni espacios." className="sm:col-span-2"><TextInput required inputMode="numeric" pattern="[0-9]{5,15}" placeholder="1234567890" value={form.cedula} onChange={(event) => update('cedula', event.target.value.replace(/\D/g, '').slice(0, 15))} /></FormField>
             </div>
 
             <fieldset className="mt-7 border-t border-white/10 pt-7">
@@ -313,7 +307,7 @@ export default function Hunters() {
               </div>
             </fieldset>
 
-            {applicantType === 'referred' && <div className="mt-6"><FormField label="Código del Hunter" required hint="Escríbelo completo, por ejemplo: 1104544508SWT27."><TextInput required autoCapitalize="characters" placeholder="1104544508SWT27" value={form.referrerCode} onChange={(event) => update('referrerCode', event.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 30))} /></FormField></div>}
+            {applicantType === 'referred' && <div className="mt-6"><FormField label="Código del Hunter" required hint="Escríbelo completo, por ejemplo: 1234567890SWT27."><TextInput required autoCapitalize="characters" placeholder="1234567890SWT27" value={form.referrerCode} onChange={(event) => update('referrerCode', event.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 30))} /></FormField></div>}
             {status === 'error' && <p role="alert" className="mt-6 rounded-xl border border-red-400/25 bg-red-400/10 px-4 py-3 text-sm font-medium text-red-300">{errorMessage}</p>}
             <div className="mt-7"><RecaptchaNotice /></div>
             <button type="submit" disabled={status === 'submitting'} className="mt-6 inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-brand px-7 text-sm font-black text-ink transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60"><Send className="size-4" />{status === 'submitting' ? 'Enviando…' : applicantType === 'hunter' ? 'Enviar y generar mi código' : 'Enviar registro'}</button>
