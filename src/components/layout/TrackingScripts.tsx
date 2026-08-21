@@ -11,6 +11,7 @@ const META_PIXEL_PATTERN = /^\d{5,30}$/
 const GOOGLE_GTAG_PATTERN = /^(G|GT|AW)-[A-Z0-9-]{4,30}$/i
 const CLIENTIFY_PATTERN = /^[A-Za-z0-9_-]{4,80}$/
 const CLIENTIFY_ANALYTICS_PLUS_URL = 'https://analyticsplusdev.clientify.net/analytics_plus/pixel/q40nJyHrCObS5ebr'
+const GOOGLE_TAG_MANAGER_ID = 'GTM-NQTSDCSL'
 
 function injectMetaPixel(pixelId: string) {
   if (document.getElementById('meta-pixel-script')) return
@@ -67,9 +68,24 @@ function injectClientifyAnalyticsPlus() {
   document.head.appendChild(script)
 }
 
+function injectGoogleTagManager() {
+  if (document.getElementById('google-tag-manager-script')) return
+
+  const trackingWindow = window as typeof window & { dataLayer?: Array<Record<string, unknown>> }
+  trackingWindow.dataLayer = trackingWindow.dataLayer || []
+  trackingWindow.dataLayer.push({ 'gtm.start': Date.now(), event: 'gtm.js' })
+
+  const script = document.createElement('script')
+  script.id = 'google-tag-manager-script'
+  script.async = true
+  script.src = `https://www.googletagmanager.com/gtm.js?id=${GOOGLE_TAG_MANAGER_ID}`
+  document.head.appendChild(script)
+}
+
 export function TrackingScripts({ enabled }: { enabled: boolean }) {
   useEffect(() => {
     if (!enabled) return
+    injectGoogleTagManager()
     injectClientifyAnalyticsPlus()
     fetch(apiUrl('/api/web/settings'), { credentials: apiCredentials })
       .then((response) => (response.ok ? response.json() : null))
