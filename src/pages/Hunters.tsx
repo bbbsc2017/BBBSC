@@ -107,13 +107,13 @@ async function createHunterCard(name: string, code: string) {
   context.beginPath()
   context.roundRect(72, 798, 936, 164, 34)
   context.fill()
-  context.fillStyle = '#171714'
+  context.fillStyle = '#ffffff'
   context.font = '900 23px Arial, sans-serif'
   context.fillText('USA MI CÓDIGO HUNTER AL REGISTRARTE', 108, 844)
   const codeSize = fittedFontSize(context, code, 864, 58, 32, 900, 'ui-monospace, SFMono-Regular, Menlo, monospace')
   context.font = `900 ${codeSize}px ui-monospace, SFMono-Regular, Menlo, monospace`
   context.fillText(code, 108, 910)
-  context.fillStyle = 'rgba(23,23,20,.7)'
+  context.fillStyle = 'rgba(255,255,255,.78)'
   context.font = '700 21px Arial, sans-serif'
   context.fillText('bbbsc.com/hunters', 108, 946)
 
@@ -248,12 +248,12 @@ export default function Hunters() {
         <Seo title="Hunters" description="Refiere nuevos participantes a BBB Student Center y gana por cada referido." path="/hunters/" />
         <section className="relative min-h-[70vh] overflow-hidden bg-ink-mesh py-24">
           <Container className="flex flex-col items-center gap-5 text-center">
-            <span className="flex size-20 items-center justify-center rounded-3xl bg-brand text-ink shadow-brand"><CheckCircle2 className="size-10" /></span>
+            <span className="flex size-20 items-center justify-center rounded-3xl bg-brand text-white shadow-brand"><CheckCircle2 className="size-10" /></span>
             <p className="text-sm font-black uppercase tracking-[0.24em] text-brand">Registro completo</p>
             <h1 className="max-w-2xl text-4xl font-black text-white sm:text-5xl">¡Gracias por registrarte!</h1>
             <p className="max-w-xl text-balance text-lg text-white/65">Tu información fue registrada correctamente. Pronto nos comunicaremos contigo.</p>
             {hunterCode && <div className="rounded-2xl border border-brand/30 bg-brand/10 px-6 py-4"><p className="text-xs font-bold uppercase tracking-wider text-white/50">Tu código Hunter</p><p className="mt-1 font-mono text-xl font-black text-brand">{hunterCode}</p></div>}
-            <button type="button" onClick={() => { setStatus('idle'); setHunterCode(''); setCardUrl('') }} className="mt-3 rounded-full bg-brand px-7 py-3 text-sm font-black text-ink transition hover:-translate-y-0.5">Registrar otra persona</button>
+            <button type="button" onClick={() => { setStatus('idle'); setHunterCode(''); setCardUrl('') }} className="mt-3 rounded-full bg-brand px-7 py-3 text-sm font-black text-white transition hover:-translate-y-0.5">Registrar otra persona</button>
           </Container>
         </section>
       </>
@@ -330,7 +330,7 @@ export default function Hunters() {
             {applicantType === 'referred' && <div className="mt-6"><FormField label="Código del Hunter" required hint="Escríbelo completo, por ejemplo: 1234567890SWT27."><TextInput required autoCapitalize="characters" placeholder="1234567890SWT27" value={form.referrerCode} onChange={(event) => update('referrerCode', event.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 30))} /></FormField></div>}
             {status === 'error' && <p role="alert" className="mt-6 rounded-xl border border-red-400/25 bg-red-400/10 px-4 py-3 text-sm font-medium text-red-300">{errorMessage}</p>}
             <div className="mt-7"><RecaptchaNotice /></div>
-            <button type="submit" disabled={status === 'submitting'} className="mt-6 inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-brand px-7 text-sm font-black text-ink transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60"><Send className="size-4" />{status === 'submitting' ? 'Enviando…' : applicantType === 'hunter' ? 'Enviar y generar mi código' : 'Enviar registro'}</button>
+            <button type="submit" disabled={status === 'submitting'} className="mt-6 inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-brand px-7 text-sm font-black text-white transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60"><Send className="size-4" />{status === 'submitting' ? 'Enviando…' : applicantType === 'hunter' ? 'Enviar y generar mi código' : 'Enviar registro'}</button>
           </form>
         </Container>
       </section>
@@ -345,7 +345,7 @@ export default function Hunters() {
               <button type="button" onClick={() => void shareCard()} className="inline-flex items-center gap-2 rounded-full border border-white/15 px-5 py-2.5 text-sm font-bold text-white transition hover:border-brand/50 hover:text-brand"><Share2 className="size-4" /> Compartir</button>
               <button type="button" onClick={() => void copyCode()} className="inline-flex items-center gap-2 rounded-full border border-white/15 px-5 py-2.5 text-sm font-bold text-white transition hover:border-brand/50 hover:text-brand"><Copy className="size-4" /> {copied ? 'Copiado' : 'Copiar código'}</button>
             </div>
-            <div className="mt-6 border-t border-white/10 pt-6 text-center"><p className="mb-4 text-sm text-white/55">Para continuar debes abrir los términos y condiciones de Hunters.</p><button type="button" onClick={() => { setCardOpen(false); setTermsOpen(true) }} className="inline-flex items-center gap-2 rounded-full bg-brand px-6 py-3 text-sm font-black text-ink transition hover:-translate-y-0.5"><FileSignature className="size-4" /> Firmar términos y condiciones</button></div>
+            <div className="mt-6 border-t border-white/10 pt-6 text-center"><p className="mb-4 text-sm text-white/55">Para continuar debes abrir los términos y condiciones de Hunters.</p><button type="button" onClick={() => { setCardOpen(false); setTermsOpen(true) }} className="inline-flex items-center gap-2 rounded-full bg-brand px-6 py-3 text-sm font-black text-white transition hover:-translate-y-0.5"><FileSignature className="size-4" /> Firmar términos y condiciones</button></div>
           </section>
         </div>
       )}
@@ -355,7 +355,7 @@ export default function Hunters() {
           <section className="flex h-[96vh] w-full max-w-6xl flex-col overflow-hidden rounded-2xl border border-white/15 bg-ink-800 shadow-2xl">
             <header className="flex items-center justify-between gap-4 border-b border-white/10 px-4 py-3 sm:px-6"><div><p className="text-[10px] font-black uppercase tracking-widest text-brand">Adobe Acrobat Sign</p><h2 id="hunter-terms-title" className="text-sm font-black text-white sm:text-base">Términos y condiciones Hunters</h2></div><button type="button" onClick={finishTerms} className="rounded-full border border-white/10 p-2 text-white/60 hover:text-white" aria-label="Cerrar términos"><X className="size-5" /></button></header>
             <div className="min-h-0 flex-1 overflow-auto bg-white"><iframe src={TERMS_URL} title="Términos y condiciones de la iniciativa Hunters" className="block h-full min-h-[700px] w-full min-w-[600px] border-0" allow="clipboard-read; clipboard-write" referrerPolicy="strict-origin-when-cross-origin" /></div>
-            <footer className="flex flex-col items-center justify-between gap-3 border-t border-white/10 px-4 py-3 sm:flex-row sm:px-6"><p className="text-center text-xs text-white/50 sm:text-left">Puedes revisar o firmar el documento directamente en Adobe Acrobat Sign.</p><button type="button" onClick={finishTerms} className="inline-flex items-center gap-2 rounded-full bg-brand px-5 py-2.5 text-xs font-black text-ink"><CheckCircle2 className="size-4" /> Cerrar y continuar</button></footer>
+            <footer className="flex flex-col items-center justify-between gap-3 border-t border-white/10 px-4 py-3 sm:flex-row sm:px-6"><p className="text-center text-xs text-white/50 sm:text-left">Puedes revisar o firmar el documento directamente en Adobe Acrobat Sign.</p><button type="button" onClick={finishTerms} className="inline-flex items-center gap-2 rounded-full bg-brand px-5 py-2.5 text-xs font-black text-white"><CheckCircle2 className="size-4" /> Cerrar y continuar</button></footer>
           </section>
         </div>
       )}
