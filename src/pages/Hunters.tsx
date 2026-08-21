@@ -21,11 +21,31 @@ import { SubmittingOverlay } from '../components/ui/SubmittingOverlay'
 import huntersHero from '../assets/hunters/hunters-hero.png'
 import { apiCredentials, apiUrl } from '../lib/apiBase'
 import { executeRecaptcha } from '../lib/recaptcha'
+import bbbIcon from '../assets/logo/bbb-icon.svg'
 
 const TERMS_URL = 'https://na4.documents.adobe.com/public/esignWidget?wid=CBFCIBAA3AAABLblqZhAdzzu06-KYCx1yEDivO0vlvlLdVJn47OmLpgUdOk8nZ3lcybsd2ne-IePHwUqlsiA*&hosted=false'
 const emptyForm = { firstName: '', lastName: '', email: '', phone: '', cedula: '', applicantType: '', referrerCode: '' }
 type ApplicantType = 'hunter' | 'referred'
 type Status = 'idle' | 'submitting' | 'success' | 'error'
+
+function loadCanvasImage(source: string) {
+  return new Promise<HTMLImageElement>((resolve, reject) => {
+    const image = new Image()
+    image.onload = () => resolve(image)
+    image.onerror = () => reject(new Error('No pudimos cargar el logo de BBB Student Center.'))
+    image.src = source
+  })
+}
+
+function fittedFontSize(context: CanvasRenderingContext2D, text: string, maxWidth: number, maximum: number, minimum: number, weight = 900, family = 'Arial, sans-serif') {
+  let size = maximum
+  while (size > minimum) {
+    context.font = `${weight} ${size}px ${family}`
+    if (context.measureText(text).width <= maxWidth) return size
+    size -= 2
+  }
+  return minimum
+}
 
 async function createHunterCard(name: string, code: string) {
   const canvas = document.createElement('canvas')
@@ -51,55 +71,55 @@ async function createHunterCard(name: string, code: string) {
   context.fill()
   context.globalAlpha = 1
 
-  context.fillStyle = '#f9b000'
-  context.beginPath()
-  context.roundRect(72, 72, 98, 98, 26)
-  context.fill()
-  context.fillStyle = '#11110f'
-  context.font = '900 46px Arial, sans-serif'
-  context.textAlign = 'center'
-  context.fillText('BBB', 121, 134)
-
+  const logo = await loadCanvasImage(bbbIcon)
+  context.drawImage(logo, 72, 66, 104, 104)
   context.textAlign = 'left'
   context.fillStyle = '#ffffff'
   context.font = '800 34px Arial, sans-serif'
-  context.fillText('BBB STUDENT CENTER', 194, 132)
+  context.fillText('BBB STUDENT CENTER', 198, 132)
   context.fillStyle = '#f9b000'
-  context.font = '900 30px Arial, sans-serif'
-  context.fillText('INICIATIVA', 72, 275)
+  context.font = '900 27px Arial, sans-serif'
+  context.fillText('INVITACIÓN PERSONAL · INICIATIVA HUNTERS', 72, 252)
   context.fillStyle = '#ffffff'
-  context.font = '900 112px Arial, sans-serif'
-  context.fillText('HUNTERS', 66, 390)
+  context.font = '900 72px Arial, sans-serif'
+  context.fillText('TE INVITO A VIVIR', 72, 342)
+  context.fillText('UNA EXPERIENCIA', 72, 420)
+  context.fillText('INTERNACIONAL', 72, 498)
   context.fillStyle = 'rgba(255,255,255,.72)'
-  context.font = '600 38px Arial, sans-serif'
-  context.fillText('Recomienda. Conecta. Gana.', 72, 452)
-
-  context.fillStyle = '#f9b000'
-  context.beginPath()
-  context.roundRect(72, 520, 936, 142, 34)
-  context.fill()
-  context.fillStyle = '#11110f'
-  context.font = '900 29px Arial, sans-serif'
-  context.fillText('REFIERE A TU FAMILIA Y AMIGOS', 112, 578)
-  context.font = '900 43px Arial, sans-serif'
-  context.fillText('Y AVANZA HACIA TU PROGRAMA', 112, 635)
+  context.font = '600 30px Arial, sans-serif'
+  context.fillText('Quiero compartir contigo una oportunidad', 72, 568)
+  context.fillText('de BBB Student Center.', 72, 608)
 
   context.fillStyle = 'rgba(255,255,255,.08)'
   context.beginPath()
-  context.roundRect(72, 712, 936, 250, 36)
+  context.roundRect(72, 640, 936, 126, 30)
   context.fill()
-  context.fillStyle = 'rgba(255,255,255,.58)'
-  context.font = '700 25px Arial, sans-serif'
-  context.fillText('CÓDIGO DE REFERIDO DE', 112, 774)
+  context.fillStyle = 'rgba(255,255,255,.55)'
+  context.font = '700 22px Arial, sans-serif'
+  context.fillText('UNA INVITACIÓN DE', 108, 686)
+  const displayName = name.trim().toUpperCase().slice(0, 50) || 'TU HUNTER'
+  const nameSize = fittedFontSize(context, displayName, 864, 42, 24, 900)
+  context.font = `900 ${nameSize}px Arial, sans-serif`
   context.fillStyle = '#ffffff'
-  context.font = '800 37px Arial, sans-serif'
-  context.fillText(name.toUpperCase().slice(0, 34), 112, 828)
+  context.fillText(displayName, 108, 734)
+
   context.fillStyle = '#f9b000'
-  context.font = '900 51px ui-monospace, SFMono-Regular, Menlo, monospace'
-  context.fillText(code, 112, 903)
-  context.fillStyle = 'rgba(255,255,255,.52)'
-  context.font = '500 23px Arial, sans-serif'
-  context.fillText('Comparte este código con tus referidos.', 112, 942)
+  context.beginPath()
+  context.roundRect(72, 798, 936, 164, 34)
+  context.fill()
+  context.fillStyle = '#171714'
+  context.font = '900 23px Arial, sans-serif'
+  context.fillText('USA MI CÓDIGO HUNTER AL REGISTRARTE', 108, 844)
+  const codeSize = fittedFontSize(context, code, 864, 58, 32, 900, 'ui-monospace, SFMono-Regular, Menlo, monospace')
+  context.font = `900 ${codeSize}px ui-monospace, SFMono-Regular, Menlo, monospace`
+  context.fillText(code, 108, 910)
+  context.fillStyle = 'rgba(23,23,20,.7)'
+  context.font = '700 21px Arial, sans-serif'
+  context.fillText('bbbsc.com/hunters', 108, 946)
+
+  context.fillStyle = 'rgba(255,255,255,.5)'
+  context.font = '700 22px Arial, sans-serif'
+  context.fillText('Tu próxima experiencia puede comenzar con una recomendación.', 72, 1020)
 
   return canvas.toDataURL('image/png', 1)
 }
