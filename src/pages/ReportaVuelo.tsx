@@ -1,7 +1,7 @@
 import { useState, type FormEvent } from 'react'
-import { CheckCircle2, LockKeyhole, Plane, Send } from 'lucide-react'
+import { CheckCircle2, LockKeyhole, Send } from 'lucide-react'
 import { Seo } from '../components/Seo'
-import { DetailHero } from '../components/ui/DetailHero'
+import { ProgramHero } from '../components/ui/ProgramHero'
 import { Container } from '../components/ui/Container'
 import { CTAButton } from '../components/ui/CTAButton'
 import { FormField, FileInput, SelectInput, TextInput } from '../components/ui/FormField'
@@ -11,10 +11,11 @@ import { airlines } from '../data/airlines'
 import { executeRecaptcha } from '../lib/recaptcha'
 import { apiCredentials, apiUrl } from '../lib/apiBase'
 import { whatsappLink } from '../lib/site'
+import airportFlightHero from '../assets/travel/airport-flight-report-hero.png'
 
 type Direction = 'ida' | 'regreso'
 
-const copy: Record<Direction, { title: string; eyebrow: string; description: string; fechaLabel: string; numeroLabel: string; path: string; recaptchaAction: string }> = {
+const copy: Record<Direction, { title: string; eyebrow: string; description: string; fechaLabel: string; numeroLabel: string; path: string; recaptchaAction: string; context: string; checklist: string[] }> = {
   ida: {
     title: 'Reporta tu vuelo de ida',
     eyebrow: 'Reporte de vuelos',
@@ -23,6 +24,8 @@ const copy: Record<Direction, { title: string; eyebrow: string; description: str
     numeroLabel: 'Número del vuelo de ida',
     path: '/reporte-vuelo-ida/',
     recaptchaAction: 'reporte_vuelo_ida',
+    context: 'Tu salida internacional',
+    checklist: ['Ten a la mano tu itinerario', 'Adjunta el documento en PDF', 'Verifica la fecha y el número de vuelo'],
   },
   regreso: {
     title: 'Reporta tu vuelo de regreso',
@@ -32,6 +35,8 @@ const copy: Record<Direction, { title: string; eyebrow: string; description: str
     numeroLabel: 'Número de vuelo de regreso',
     path: '/reporte-vuelo-regreso/',
     recaptchaAction: 'reporte_vuelo_regreso',
+    context: 'Tu regreso a Colombia',
+    checklist: ['Ten a la mano tu itinerario', 'Adjunta el documento en PDF', 'Verifica la fecha y el número de vuelo'],
   },
 }
 
@@ -104,20 +109,22 @@ export default function ReportaVuelo({ direction }: { direction: Direction }) {
   return (
     <>
       <Seo title={info.title} description={info.description} path={info.path} noIndex />
-      <DetailHero
+      <ProgramHero
         eyebrow={info.eyebrow}
         title={info.title}
         description={info.description}
+        country={info.context}
+        image={{ src: airportFlightHero, alt: 'Avión en un aeropuerto internacional al atardecer' }}
+        requirements={info.checklist}
         breadcrumbs={[{ label: 'Inicio', to: '/' }, { label: info.title }]}
-      >
-        <div className="flex flex-wrap gap-3 text-sm text-white/65">
-          <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2">
-            <Plane className="size-4 text-brand" /> Adjunta el PDF de tu itinerario
-          </span>
-        </div>
-      </DetailHero>
+        primaryTo="#formulario-reporte"
+        primaryLabel="Completar reporte"
+        secondaryTo="#formulario-reporte"
+        secondaryLabel="Ver qué necesitas"
+        requirementsLabel="Antes de enviar"
+      />
 
-      <section className="py-8 sm:py-12">
+      <section id="formulario-reporte" className="scroll-mt-24 py-8 sm:py-12">
         <Container className="max-w-3xl">
           <form onSubmit={handleSubmit} className="rounded-3xl border border-white/10 bg-ink-800 p-5 shadow-2xl shadow-black/20 sm:p-8">
             <div className="flex flex-col gap-6">

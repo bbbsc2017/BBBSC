@@ -12,9 +12,13 @@ interface ProgramHeroProps {
   requirements: string[]
   breadcrumbs: Crumb[]
   primaryTo?: string
+  primaryLabel?: string
+  secondaryTo?: string
+  secondaryLabel?: string
+  requirementsLabel?: string
 }
 
-export function ProgramHero({ eyebrow, title, description, country, image, requirements, breadcrumbs, primaryTo }: ProgramHeroProps) {
+export function ProgramHero({ eyebrow, title, description, country, image, requirements, breadcrumbs, primaryTo, primaryLabel, secondaryTo = '#contenido-programa', secondaryLabel = 'Conoce el programa', requirementsLabel = 'Requisitos principales' }: ProgramHeroProps) {
   return <section className="relative bg-[#1c1c1c] pb-8 pt-6 sm:pb-12 sm:pt-8">
     <Container>
       <Breadcrumbs items={breadcrumbs} />
@@ -30,13 +34,13 @@ export function ProgramHero({ eyebrow, title, description, country, image, requi
             <h1 className="mt-6 max-w-xl text-balance text-[clamp(2.5rem,6vw,5.25rem)] font-black leading-[.94] tracking-[-.055em] text-white">{title}</h1>
             <p className="mt-5 max-w-xl text-balance text-sm font-medium leading-6 text-white/70 sm:text-base sm:leading-7">{description}</p>
             <div className="mt-7 flex flex-col gap-3 sm:flex-row">
-              <Link to={primaryTo || '/contacto'} className="inline-flex min-h-12 items-center justify-center rounded-full bg-brand px-6 text-sm font-black text-white transition hover:-translate-y-0.5 hover:bg-brand-400">{primaryTo ? 'Inscríbete ahora' : 'Habla con un asesor'}<ArrowRight className="ml-2 size-4" /></Link>
-              <a href="#contenido-programa" className="inline-flex min-h-12 items-center justify-center rounded-full border border-white/20 bg-[#1c1c1c]/30 px-6 text-sm font-bold text-white backdrop-blur-md transition hover:border-brand/50 hover:text-brand">Conoce el programa<ArrowDown className="ml-2 size-4" /></a>
+              <Link to={primaryTo || '/contacto'} className="inline-flex min-h-12 items-center justify-center rounded-full bg-brand px-6 text-sm font-black text-white transition hover:-translate-y-0.5 hover:bg-brand-400">{primaryLabel || (primaryTo ? 'Inscríbete ahora' : 'Habla con un asesor')}<ArrowRight className="ml-2 size-4" /></Link>
+              <a href={secondaryTo} className="inline-flex min-h-12 items-center justify-center rounded-full border border-white/20 bg-[#1c1c1c]/30 px-6 text-sm font-bold text-white backdrop-blur-md transition hover:border-brand/50 hover:text-brand">{secondaryLabel}<ArrowDown className="ml-2 size-4" /></a>
             </div>
           </div>
 
           <div className="mt-auto border-t border-white/15 pt-5 sm:pt-6">
-            <p className="mb-4 text-[10px] font-black uppercase tracking-[.22em] text-brand">Requisitos principales</p>
+            <p className="mb-4 text-[10px] font-black uppercase tracking-[.22em] text-brand">{requirementsLabel}</p>
             <div className={`grid gap-3 ${requirements.length === 3 ? 'sm:grid-cols-3' : 'sm:grid-cols-2 lg:grid-cols-4'}`}>
               {requirements.slice(0, 4).map((requirement, index) => <div key={requirement} className="group flex items-start gap-3 rounded-2xl border border-white/[0.08] bg-[#1c1c1c]/45 p-4 backdrop-blur-md transition hover:border-brand/25 hover:bg-[#1c1c1c]/70">
                 <span className="mt-0.5 flex size-7 shrink-0 items-center justify-center rounded-full bg-brand text-white"><CheckCircle2 className="size-4" /></span>
