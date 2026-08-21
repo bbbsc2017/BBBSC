@@ -112,6 +112,14 @@ body {
   animation: grid-drift 18s linear infinite;
 }
 
+.home-hero-grid {
+  background-image:
+    linear-gradient(rgba(249, 176, 0, 0.11) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(249, 176, 0, 0.11) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: linear-gradient(to right, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.35));
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
