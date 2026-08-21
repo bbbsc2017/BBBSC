@@ -6,6 +6,7 @@ import {
   CalendarDays,
   Check,
   Clock3,
+  Eye,
   FileText,
   House,
   Languages,
@@ -506,6 +507,12 @@ export default function OfferDetail() {
                       className="pointer-events-none absolute -inset-y-1 left-0 h-[calc(100%+8px)] w-[calc(100%+18px)] bg-white"
                     />
                     <span className="pointer-events-none absolute inset-0 rounded-2xl ring-[3px] ring-inset ring-ink-800" />
+                    <span className="pointer-events-none absolute inset-0 flex items-center justify-center bg-black/55 transition-all duration-300 group-hover:bg-black/20 group-focus-visible:bg-black/20">
+                      <span className="flex items-center gap-2 rounded-full border border-white/20 bg-black/75 px-4 py-2 text-xs font-black uppercase tracking-wider text-white shadow-xl backdrop-blur-sm transition-all duration-300 group-hover:-translate-y-1 group-hover:scale-105 group-hover:bg-brand group-hover:text-ink group-focus-visible:-translate-y-1 group-focus-visible:scale-105 group-focus-visible:bg-brand group-focus-visible:text-ink">
+                        <Eye className="size-4" />
+                        Ver PDF
+                      </span>
+                    </span>
                   </button>
                 </div>
               )}
