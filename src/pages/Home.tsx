@@ -3,7 +3,6 @@ import { Hero } from '../components/home/Hero'
 import { LatestNewsSection } from '../components/home/LatestNewsSection'
 import { AboutUs } from '../components/home/AboutUs'
 import { CulturalProgramsGrid } from '../components/home/CulturalProgramsGrid'
-import { AcademicProgramsGrid } from '../components/home/AcademicProgramsGrid'
 import { TestimonialsSection } from '../components/home/TestimonialsSection'
 import { FAQSection } from '../components/home/FAQSection'
 import { SITE } from '../lib/site'
@@ -31,7 +30,6 @@ export default function Home() {
       <LatestNewsSection />
       <AboutUs />
       <CulturalProgramsGrid />
-      <AcademicProgramsGrid />
       <TestimonialsSection />
       <FAQSection />
     </>
