@@ -23,12 +23,26 @@ function offerHeroImage(program?: OfferProgram) {
 }
 
 function Filters({ offers, params, setValue, clear }: { offers: JobOffer[]; params: URLSearchParams; setValue: (key: string, value: string) => void; clear: () => void }) {
-  const cities = [...new Set(offers.map((offer) => offer.city))].sort()
+  const state = params.get('estado') || ''
+  const states = [...new Set(offers.map((offer) => offer.state))].sort()
+  // Las ciudades se acotan al estado elegido — hay ciudades con el mismo
+  // nombre en distintos estados, así que mostrar todas sin filtrar por
+  // estado invita a elegir la ciudad equivocada.
+  const cities = [...new Set(offers.filter((offer) => !state || offer.state === state).map((offer) => offer.city))].sort()
   const sponsors = [...new Set(offers.map((offer) => offer.sponsor))].sort()
-  const activeCount = ['buscar', 'ciudad', 'sponsor', 'salario_min', 'salario_max', 'disponibilidad'].filter((key) => params.get(key)).length
+  const activeCount = ['buscar', 'ciudad', 'estado', 'sponsor', 'salario_min', 'salario_max', 'disponibilidad'].filter((key) => params.get(key)).length
+  function setState(value: string) {
+    // Si la ciudad ya elegida no existe en el nuevo estado, se limpia para
+    // no dejar una combinación estado+ciudad inválida sin resultados.
+    const city = params.get('ciudad') || ''
+    const cityStillValid = !city || offers.some((offer) => offer.state === value && offer.city === city)
+    setValue('estado', value)
+    if (!cityStillValid) setValue('ciudad', '')
+  }
   return <div className="space-y-5">
     <div className="flex items-center justify-between"><h2 className="flex items-center gap-2 font-extrabold"><SlidersHorizontal className="size-4 text-brand" />Filtrar ofertas</h2>{activeCount > 0 && <button type="button" onClick={clear} className="text-xs font-bold text-brand hover:underline">Limpiar ({activeCount})</button>}</div>
     <label className="block text-xs font-bold text-white/65">Nombre o empleador<span className="relative mt-2 block"><Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-white/30" /><input value={params.get('buscar') || ''} onChange={(event) => setValue('buscar', event.target.value)} className={`${fieldClass} pl-10`} placeholder="Buscar oferta" /></span></label>
+    <label className="block text-xs font-bold text-white/65">Estado<select value={state} onChange={(event) => setState(event.target.value)} className={`${fieldClass} mt-2`}><option value="">Todos los estados</option>{states.map((item) => <option key={item}>{item}</option>)}</select></label>
     <label className="block text-xs font-bold text-white/65">Ciudad<select value={params.get('ciudad') || ''} onChange={(event) => setValue('ciudad', event.target.value)} className={`${fieldClass} mt-2`}><option value="">Todas las ciudades</option>{cities.map((city) => <option key={city}>{city}</option>)}</select></label>
     <label className="block text-xs font-bold text-white/65">Sponsor<select value={params.get('sponsor') || ''} onChange={(event) => setValue('sponsor', event.target.value)} className={`${fieldClass} mt-2`}><option value="">Todos los sponsors</option>{sponsors.map((sponsor) => <option key={sponsor}>{sponsor}</option>)}</select></label>
     <label className="block text-xs font-bold text-white/65">Disponibilidad<select value={params.get('disponibilidad') || ''} onChange={(event) => setValue('disponibilidad', event.target.value)} className={`${fieldClass} mt-2`}><option value="">Todas las ofertas</option><option value="disponibles">Disponibles</option><option value="no-disponibles">No disponibles</option></select></label>
@@ -55,6 +69,7 @@ export default function OffersIndex() {
 
   const visibleOffers = useMemo(() => {
     const search = (params.get('buscar') || '').trim().toLocaleLowerCase('es')
+    const state = params.get('estado') || ''
     const city = params.get('ciudad') || ''
     const sponsor = params.get('sponsor') || ''
     const minimum = Number(params.get('salario_min'))
@@ -64,6 +79,7 @@ export default function OffersIndex() {
       const isAvailable = isOfferAvailable(offer)
       const searchable = `${offer.title} ${offer.employer}`.toLocaleLowerCase('es')
       if (search && !searchable.includes(search)) return false
+      if (state && offer.state !== state) return false
       if (city && offer.city !== city) return false
       if (sponsor && offer.sponsor !== sponsor) return false
       if (params.get('salario_min') && (offer.compensationMax ?? offer.compensationMin) < minimum) return false
