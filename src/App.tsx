@@ -13,6 +13,7 @@ const ProgramaAcademicoDetalle = lazy(() => import('./pages/ProgramaAcademicoDet
 const UniversidadesIndex = lazy(() => import('./pages/UniversidadesIndex'))
 const ContratoSwt = lazy(() => import('./pages/ContratoSwt'))
 const HojaDeVidaSwt = lazy(() => import('./pages/HojaDeVidaSwt'))
+const HojaDeVidaTraineeAndInternship = lazy(() => import('./pages/HojaDeVidaTraineeAndInternship'))
 const ReportaVuelo = lazy(() => import('./pages/ReportaVuelo'))
 const Hunters = lazy(() => import('./pages/Hunters'))
 const Contacto = lazy(() => import('./pages/Contacto'))
@@ -64,6 +65,7 @@ function App() {
           <Route path="contrato-swt-a" element={<ContratoSwt variant="a" />} />
           <Route path="contrato-swt-acc" element={<ContratoSwt variant="acc" />} />
           <Route path="hoja-de-vida-swt" element={<HojaDeVidaSwt />} />
+          <Route path="hoja-de-vida-trainee-and-internship" element={<HojaDeVidaTraineeAndInternship />} />
           <Route path="reporte-vuelo-ida" element={<ReportaVuelo direction="ida" />} />
           <Route path="reporte-vuelo-regreso" element={<ReportaVuelo direction="regreso" />} />
           <Route path="hunters" element={<Hunters />} />
