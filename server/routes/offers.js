@@ -5,7 +5,7 @@ import { requireAuth, requirePermission } from '../auth.js'
 import { PERMISSIONS } from '../lib/permissions.js'
 import { slugify, uniqueSlug } from '../lib/slugify.js'
 import { getUsers } from '../lib/bbbscApi.js'
-import { analyzeStoredPdf, downloadPdf, extractPdfText, inferOfferFields, MAX_PDF_BYTES } from '../lib/offerPdfs.js'
+import { analyzePdf, downloadPdf, extractPdfText, inferOfferFields, MAX_PDF_BYTES } from '../lib/offerPdfs.js'
 import { getCachedClientifyProducts, syncClientifyProducts, syncOfferApplicationToClientify } from '../lib/clientifyOffers.js'
 import {
   listOffers as listCentralOffers,
@@ -384,7 +384,7 @@ adminOffersRouter.post('/offers/extract-pdf', requirePermission(PERMISSIONS.OFFE
     if (uploadError instanceof multer.MulterError && uploadError.code === 'LIMIT_FILE_SIZE') return res.status(400).json({ ok: false, error: 'El PDF supera el tamaño máximo permitido (25 MB).' })
     if (uploadError || !req.file) return res.status(400).json({ ok: false, error: 'Selecciona un archivo PDF válido.' })
     try {
-      const analysis = await analyzeStoredPdf(req.file.buffer)
+      const analysis = await analyzePdf(req.file.buffer)
       return res.json({ ok: true, analysis: { fields: analysis.fields, detected: analysis.detected, confidence: analysis.confidence, warnings: analysis.warnings, pdfSourceUrl: '', pdfFileName: analysis.fileName, pdfText: analysis.text } })
     } catch (error) {
       return res.status(400).json({ ok: false, error: error instanceof Error ? error.message : 'No pudimos procesar el PDF.' })

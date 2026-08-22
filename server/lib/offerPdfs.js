@@ -1,14 +1,9 @@
 import crypto from 'node:crypto'
-import fs from 'node:fs'
-import path from 'node:path'
 import dns from 'node:dns/promises'
 import net from 'node:net'
 import { PDFParse } from 'pdf-parse'
 
-export const OFFER_PDFS_DIR = path.join(import.meta.dirname, '..', process.env.OFFER_PDFS_DIR || 'data/offer-pdfs')
 export const MAX_PDF_BYTES = 25 * 1024 * 1024
-
-fs.mkdirSync(OFFER_PDFS_DIR, { recursive: true })
 
 function isPrivateIp(address) {
   if (net.isIPv4(address)) {
@@ -39,16 +34,6 @@ function assertPdf(buffer) {
   if (buffer.length > MAX_PDF_BYTES) throw new Error('El PDF supera el tamaño máximo permitido (25 MB).')
 }
 
-export async function storePdfBuffer(buffer) {
-  assertPdf(buffer)
-  const fileName = pdfName(buffer)
-  const filePath = path.join(OFFER_PDFS_DIR, fileName)
-  if (!fs.existsSync(filePath)) {
-    try { fs.writeFileSync(filePath, buffer, { flag: 'wx' }) } catch (error) { if (error?.code !== 'EEXIST') throw error }
-  }
-  return { fileName, filePath }
-}
-
 export async function downloadPdf(sourceUrl) {
   let url
   try { url = new URL(sourceUrl) } catch { throw new Error('La URL del PDF no es válida.') }
@@ -69,7 +54,8 @@ export async function downloadPdf(sourceUrl) {
   const contentLength = Number(response.headers.get('content-length') || 0)
   if (contentLength > MAX_PDF_BYTES) throw new Error('El PDF supera el tamaño máximo permitido (25 MB).')
   const buffer = Buffer.from(await response.arrayBuffer())
-  return { ...(await storePdfBuffer(buffer)), buffer, sourceUrl: url.toString() }
+  assertPdf(buffer)
+  return { fileName: pdfName(buffer), buffer, sourceUrl: url.toString() }
 }
 
 export async function extractPdfText(buffer) {
@@ -167,15 +153,9 @@ export function inferOfferFields(text) {
   }
 }
 
-export async function analyzeStoredPdf(buffer) {
-  const stored = await storePdfBuffer(buffer)
+export async function analyzePdf(buffer) {
+  assertPdf(buffer)
   const text = await extractPdfText(buffer)
   if (!text) throw new Error('El PDF no contiene texto legible. Puede ser un documento escaneado.')
-  return { ...stored, text, ...inferOfferFields(text) }
-}
-
-export function safeStoredPdfPath(fileName) {
-  if (!/^[a-f0-9]{64}\.pdf$/.test(String(fileName || ''))) return null
-  const filePath = path.join(OFFER_PDFS_DIR, fileName)
-  return fs.existsSync(filePath) ? filePath : null
+  return { fileName: pdfName(buffer), text, ...inferOfferFields(text) }
 }
