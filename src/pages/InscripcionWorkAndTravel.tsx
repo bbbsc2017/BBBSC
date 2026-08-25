@@ -5,7 +5,7 @@ import { ShowcaseHero } from '../components/ui/ShowcaseHero'
 import { Container } from '../components/ui/Container'
 import { CTAButton } from '../components/ui/CTAButton'
 import { FormField, SelectInput, TextInput } from '../components/ui/FormField'
-import { colombiaDepartments, getDepartment, UNIVERSITIES } from '../data/colombiaLocations'
+import { colombiaDepartments, getDepartment } from '../data/colombiaLocations'
 import {
   academicLevels, academicShifts, careers, englishLevels, passportStatusOptions, previousSwtCount, semesters, yesNo,
 } from '../data/careers'
@@ -305,7 +305,7 @@ export function ProgramRegistration({ program = 'usa' }: { program?: Registratio
                       <h4 className="text-sm font-bold text-white sm:col-span-2">Tu universidad</h4>
                       <FormField label="Departamento"><SelectInput value={form.departamentoUniversidad} onChange={(event) => updateUniDept(event.target.value)}>{colombiaDepartments.map((department) => <option key={department.key} value={department.key}>{department.label}</option>)}</SelectInput></FormField>
                       <FormField label="Municipio"><SelectInput value={form.municipioUniversidad} onChange={(event) => update('municipioUniversidad', event.target.value)} disabled={!uniDept} placeholder={uniDept ? 'Selecciona un municipio' : 'Elige primero el departamento'}>{uniDept?.municipios.map((municipality) => <option key={municipality} value={municipality}>{municipality}</option>)}</SelectInput></FormField>
-                      <FormField label="Universidad" className="sm:col-span-2"><SelectInput value={form.universidad} onChange={(event) => update('universidad', event.target.value)} placeholder="Selecciona una universidad">{UNIVERSITIES.map((university) => <option key={university} value={university}>{university}</option>)}</SelectInput></FormField>
+                      <FormField label="Universidad" className="sm:col-span-2"><SelectInput value={form.universidad} onChange={(event) => update('universidad', event.target.value)} disabled={!uniDept} placeholder={uniDept ? 'Selecciona una universidad' : 'Elige primero el departamento'}>{uniDept?.universidades.map((university) => <option key={university} value={university}>{university}</option>)}</SelectInput></FormField>
                     </div>
                   </fieldset>
                   <fieldset className="flex flex-col gap-5 border-t border-white/10 pt-7">
