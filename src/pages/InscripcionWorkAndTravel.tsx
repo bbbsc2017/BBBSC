@@ -1,5 +1,5 @@
 import { useMemo, useRef, useState, type FormEvent } from 'react'
-import { ArrowLeft, ArrowRight, Check, CheckCircle2, ClipboardCheck, LockKeyhole, Send, ShieldCheck } from 'lucide-react'
+import { ArrowLeft, ArrowRight, Check, CheckCircle2, ClipboardCheck, ExternalLink, LockKeyhole, Send, ShieldCheck } from 'lucide-react'
 import { Seo } from '../components/Seo'
 import { ShowcaseHero } from '../components/ui/ShowcaseHero'
 import { Container } from '../components/ui/Container'
@@ -27,6 +27,7 @@ const registrationPrograms = {
     recaptchaAction: 'work_travel_registration',
     visaRegion: 'Estados Unidos',
     relativesRegion: 'Estados Unidos',
+    payment: { amount: '$260.000 COP', url: 'https://www.zonapagos.com/t_bbbacademiasas/pagos.asp' },
   },
   asia: {
     slug: 'asia',
@@ -36,6 +37,7 @@ const registrationPrograms = {
     recaptchaAction: 'asia_registration',
     visaRegion: 'Asia',
     relativesRegion: 'Asia',
+    payment: null,
   },
 } as const
 
@@ -184,6 +186,45 @@ export function ProgramRegistration({ program = 'usa' }: { program?: Registratio
   }
 
   if (status === 'success') {
+    if (registration.payment) {
+      return (
+        <>
+          <Seo title={`Completa tu inscripción — ${registration.title}`} description={`Realiza el pago de inscripción a ${registration.title}.`} path={pagePath} />
+          <section className="relative overflow-hidden bg-ink-mesh py-12 sm:py-20">
+            <Container className="max-w-5xl">
+              <div className="mb-6 flex items-center gap-2 text-sm text-white/50">
+                <span>Inscripción</span><ArrowRight className="size-3.5" /><span className="font-semibold text-brand">Pago</span>
+              </div>
+              <div className="overflow-hidden rounded-3xl border border-white/10 bg-ink-800 shadow-2xl shadow-black/30">
+                <div className="grid lg:grid-cols-[1.25fr_.75fr]">
+                  <div className="p-6 sm:p-10">
+                    <span className="flex size-14 items-center justify-center rounded-2xl bg-brand text-white"><CheckCircle2 className="size-7" /></span>
+                    <p className="mt-6 text-sm font-bold uppercase tracking-widest text-brand">Inscripción recibida</p>
+                    <h1 className="mt-2 text-3xl font-extrabold text-white sm:text-4xl">¡Estás a un paso de completar tu registro!</h1>
+                    <p className="mt-4 max-w-xl leading-relaxed text-white/65">Aprovecha y realiza ahora el pago de tu inscripción. En Zona Pagos deberás ingresar el valor de <strong className="text-white">{registration.payment.amount}</strong>.</p>
+                    <a href={registration.payment.url} target="_blank" rel="noopener noreferrer" className="mt-8 inline-flex min-h-13 items-center justify-center gap-2 rounded-full bg-brand px-7 py-3.5 text-sm font-bold text-white shadow-brand transition-transform hover:-translate-y-0.5">
+                      Ir a Zona Pagos <ExternalLink className="size-4" />
+                    </a>
+                    <p className="mt-4 flex items-center gap-2 text-xs text-white/45"><LockKeyhole className="size-4 text-brand" /> El pago se realiza de forma segura en el portal de Zona Pagos.</p>
+                  </div>
+                  <aside className="border-t border-white/10 bg-black/20 p-6 sm:p-8 lg:border-l lg:border-t-0">
+                    <p className="text-xs font-bold uppercase tracking-widest text-white/45">Resumen</p>
+                    <h2 className="mt-5 text-xl font-bold text-white">{registration.title}</h2>
+                    <p className="mt-2 text-sm text-white/55">Pago de inscripción</p>
+                    <div className="my-7 border-t border-white/10" />
+                    <div className="flex items-end justify-between gap-4">
+                      <span className="font-semibold text-white/70">Total a pagar</span>
+                      <strong className="text-2xl text-brand">{registration.payment.amount}</strong>
+                    </div>
+                    <div className="mt-7 rounded-2xl border border-brand/20 bg-brand/10 p-4 text-sm leading-relaxed text-white/65">Tu formulario ya fue enviado correctamente. Un asesor también revisará tu información y se pondrá en contacto contigo.</div>
+                  </aside>
+                </div>
+              </div>
+            </Container>
+          </section>
+        </>
+      )
+    }
     return (
       <>
         <Seo title={`Inscripción enviada — ${registration.title}`} description={`Tu inscripción a ${registration.title} fue enviada correctamente.`} path={pagePath} />
