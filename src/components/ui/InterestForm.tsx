@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from 'react'
-import { CheckCircle2, Loader2, Send } from 'lucide-react'
+import { CheckCircle2, ExternalLink, Loader2, LockKeyhole, Send } from 'lucide-react'
 import { fieldClass } from './FormField'
 import { executeRecaptcha } from '../../lib/recaptcha'
 import { RecaptchaNotice } from './RecaptchaNotice'
@@ -14,7 +14,9 @@ interface InterestFormProps {
 
 const emptyForm = { firstName: '', lastName: '', email: '', phone: '' }
 
-export function InterestForm({ formKey, interestTag }: InterestFormProps) {
+const paymentUrl = 'https://www.zonapagos.com/t_bbbacademiasas/pagos.asp'
+
+export function InterestForm({ formKey, programTitle, interestTag }: InterestFormProps) {
   const [form, setForm] = useState(emptyForm)
   const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle')
   const [error, setError] = useState('')
@@ -49,7 +51,14 @@ export function InterestForm({ formKey, interestTag }: InterestFormProps) {
   }
 
   if (status === 'success') {
-    return <div role="status" className="rounded-2xl border border-emerald-400/20 bg-emerald-400/10 p-4 text-center"><CheckCircle2 className="mx-auto size-7 text-emerald-300" /><p className="mt-2 text-sm font-bold text-white">Recibimos tus datos</p><p className="mt-1 text-xs leading-5 text-white/55">Un asesor se pondrá en contacto contigo.</p></div>
+    return <div role="status" className="rounded-2xl border border-brand/30 bg-brand/10 p-5 text-center">
+      <CheckCircle2 className="mx-auto size-8 text-brand" />
+      <p className="mt-3 text-base font-extrabold text-white">¡Recibimos tus datos!</p>
+      <p className="mt-2 text-xs leading-5 text-white/60">Completa tu registro en {programTitle} pagando la inscripción.</p>
+      <div className="my-4 flex items-end justify-between border-y border-white/10 py-3 text-left"><span className="text-xs text-white/55">Total a pagar</span><strong className="text-xl text-brand">$250.000 COP</strong></div>
+      <a href={paymentUrl} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-full bg-brand px-5 text-sm font-extrabold text-white transition hover:bg-brand-400">Ir a Zona Pagos <ExternalLink className="size-4" /></a>
+      <p className="mt-3 flex items-center justify-center gap-1.5 text-[11px] text-white/45"><LockKeyhole className="size-3.5" /> Pago seguro en Zona Pagos</p>
+    </div>
   }
 
   return <form onSubmit={submit} className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">

@@ -37,7 +37,7 @@ const registrationPrograms = {
     recaptchaAction: 'asia_registration',
     visaRegion: 'Asia',
     relativesRegion: 'Asia',
-    payment: null,
+    payment: { amount: '$250.000 COP', url: 'https://www.zonapagos.com/t_bbbacademiasas/pagos.asp' },
   },
 } as const
 
