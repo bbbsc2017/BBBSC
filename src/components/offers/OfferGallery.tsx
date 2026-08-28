@@ -7,15 +7,15 @@ interface OfferGalleryProps {
 }
 
 // Galería tipo WooCommerce: imagen grande arriba + tira de miniaturas
-// scrolleable abajo. Con más de una foto se comporta como un carrusel
-// (flechas + swipe en táctil); con una sola foto (o ninguna) se ve igual
-// que antes, sin controles.
+// scrolleable abajo, con bordes redondeados propios (independientes del
+// contenedor que la use). Con más de una foto se comporta como un carrusel
+// (flechas + swipe en táctil) que desliza con animación entre fotos; con
+// una sola foto (o ninguna) se ve igual que antes, sin controles.
 export function OfferGallery({ images, alt }: OfferGalleryProps) {
   const [active, setActive] = useState(0)
   const [touchStartX, setTouchStartX] = useState<number | null>(null)
   const photos = images.filter(Boolean)
   const hasCarousel = photos.length > 1
-  const current = photos[active] ?? photos[0]
 
   function goTo(index: number) {
     setActive((index + photos.length) % photos.length)
@@ -36,18 +36,34 @@ export function OfferGallery({ images, alt }: OfferGalleryProps) {
   }
 
   return (
-    <div className="relative flex h-full flex-col">
+    <div className="relative flex h-full flex-col overflow-hidden rounded-2xl">
       <div
         className="relative min-h-72 flex-1 overflow-hidden bg-gradient-to-br from-brand/25 via-ink-700 to-ink sm:min-h-[400px]"
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
       >
-        {current ? (
-          <img src={current} alt={alt} className="absolute inset-0 size-full object-cover" />
+        {photos.length > 0 ? (
+          // Pista con todas las fotos una al lado de la otra; cambiar de
+          // foto solo mueve el transform, así el navegador anima el
+          // deslizamiento en vez de reemplazar la imagen de golpe.
+          <div
+            className="flex h-full transition-transform duration-500 ease-out"
+            style={{ width: `${photos.length * 100}%`, transform: `translateX(-${(active * 100) / photos.length}%)` }}
+          >
+            {photos.map((src, index) => (
+              <img
+                key={src + index}
+                src={src}
+                alt={index === active ? alt : ''}
+                style={{ width: `${100 / photos.length}%` }}
+                className="h-full shrink-0 object-cover"
+              />
+            ))}
+          </div>
         ) : (
           <Building2 className="absolute left-1/2 top-1/2 size-28 -translate-x-1/2 -translate-y-1/2 text-white/10" />
         )}
-        <div className="absolute inset-0 bg-gradient-to-t from-ink via-transparent to-transparent" />
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-ink via-transparent to-transparent" />
         {hasCarousel && (
           <>
             <button
