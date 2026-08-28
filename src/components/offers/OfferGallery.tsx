@@ -36,9 +36,11 @@ export function OfferGallery({ images, alt }: OfferGalleryProps) {
   }
 
   return (
-    <div className="relative flex h-full flex-col overflow-hidden rounded-2xl">
+    <div className="flex w-full flex-col overflow-hidden rounded-2xl">
+      {/* Formato horizontal 4:3 fijo — mismo encuadre sin importar cuántas
+          fotos tenga la oferta, con la imagen centrada dentro del marco. */}
       <div
-        className="relative min-h-72 flex-1 overflow-hidden bg-gradient-to-br from-brand/25 via-ink-700 to-ink sm:min-h-[400px]"
+        className="relative aspect-[4/3] w-full overflow-hidden bg-gradient-to-br from-brand/25 via-ink-700 to-ink"
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
       >
