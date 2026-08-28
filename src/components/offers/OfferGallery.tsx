@@ -7,10 +7,11 @@ interface OfferGalleryProps {
 }
 
 // Galería tipo WooCommerce: imagen grande arriba + tira de miniaturas
-// scrolleable abajo, con bordes redondeados propios (independientes del
-// contenedor que la use). Con más de una foto se comporta como un carrusel
-// (flechas + swipe en táctil) que desliza con animación entre fotos; con
-// una sola foto (o ninguna) se ve igual que antes, sin controles.
+// debajo, cada una con sus propias 4 esquinas redondeadas (separadas por
+// un espacio, no fundidas en un solo bloque). Con más de una foto se
+// comporta como un carrusel (flechas + swipe en táctil) que desliza con
+// animación entre fotos; con una sola foto (o ninguna) se ve igual que
+// antes, sin controles ni tira de miniaturas.
 export function OfferGallery({ images, alt }: OfferGalleryProps) {
   const [active, setActive] = useState(0)
   const [touchStartX, setTouchStartX] = useState<number | null>(null)
@@ -36,11 +37,9 @@ export function OfferGallery({ images, alt }: OfferGalleryProps) {
   }
 
   return (
-    <div className="flex w-full flex-col overflow-hidden rounded-2xl">
-      {/* Formato horizontal 4:3 fijo — mismo encuadre sin importar cuántas
-          fotos tenga la oferta, con la imagen centrada dentro del marco. */}
+    <div className="flex w-full flex-col gap-3">
       <div
-        className="relative aspect-[4/3] w-full overflow-hidden bg-gradient-to-br from-brand/25 via-ink-700 to-ink"
+        className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl bg-gradient-to-br from-brand/25 via-ink-700 to-ink"
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
       >
@@ -65,7 +64,6 @@ export function OfferGallery({ images, alt }: OfferGalleryProps) {
         ) : (
           <Building2 className="absolute left-1/2 top-1/2 size-28 -translate-x-1/2 -translate-y-1/2 text-white/10" />
         )}
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-ink via-transparent to-transparent" />
         {hasCarousel && (
           <>
             <button
@@ -84,7 +82,7 @@ export function OfferGallery({ images, alt }: OfferGalleryProps) {
             >
               <ChevronRight className="size-5" />
             </button>
-            <div className="absolute bottom-3 left-1/2 flex -translate-x-1/2 gap-1.5">
+            <div className="absolute bottom-3 left-1/2 flex -translate-x-1/2 gap-1.5 rounded-full bg-ink/50 px-2.5 py-1.5 backdrop-blur">
               {photos.map((src, index) => (
                 <span
                   key={src + index}
@@ -96,7 +94,7 @@ export function OfferGallery({ images, alt }: OfferGalleryProps) {
         )}
       </div>
       {hasCarousel && (
-        <div className="flex gap-2 overflow-x-auto bg-ink-900/60 p-3">
+        <div className="flex gap-2 overflow-x-auto rounded-2xl bg-ink-900/60 p-3">
           {photos.map((src, index) => (
             <button
               key={src + index}
