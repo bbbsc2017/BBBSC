@@ -72,7 +72,11 @@ export function compensationLabel(offer: JobOffer) {
   const range = offer.compensationMax && offer.compensationMax !== offer.compensationMin
     ? `${formatter.format(offer.compensationMin)}–${formatter.format(offer.compensationMax)}`
     : formatter.format(offer.compensationMin)
-  return `${offer.compensationCurrency} ${range} / ${periodLabels[offer.compensationPeriod]}`
+  // En dólares se pide el signo $ al inicio y "USD" después del valor
+  // (ej. "$1,200–1,500 USD"), no el código de moneda antes del número.
+  // Otras monedas conservan el formato anterior (código antes del valor).
+  const amount = offer.compensationCurrency === 'USD' ? `$${range} USD` : `${offer.compensationCurrency} ${range}`
+  return `${amount} / ${periodLabels[offer.compensationPeriod]}`
 }
 
 export function isOfferAvailable(offer: JobOffer, now = Date.now()) {
