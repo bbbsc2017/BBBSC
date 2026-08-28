@@ -72,7 +72,7 @@ function App() {
           <Route path="contacto" element={<Contacto />} />
           <Route path="blog" element={<BlogIndex />} />
           <Route path="blog/:slug" element={<BlogPost />} />
-          <Route path="ofertas/:program/:sponsor/:slug" element={<OfferDetail />} />
+          <Route path="ofertas/:sponsor/:employer/:slug" element={<OfferDetail />} />
           <Route path="ofertas/:program" element={<OffersIndex />} />
           <Route path="ofertas" element={<OffersIndex />} />
           <Route path="terminos-y-condiciones" element={<TerminosCondiciones />} />

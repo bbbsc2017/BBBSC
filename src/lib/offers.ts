@@ -61,8 +61,8 @@ export function pathSlug(value: string) {
   return value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
 }
 
-export function offerPath(offer: Pick<JobOffer, 'program' | 'sponsor' | 'slug'>) {
-  return `/ofertas/${offer.program}/${pathSlug(offer.sponsor)}/${offer.slug}`
+export function offerPath(offer: Pick<JobOffer, 'sponsor' | 'employer' | 'slug'>) {
+  return `/ofertas/${pathSlug(offer.sponsor)}/${pathSlug(offer.employer)}/${offer.slug}`
 }
 
 const periodLabels: Record<JobOffer['compensationPeriod'], string> = { hour: 'hora', week: 'semana', month: 'mes', year: 'año', program: 'programa' }

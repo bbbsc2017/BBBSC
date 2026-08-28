@@ -65,7 +65,7 @@ function Fact({
 }
 
 export default function OfferDetail() {
-  const { program = "", sponsor = "", slug = "" } = useParams();
+  const { sponsor = "", employer = "", slug = "" } = useParams();
   const navigate = useNavigate();
   const [offer, setOffer] = useState<JobOffer | null>(null);
   const [session, setSession] = useState<Session | null>(null);
@@ -125,7 +125,7 @@ export default function OfferDetail() {
       .then((item) => {
         setOffer(item);
         const canonical = offerPath(item);
-        if (item.program !== program || pathSlug(item.sponsor) !== sponsor)
+        if (pathSlug(item.sponsor) !== sponsor || pathSlug(item.employer) !== employer)
           navigate(canonical, { replace: true });
       })
       .catch((err) =>
@@ -152,7 +152,7 @@ export default function OfferDetail() {
           .catch(() => undefined);
       })
       .catch(() => undefined);
-  }, [navigate, program, slug, sponsor]);
+  }, [navigate, employer, slug, sponsor]);
 
   async function apply(event: FormEvent) {
     event.preventDefault();
