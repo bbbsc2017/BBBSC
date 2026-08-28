@@ -75,7 +75,7 @@ export default function OffersIndex() {
     const minimum = Number(params.get('salario_min'))
     const maximum = Number(params.get('salario_max'))
     const availability = params.get('disponibilidad') || ''
-    return offers.filter((offer) => {
+    const filtered = offers.filter((offer) => {
       const isAvailable = isOfferAvailable(offer)
       const searchable = `${offer.title} ${offer.employer}`.toLocaleLowerCase('es')
       if (search && !searchable.includes(search)) return false
@@ -87,6 +87,15 @@ export default function OffersIndex() {
       if (availability === 'disponibles' && !isAvailable) return false
       if (availability === 'no-disponibles' && isAvailable) return false
       return true
+    })
+    // Con o sin filtros: primero las disponibles, luego las que no lo están.
+    // Dentro de cada grupo, las agregadas más recientemente van primero —
+    // pero la recencia nunca hace que una oferta no disponible adelante a
+    // una disponible, la disponibilidad manda siempre.
+    return [...filtered].sort((a, b) => {
+      const availabilityDiff = Number(isOfferAvailable(b)) - Number(isOfferAvailable(a))
+      if (availabilityDiff !== 0) return availabilityDiff
+      return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
     })
   }, [offers, params])
 
