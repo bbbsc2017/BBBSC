@@ -54,7 +54,7 @@ function Fact({
   value: string;
 }) {
   return (
-    <div className="rounded-2xl border border-white/10 bg-white/[0.035] p-4">
+    <div className="rounded-2xl border border-white/10 bg-white/[0.035] p-4 transition-colors duration-300 hover:border-brand/30 hover:bg-white/[0.06]">
       <Icon className="mb-3 size-5 text-brand" />
       <p className="text-[10px] font-bold uppercase tracking-wider text-white/35">
         {label}
@@ -299,17 +299,19 @@ export default function OfferDetail() {
             <ArrowLeft className="mr-2 size-4" />
             Volver a {programLabel(offer.program)}
           </Link>
-          <section className="mt-6 grid overflow-hidden rounded-[2rem] border border-white/10 bg-ink-800 lg:grid-cols-[1.15fr_.85fr]">
-            <div className="relative min-h-72 sm:min-h-[470px]">
+          <section className="mt-6 grid animate-[fadeInUp_0.6s_ease-out] gap-8 rounded-[2rem] border border-white/10 bg-ink-800 p-5 sm:p-7 lg:grid-cols-[1.15fr_.85fr] lg:items-start lg:p-9">
+            {/* Marco 4:3 centrado, con aire alrededor en vez de ir pegado al
+                borde de la tarjeta — el mismo encuadre para cualquier oferta. */}
+            <div className="relative mx-auto w-full max-w-xl lg:max-w-none">
               <OfferGallery
                 images={offer.images?.length ? offer.images : [offer.imageSrc]}
                 alt={`${offer.title} en ${offer.employer}, ${offer.city}`}
               />
-              <span className="absolute left-5 top-5 rounded-full bg-ink/80 px-4 py-2 text-xs font-extrabold uppercase tracking-wider text-brand backdrop-blur">
+              <span className="absolute left-4 top-4 rounded-full bg-ink/80 px-4 py-2 text-xs font-extrabold uppercase tracking-wider text-brand backdrop-blur">
                 {programLabel(offer.program)}
               </span>
             </div>
-            <div className="flex flex-col p-6 sm:p-9">
+            <div className="flex flex-col">
               <p className="text-xs font-extrabold uppercase tracking-[.2em] text-brand">
                 {offer.sponsor}
               </p>

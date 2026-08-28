@@ -34,6 +34,13 @@
   to { opacity: 1; }
 }
 
+/* Entrada de la página de detalle de oferta (hero + secciones): un único
+   gesto de aparición, no una animación distinta por elemento. */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 @keyframes float {
   0%,
   100% {
