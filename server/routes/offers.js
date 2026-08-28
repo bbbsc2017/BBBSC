@@ -172,6 +172,10 @@ function adaptCentralOffer(o) {
     vacanciesAvailable: o.vacanciesAvailable,
     availableUntil: o.availableUntil,
     imageSrc: o.imageSrc ?? o.imageMain,
+    // La API central ya devuelve la galería completa (images[]) además de
+    // imageSrc/imageMain — sin este campo el frontend nunca podía mostrar
+    // más de una foto por oferta, aunque el admin hubiera subido varias.
+    images: Array.isArray(o.images) ? o.images : [],
     description: o.description,
     status: o.status,
     hasPdf: Boolean(pdfViewUrl),
