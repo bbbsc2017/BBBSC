@@ -8,7 +8,8 @@
     "start": "node index.js",
     "dev": "node --watch index.js",
     "test:participant-dashboard": "node scripts/test-participant-dashboard.js",
-    "test:clientify-offers": "node scripts/test-clientify-offer-sync.js"
+    "test:clientify-offers": "node scripts/test-clientify-offer-sync.js",
+    "test:application-notifications": "node scripts/test-application-notifications.js"
   },
   "dependencies": {
     "cookie-parser": "^1.4.7",
