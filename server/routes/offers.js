@@ -14,6 +14,7 @@ import {
   applyToOffer,
   OffersApiError,
 } from '../lib/offersApi.js'
+import { sendOfferApplicationNotification } from '../lib/applicationNotifications.js'
 
 export const publicOffersRouter = Router()
 export const adminOffersRouter = Router()
@@ -332,6 +333,25 @@ publicOffersRouter.post('/offers/:id/apply', requireAuth, async (req, res) => {
     const application = central?.application
       ? { ...central.application, offer: adaptCentralOffer(central.application.offer) }
       : null
+    if (application) {
+      const offer = application.offer || {}
+      try {
+        await sendOfferApplicationNotification({
+          id: application.id || `${req.user.id}-${Date.now()}`,
+          participant_first_name: req.user.firstName,
+          participant_last_name: req.user.lastName,
+          participant_email: req.user.email,
+          title: offer.title,
+          employer: offer.employer,
+          sponsor: offer.sponsor,
+          travel_start_date: application.travelStartDate || req.body.travelStartDate,
+          travel_end_date: application.travelEndDate || req.body.travelEndDate,
+          applied_at: application.appliedAt || new Date().toISOString(),
+        })
+      } catch (notificationError) {
+        console.error('[bbbsc-server] Aplicación guardada; no se pudo enviar la notificación:', notificationError instanceof Error ? notificationError.message : notificationError)
+      }
+    }
     return res.status(201).json({ ok: true, application })
   } catch (error) {
     console.error('[bbbsc-server] Error aplicando a oferta vía API central:', error)
