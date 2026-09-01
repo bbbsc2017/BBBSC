@@ -27,15 +27,30 @@ export default function ProgramaCulturalDetalle() {
         path={`/${program.slug}`}
         image={program.image.src}
         imageAlt={program.image.alt}
-        jsonLd={{
-          '@context': 'https://schema.org',
-          '@type': 'Course',
-          name: program.title,
-          description: program.description,
-          image: program.image.src,
-          url: `${SITE.url}/${program.slug}`,
-          provider: { '@type': 'Organization', name: SITE.name, sameAs: SITE.url },
-        }}
+        jsonLd={[
+          {
+            '@context': 'https://schema.org',
+            '@type': 'Course',
+            name: program.title,
+            description: program.description,
+            image: program.image.src,
+            url: `${SITE.url}/${program.slug}`,
+            provider: { '@type': 'Organization', name: SITE.name, sameAs: SITE.url },
+          },
+          // FAQPage habilita que Google muestre estas preguntas como "rich
+          // snippet" desplegable directo en el resultado de búsqueda — el
+          // mecanismo real (no el meta "keywords", que Google ignora desde
+          // 2009) para que las preguntas frecuentes ayuden a posicionar.
+          {
+            '@context': 'https://schema.org',
+            '@type': 'FAQPage',
+            mainEntity: program.faq.map((item) => ({
+              '@type': 'Question',
+              name: item.question,
+              acceptedAnswer: { '@type': 'Answer', text: item.answer },
+            })),
+          },
+        ]}
       />
       <ProgramHero
         eyebrow="Programa cultural"
