@@ -1,5 +1,32 @@
+import type { ComponentType } from 'react'
 import { Navigate, useParams } from 'react-router-dom'
-import { Briefcase, Clock, ListChecks, ShieldCheck, Sparkles } from 'lucide-react'
+import {
+  Armchair,
+  Briefcase,
+  CalendarClock,
+  Candy,
+  Clock,
+  Luggage,
+  PackageCheck,
+  ShieldCheck,
+  Sparkles,
+  UtensilsCrossed,
+  Warehouse,
+  Wrench,
+} from 'lucide-react'
+
+// Ícono por tipo de puesto en "Ejemplos actuales de trabajo". Briefcase es el
+// respaldo genérico si algún programa agrega un puesto que no está en esta lista.
+const jobExampleIcons: Record<string, ComponentType<{ className?: string }>> = {
+  'Fábrica de chocolate': Candy,
+  'Almacén y logística': Warehouse,
+  'Producción y montaje': Wrench,
+  'Manipulación de equipaje': Luggage,
+  'Sala business': Armchair,
+  'Catering aeroportuario': UtensilsCrossed,
+  'Embalaje y control de calidad': PackageCheck,
+  'Otras tareas estacionales': CalendarClock,
+}
 import { Seo } from '../components/Seo'
 import { ProgramHero } from '../components/ui/ProgramHero'
 import { Container } from '../components/ui/Container'
@@ -85,40 +112,26 @@ export default function ProgramaCulturalDetalle() {
               <InfoList items={program.benefits} />
             </div>
 
-            {program.selectionProcess && (
-              <div>
-                <h3 className="mb-1.5 flex items-center gap-2 text-base font-bold text-white">
-                  <ListChecks className="size-5 text-brand" />
-                  Cómo funciona la selección
-                </h3>
-                {program.selectionNote && <p className="mb-4 text-sm text-white/55">{program.selectionNote}</p>}
-                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                  {program.selectionProcess.map((step, index) => (
-                    <div key={step.title} className="rounded-2xl border border-white/10 bg-ink-800 p-5">
-                      <span className="mb-3 flex size-9 items-center justify-center rounded-xl bg-brand/15 text-sm font-black text-brand">
-                        {String(index + 1).padStart(2, '0')}
-                      </span>
-                      <h4 className="text-sm font-bold text-white">{step.title}</h4>
-                      <p className="mt-1.5 text-sm leading-relaxed text-white/60">{step.description}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
             {program.jobExamples && (
               <div>
                 <h3 className="mb-4 flex items-center gap-2 text-base font-bold text-white">
                   <Briefcase className="size-5 text-brand" />
                   Ejemplos actuales de trabajo
                 </h3>
-                <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-                  {program.jobExamples.map((job, index) => (
-                    <div key={job} className="rounded-xl border border-white/10 bg-ink-800 px-3 py-3.5 text-center">
-                      <span className="block text-xs font-black text-brand">{String(index + 1).padStart(2, '0')}</span>
-                      <span className="mt-1 block text-xs font-semibold leading-tight text-white/80">{job}</span>
-                    </div>
-                  ))}
+                <div className="flex flex-wrap gap-3">
+                  {program.jobExamples.map((job, index) => {
+                    const Icon = jobExampleIcons[job] ?? Briefcase
+                    return (
+                      <span
+                        key={job}
+                        style={{ animationDelay: `${index * 70}ms` }}
+                        className="group flex animate-[fadeInUp_0.5s_ease-out_both] items-center gap-2 rounded-full border border-white/10 bg-ink-800 px-4 py-2.5 text-xs font-semibold text-white/80 transition-all duration-300 hover:-translate-y-1 hover:border-brand/40 hover:bg-brand/10 hover:text-white"
+                      >
+                        <Icon className="size-4 text-brand transition-transform duration-300 group-hover:scale-110" />
+                        {job}
+                      </span>
+                    )
+                  })}
                 </div>
                 {program.jobExamplesNote && <p className="mt-4 text-xs leading-relaxed text-white/50">{program.jobExamplesNote}</p>}
               </div>

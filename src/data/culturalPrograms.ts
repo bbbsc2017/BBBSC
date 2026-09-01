@@ -18,10 +18,7 @@ export interface CulturalProgram {
     items: string[]
     note?: string
   }
-  /** Pasos del proceso de selección, opcional — solo algunos programas lo detallan. */
-  selectionProcess?: { title: string; description: string }[]
-  selectionNote?: string
-  /** Ejemplos de puestos de trabajo, opcional — se muestran en una grilla numerada. */
+  /** Ejemplos de puestos de trabajo, opcional — se muestran como etiquetas con ícono. */
   jobExamples?: string[]
   jobExamplesNote?: string
 }
@@ -453,13 +450,6 @@ export const culturalPrograms: CulturalProgram[] = [
       src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/GER_Rothenburg_ob_der_Tauber%2C_Marktplatz_001.jpg/1280px-GER_Rothenburg_ob_der_Tauber%2C_Marktplatz_001.jpg',
       alt: 'Casas de colores en la plaza del mercado de Rothenburg ob der Tauber, Alemania',
     },
-    selectionNote: 'Puedes indicar preferencias, pero no se garantiza un puesto o lugar concreto.',
-    selectionProcess: [
-      { title: 'Preferencias', description: 'Indica los sectores y lugares que prefieres. La flexibilidad aumenta tus posibilidades.' },
-      { title: 'Bolsa de candidatos', description: 'Tu perfil se presenta a empresas adecuadas de nuestra red de empleadores.' },
-      { title: 'Selección empresarial', description: 'La empresa elige perfiles según la demanda, la disponibilidad y la idoneidad.' },
-      { title: 'Amigos', description: 'Marca a tus amigos en la solicitud. Intentamos asignarlos y alojarlos juntos cuando es posible.' },
-    ],
     jobExamplesNote: 'La asignación exacta depende de la empresa, el lugar, la demanda y tu perfil. Los proyectos de aeropuerto suelen exigir inglés B1 como mínimo; en general se recomienda A2. El alemán nunca es obligatorio. Muchas tareas requieren estar de pie, caminar, levantar peso o repetir movimientos.',
     jobExamples: [
       'Fábrica de chocolate',
