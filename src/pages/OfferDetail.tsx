@@ -21,6 +21,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { Seo } from "../components/Seo";
 import { Container } from "../components/ui/Container";
 import { SubmittingOverlay } from "../components/ui/SubmittingOverlay";
+import { LoginModal } from "../components/layout/LoginModal";
 import { OfferCountdown } from "../components/offers/OfferCountdown";
 import { OfferGallery } from "../components/offers/OfferGallery";
 import {
@@ -76,6 +77,7 @@ export default function OfferDetail() {
   const [message, setMessage] = useState("");
   const [pdfOpen, setPdfOpen] = useState(false);
   const [applyOpen, setApplyOpen] = useState(false);
+  const [loginOpen, setLoginOpen] = useState(false);
   const [travelStartDate, setTravelStartDate] = useState("");
   const [travelEndDate, setTravelEndDate] = useState("");
   const [now, setNow] = useState(Date.now());
@@ -113,25 +115,7 @@ export default function OfferDetail() {
     };
   }, [pdfOpen]);
 
-  useEffect(() => {
-    setLoading(true);
-    setError("");
-    fetch(`/api/offers/${encodeURIComponent(slug)}`, { credentials: apiCredentials })
-      .then(async (response) => {
-        const data = await response.json();
-        if (!response.ok || !data.ok) throw new Error(data.error);
-        return data.offer as JobOffer;
-      })
-      .then((item) => {
-        setOffer(item);
-        const canonical = offerPath(item);
-        if (pathSlug(item.sponsor) !== sponsor || pathSlug(item.employer) !== employer)
-          navigate(canonical, { replace: true });
-      })
-      .catch((err) =>
-        setError(err instanceof Error ? err.message : "Oferta no encontrada."),
-      )
-      .finally(() => setLoading(false));
+  function loadSession() {
     fetch(apiUrl("/api/auth/me"), { credentials: apiCredentials })
       .then(async (response) => {
         if (!response.ok) return null;
@@ -152,6 +136,28 @@ export default function OfferDetail() {
           .catch(() => undefined);
       })
       .catch(() => undefined);
+  }
+
+  useEffect(() => {
+    setLoading(true);
+    setError("");
+    fetch(`/api/offers/${encodeURIComponent(slug)}`, { credentials: apiCredentials })
+      .then(async (response) => {
+        const data = await response.json();
+        if (!response.ok || !data.ok) throw new Error(data.error);
+        return data.offer as JobOffer;
+      })
+      .then((item) => {
+        setOffer(item);
+        const canonical = offerPath(item);
+        if (pathSlug(item.sponsor) !== sponsor || pathSlug(item.employer) !== employer)
+          navigate(canonical, { replace: true });
+      })
+      .catch((err) =>
+        setError(err instanceof Error ? err.message : "Oferta no encontrada."),
+      )
+      .finally(() => setLoading(false));
+    loadSession();
   }, [navigate, employer, slug, sponsor]);
 
   async function apply(event: FormEvent) {
@@ -367,12 +373,13 @@ export default function OfferDetail() {
                     </p>
                   </div>
                 ) : !session ? (
-                  <a
-                    href="/perfil"
-                    className="block rounded-full bg-brand px-6 py-4 text-center text-sm font-black text-white transition hover:-translate-y-0.5"
+                  <button
+                    type="button"
+                    onClick={() => setLoginOpen(true)}
+                    className="w-full rounded-full bg-brand px-6 py-4 text-center text-sm font-black text-white transition hover:-translate-y-0.5"
                   >
-                    Ir al portal para aplicar
-                  </a>
+                    Necesitas iniciar sesión para aplicar
+                  </button>
                 ) : !isParticipant ? (
                   <button
                     disabled
@@ -636,6 +643,12 @@ export default function OfferDetail() {
             </button>
           </form>
         </div>
+      )}
+      {loginOpen && (
+        <LoginModal
+          onClose={() => setLoginOpen(false)}
+          onSuccess={() => { setLoginOpen(false); loadSession(); }}
+        />
       )}
       <SubmittingOverlay show={applying} label="Registrando tu aplicación…" />
       {pdfOpen && offer.hasPdf && (
