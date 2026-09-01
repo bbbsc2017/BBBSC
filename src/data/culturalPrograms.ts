@@ -55,19 +55,23 @@ export const culturalPrograms: CulturalProgram[] = [
     faq: [
       {
         question: '¿Necesito hablar inglés avanzado?',
-        answer: 'No. Basta con un nivel B1 conversacional; lo perfeccionarás en el día a día trabajando en Estados Unidos.',
+        answer:
+          'No. Para postularte a Work and Travel USA basta con un nivel B1 conversacional, es decir, poder mantener una conversación básica y entender instrucciones de trabajo en inglés. No se exige un nivel avanzado ni certificación internacional. La mayoría de participantes llega con ese nivel intermedio y lo perfecciona de forma natural durante los cerca de 4 meses de inmersión total, ya que conviven y trabajan a diario en inglés junto a compañeros y clientes estadounidenses.',
       },
       {
         question: '¿Puedo aplicar si estudio una carrera virtual?',
-        answer: 'No, el programa exige ser estudiante universitario de tiempo completo en modalidad presencial y jornada diurna.',
+        answer:
+          'No, el programa exige que seas estudiante universitario activo, de tiempo completo, en modalidad presencial y jornada diurna al momento de aplicar y de viajar. Este requisito no lo define BBB Student Center sino el propio programa de intercambio cultural J-1 en Estados Unidos, que busca participantes vinculados de forma activa a una institución académica presencial. Si estudias en modalidad virtual o a distancia, no podrás participar en esta versión del programa, pero puedes escribirnos para revisar si aplicas a otro de nuestros programas culturales o académicos.',
       },
       {
         question: '¿Cuánto dura la experiencia en total?',
-        answer: 'Cerca de 4 meses de trabajo (15 de mayo a 30 de agosto) más 30 días adicionales para viajar como turista.',
+        answer:
+          'La experiencia completa dura aproximadamente 4 meses de trabajo, entre el 15 de mayo y el 30 de agosto, más 30 días adicionales que puedes usar libremente para viajar por Estados Unidos como turista antes de regresar. En total son cerca de 5 meses fuera del país. El proceso de postulación, documentación y trámite de la visa J-1 comienza varios meses antes de esa fecha de viaje, por lo que te recomendamos iniciar tu proceso con BBB Student Center con la mayor anticipación posible para asegurar cupo y buenas opciones laborales.',
       },
       {
         question: '¿Qué tipo de empleos voy a conseguir?',
-        answer: 'Tienes acceso a más de 100 opciones laborales en hoteles, restaurantes, parques acuáticos y de diversiones, y resorts.',
+        answer:
+          'Tienes acceso a más de 100 opciones laborales en hoteles, restaurantes, parques acuáticos, parques de diversiones y resorts en distintos estados de Estados Unidos. Entre los puestos más comunes están salvavidas (lifeguard), recepción y atención al cliente, mesero/a, operador de atracciones, housekeeping y soporte en cocina o alimentos y bebidas. El puesto específico depende de tu perfil, tu nivel de inglés y la disponibilidad del empleador al momento de tu proceso; tu asesor BBBSC te acompaña para postularte a las ofertas que mejor se ajusten a ti.',
       },
     ],
     pricing: {
