@@ -33,7 +33,7 @@ function formatAppliedAt(value) {
 // Node aparte sin acceso a él, así que se replica el HTML en lugar de
 // importarlo, para que el aviso interno se vea igual a esa plantilla.
 function dataRow(label, value, isLast) {
-  return `<tr><td style="padding:17px 20px;${isLast ? '' : 'border-bottom:1px solid #323232;'}"><div style="margin-bottom:5px;color:#818181;font-size:9px;font-weight:700;letter-spacing:1.3px;text-transform:uppercase;">${escapeHtml(label)}</div><div style="color:#fff;font-size:15px;font-weight:700;word-break:break-word;">${escapeHtml(value)}</div></td></tr>`
+  return `<tr><td style="padding:17px 20px;${isLast ? '' : 'border-bottom:1px solid rgba(255,255,255,.08);'}"><div style="margin-bottom:5px;color:#818181;font-size:9px;font-weight:700;letter-spacing:1.3px;text-transform:uppercase;">${escapeHtml(label)}</div><div style="color:#fff;font-size:15px;font-weight:700;word-break:break-word;">${escapeHtml(value)}</div></td></tr>`
 }
 
 export function buildOfferApplicationEmail(record, config = notificationConfig()) {
@@ -62,6 +62,7 @@ export function buildOfferApplicationEmail(record, config = notificationConfig()
   const html = `<!DOCTYPE html>
 <html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Nueva postulación — BBB Student Center</title>
 <style>
+  .bbb-glass{ -webkit-backdrop-filter:blur(14px); backdrop-filter:blur(14px); }
   @media only screen and (max-width:600px){
     .bbb-outer{padding:20px 0!important}
     .bbb-card{border-radius:16px!important}
@@ -78,26 +79,26 @@ export function buildOfferApplicationEmail(record, config = notificationConfig()
   }
 </style>
 </head>
-<body style="margin:0;padding:0;background:#eeeeee;font-family:Arial,Helvetica,sans-serif;color:#ffffff;">
-  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#eeeeee;padding:40px 15px;" class="bbb-outer"><tr><td align="center">
-    <table role="presentation" width="680" cellpadding="0" cellspacing="0" style="width:100%;max-width:680px;background:#1c1c1c;border:1px solid #4b3b13;border-radius:26px;overflow:hidden;box-shadow:0 24px 65px rgba(0,0,0,.20);" class="bbb-card">
-      <tr><td style="padding:23px 34px;background:#171717;border-bottom:1px solid #332d20;" class="bbb-header"><table role="presentation" width="100%"><tr>
+<body style="margin:0;padding:0;background-color:#161511;font-family:Arial,Helvetica,sans-serif;color:#ffffff;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" bgcolor="#161511" style="background-color:#161511;background-image:radial-gradient(circle at 12% 8%,rgba(249,176,0,.16),transparent 42%),radial-gradient(circle at 88% 0%,rgba(249,176,0,.10),transparent 38%),linear-gradient(rgba(249,176,0,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(249,176,0,.05) 1px,transparent 1px),linear-gradient(160deg,#1c1c1c 0%,#241f16 100%);background-size:auto,auto,48px 48px,48px 48px,auto;padding:40px 15px;" class="bbb-outer"><tr><td align="center">
+    <table role="presentation" width="680" cellpadding="0" cellspacing="0" bgcolor="#1c1c1c" style="width:100%;max-width:680px;background-color:#1c1c1c;background-image:linear-gradient(160deg,#1c1c1c 0%,#2b2419 100%);border:1px solid #4b3b13;border-radius:26px;overflow:hidden;box-shadow:0 24px 65px rgba(0,0,0,.35);" class="bbb-card">
+      <tr><td style="padding:23px 34px;background-color:#171717;background-image:linear-gradient(90deg,#171717 0%,#20180f 100%);border-bottom:1px solid #332d20;" class="bbb-header"><table role="presentation" width="100%"><tr>
         <td><img src="https://bbbsc.com/assets/bbb-mark-white-BpLAJUN7.svg" width="105" alt="BBB Student Center" style="display:block;border:0;max-width:105px;height:auto;" class="bbb-header-logo"></td>
         <td align="right" style="color:#f9b000;font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;">Aviso interno</td>
       </tr></table></td></tr>
-      <tr><td style="padding:22px 22px 10px;" class="bbb-panel-wrap"><table role="presentation" width="100%" style="border:1px solid #50401a;border-radius:20px;background:#222222;"><tr><td style="padding:44px 38px;" class="bbb-panel">
-        <span style="display:inline-block;padding:7px 12px;border:1px solid #68551c;border-radius:50px;background:#302a1b;color:#f9b000;font-size:9px;font-weight:700;letter-spacing:1.1px;text-transform:uppercase;">&#9679;&nbsp; Nueva postulación</span>
+      <tr><td style="padding:22px 22px 10px;" class="bbb-panel-wrap"><table role="presentation" width="100%" style="border:1px solid #50401a;border-radius:20px;background-color:#242424;background-image:linear-gradient(155deg,rgba(255,255,255,.05) 0%,rgba(249,176,0,.06) 100%);" class="bbb-glass"><tr><td style="padding:44px 38px;" class="bbb-panel">
+        <span style="display:inline-block;padding:7px 12px;border:1px solid #68551c;border-radius:50px;background-color:#302a1b;background-image:linear-gradient(135deg,#302a1b,#3c3018);color:#f9b000;font-size:9px;font-weight:700;letter-spacing:1.1px;text-transform:uppercase;">&#9679;&nbsp; Nueva postulación</span>
         <h1 style="margin:19px 0 15px;color:#fff;font-size:36px;line-height:1.14;letter-spacing:-1px;" class="bbb-title">${escapeHtml(name)}<br>se acaba de postular.</h1>
         <p style="max-width:520px;margin:0;color:#bdbdbd;font-size:14px;line-height:1.8;" class="bbb-intro">Se registró una nueva postulación desde el portal BBBSC. A continuación encontrarás los datos del participante y de la oferta.</p>
-        <div style="width:50px;height:3px;margin-top:24px;border-radius:50px;background:#f9b000;">&nbsp;</div>
+        <div style="width:50px;height:3px;margin-top:24px;border-radius:50px;background-color:#f9b000;background-image:linear-gradient(135deg,#f9b000 0%,#ffcf4d 100%);">&nbsp;</div>
       </td></tr></table></td></tr>
       <tr><td style="padding:22px 40px 42px;" class="bbb-body">
         <h2 style="margin:0 0 15px;color:#fff;font-size:20px;line-height:27px;">Detalles de la postulación</h2>
-        <table role="presentation" width="100%" style="background:#202020;border:1px solid #54431b;border-radius:16px;">${rows}</table>
-        <div style="padding:24px 0 4px;text-align:center;"><a href="https://admin.bbbsc.com/contenido/ofertas" target="_blank" style="display:inline-block;padding:15px 27px;border-radius:10px;background:#f9b000;color:#161616;text-decoration:none;font-size:12px;font-weight:700;letter-spacing:.4px;" class="bbb-cta">VER EN ADMIN &nbsp; &#8594;</a></div>
+        <table role="presentation" width="100%" style="background-color:#232323;background-image:linear-gradient(155deg,rgba(255,255,255,.04) 0%,rgba(249,176,0,.05) 100%);border:1px solid #3a3324;border-radius:18px;" class="bbb-glass">${rows}</table>
+        <div style="padding:24px 0 4px;text-align:center;"><a href="https://admin.bbbsc.com/contenido/ofertas" target="_blank" style="display:inline-block;padding:15px 27px;border-radius:14px;background-color:#f9b000;background-image:linear-gradient(135deg,#f9b000 0%,#ffcf4d 100%);color:#161616;text-decoration:none;font-size:12px;font-weight:700;letter-spacing:.4px;" class="bbb-cta">VER EN ADMIN &nbsp; &#8594;</a></div>
         <div style="padding:16px 10px 4px;text-align:center;"><p style="margin:0;color:#888;font-size:11px;line-height:1.7;">Este es un aviso automático. La postulación ya quedó guardada en el sistema.</p></div>
       </td></tr>
-      <tr><td align="center" style="padding:25px 30px;background:#111;border-top:1px solid #332d20;" class="bbb-footer"><img src="https://bbbsc.com/assets/bbb-mark-white-BpLAJUN7.svg" width="82" alt="BBB Student Center" style="display:block;border:0;margin:0 auto;"><p style="margin:12px 0 0;color:#686868;font-size:9px;line-height:1.8;">Expertos en Work &amp; Travel y experiencias internacionales.<br><a href="https://bbbsc.com" style="color:#f9b000;text-decoration:none;">www.bbbsc.com</a>&nbsp; &middot; &nbsp;<a href="mailto:info@bbbsc.com" style="color:#f9b000;text-decoration:none;">info@bbbsc.com</a></p></td></tr>
+      <tr><td align="center" style="padding:25px 30px;background-color:#111111;background-image:linear-gradient(90deg,#111111 0%,#1a1208 100%);border-top:1px solid #332d20;" class="bbb-footer"><img src="https://bbbsc.com/assets/bbb-mark-white-BpLAJUN7.svg" width="82" alt="BBB Student Center" style="display:block;border:0;margin:0 auto;"><p style="margin:12px 0 0;color:#686868;font-size:9px;line-height:1.8;">Expertos en Work &amp; Travel y experiencias internacionales.<br><a href="https://bbbsc.com" style="color:#f9b000;text-decoration:none;">www.bbbsc.com</a>&nbsp; &middot; &nbsp;<a href="mailto:info@bbbsc.com" style="color:#f9b000;text-decoration:none;">info@bbbsc.com</a></p></td></tr>
     </table>
   </td></tr></table>
 </body></html>`
