@@ -335,22 +335,24 @@ publicOffersRouter.post('/offers/:id/apply', requireAuth, async (req, res) => {
       : null
     if (application) {
       const offer = application.offer || {}
-      try {
-        await sendOfferApplicationNotification({
-          id: application.id || `${req.user.id}-${Date.now()}`,
-          participant_first_name: req.user.firstName,
-          participant_last_name: req.user.lastName,
-          participant_email: req.user.email,
-          title: offer.title,
-          employer: offer.employer,
-          sponsor: offer.sponsor,
-          travel_start_date: application.travelStartDate || req.body.travelStartDate,
-          travel_end_date: application.travelEndDate || req.body.travelEndDate,
-          applied_at: application.appliedAt || new Date().toISOString(),
-        })
-      } catch (notificationError) {
+      // No se espera (await) el envío del aviso interno: es un correo para
+      // el equipo, no algo que el participante deba esperar para ver su
+      // postulación confirmada. Se dispara en segundo plano y solo se
+      // loguea si falla; la respuesta ya salió con la aplicación guardada.
+      sendOfferApplicationNotification({
+        id: application.id || `${req.user.id}-${Date.now()}`,
+        participant_first_name: req.user.firstName,
+        participant_last_name: req.user.lastName,
+        participant_email: req.user.email,
+        title: offer.title,
+        employer: offer.employer,
+        sponsor: offer.sponsor,
+        travel_start_date: application.travelStartDate || req.body.travelStartDate,
+        travel_end_date: application.travelEndDate || req.body.travelEndDate,
+        applied_at: application.appliedAt || new Date().toISOString(),
+      }).catch((notificationError) => {
         console.error('[bbbsc-server] Aplicación guardada; no se pudo enviar la notificación:', notificationError instanceof Error ? notificationError.message : notificationError)
-      }
+      })
     }
     return res.status(201).json({ ok: true, application })
   } catch (error) {
