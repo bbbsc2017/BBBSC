@@ -8,7 +8,7 @@ import { ContactCard } from '../components/ui/ContactCard'
 import { ProgramCard } from '../components/ui/ProgramCard'
 import { ProgramFAQ } from '../components/ui/ProgramFAQ'
 import { culturalPrograms, getCulturalProgram } from '../data/culturalPrograms'
-import { SITE } from '../lib/site'
+import { SITE, breadcrumbJsonLd } from '../lib/site'
 
 export default function ProgramaCulturalDetalle() {
   const { slug = '' } = useParams()
@@ -18,6 +18,11 @@ export default function ProgramaCulturalDetalle() {
 
   const related = culturalPrograms.filter((item) => item.slug !== program.slug).slice(0, 3)
   const registrationTo = program.slug === 'work-and-travel-usa' || program.slug === 'asia' ? `/${program.slug}/inscripcion` : undefined
+  const breadcrumbs = [
+    { label: 'Inicio', to: '/' },
+    { label: 'Programas culturales' },
+    { label: program.title },
+  ]
 
   return (
     <>
@@ -28,6 +33,7 @@ export default function ProgramaCulturalDetalle() {
         image={program.image.src}
         imageAlt={program.image.alt}
         jsonLd={[
+          breadcrumbJsonLd(breadcrumbs, `/${program.slug}`),
           {
             '@context': 'https://schema.org',
             '@type': 'Course',
@@ -60,11 +66,7 @@ export default function ProgramaCulturalDetalle() {
         image={program.image}
         requirements={program.requirements}
         primaryTo={registrationTo}
-        breadcrumbs={[
-          { label: 'Inicio', to: '/' },
-          { label: 'Programas culturales' },
-          { label: program.title },
-        ]}
+        breadcrumbs={breadcrumbs}
       />
 
       <section id="contenido-programa" className="scroll-mt-24 py-16 sm:py-20">

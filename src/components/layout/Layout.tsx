@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Outlet } from 'react-router-dom'
 import { Navbar } from './Navbar'
 import { Footer } from './Footer'
@@ -8,12 +8,32 @@ import { TrackingScripts } from './TrackingScripts'
 import { CookieConsent, type TrackingConsent } from './CookieConsent'
 import { RouteFocus } from './RouteFocus'
 
+declare global {
+  interface Window {
+    gtag?: (...args: unknown[]) => void
+  }
+}
+
 export function Layout() {
   const [trackingConsent, setTrackingConsent] = useState<TrackingConsent>(() => {
     const value = localStorage.getItem('bbbsc_tracking_consent')
     return value === 'accepted' || value === 'rejected' ? value : null
   })
   const trackingEnabled = trackingConsent === 'accepted'
+
+  // GTM ya carga en index.html con Consent Mode en "denied" por defecto (para
+  // que las etiquetas del contenedor lo respeten desde la primera carga). Acá
+  // solo se avisa el cambio cuando la persona elige — o ya eligió antes, en
+  // cuyo caso esto corre una vez al montar y confirma su elección guardada.
+  useEffect(() => {
+    if (trackingConsent === null) return
+    window.gtag?.('consent', 'update', {
+      ad_storage: trackingEnabled ? 'granted' : 'denied',
+      analytics_storage: trackingEnabled ? 'granted' : 'denied',
+      ad_user_data: trackingEnabled ? 'granted' : 'denied',
+      ad_personalization: trackingEnabled ? 'granted' : 'denied',
+    })
+  }, [trackingConsent, trackingEnabled])
 
   return (
     <div className="relative isolate flex min-h-screen flex-col">

@@ -9,7 +9,7 @@ import { colombiaDepartments, getDepartment } from '../data/colombiaLocations'
 import {
   academicLevels, academicShifts, careers, englishLevels, passportStatusOptions, previousSwtCount, semesters, yesNo,
 } from '../data/careers'
-import { whatsappLink } from '../lib/site'
+import { breadcrumbJsonLd, whatsappLink } from '../lib/site'
 import { getCulturalProgram } from '../data/culturalPrograms'
 import { executeRecaptcha } from '../lib/recaptcha'
 import { apiCredentials, apiUrl } from '../lib/apiBase'
@@ -125,6 +125,7 @@ export function ProgramRegistration({ program = 'usa' }: { program?: Registratio
   const isAsia = program === 'asia'
   const culturalProgram = getCulturalProgram(registration.slug)!
   const pagePath = `/${registration.slug}/inscripcion`
+  const inscripcionBreadcrumbs = [{ label: 'Inicio', to: '/' }, { label: 'Programas culturales' }, { label: registration.title, to: `/${registration.slug}` }, { label: 'Inscripción' }]
   const formRef = useRef<HTMLFormElement>(null)
   const [form, setForm] = useState<FormState>(initialForm)
   const [step, setStep] = useState(0)
@@ -245,7 +246,7 @@ export function ProgramRegistration({ program = 'usa' }: { program?: Registratio
 
   return (
     <>
-      <Seo title={`Inscripción a ${registration.title}`} description={`Inicia tu inscripción a ${registration.title} con BBB Student Center. Completa tu perfil y recibe acompañamiento durante el proceso.`} path={pagePath} image={culturalProgram.image.src} imageAlt={culturalProgram.image.alt} />
+      <Seo title={`Inscripción a ${registration.title}`} description={`Inicia tu inscripción a ${registration.title} con BBB Student Center. Completa tu perfil y recibe acompañamiento durante el proceso.`} path={pagePath} image={culturalProgram.image.src} imageAlt={culturalProgram.image.alt} jsonLd={breadcrumbJsonLd(inscripcionBreadcrumbs, pagePath)} />
       <ShowcaseHero
         eyebrow={`Inscripción ${registration.title}`}
         title={`Inscríbete a ${registration.title}`}
@@ -253,7 +254,7 @@ export function ProgramRegistration({ program = 'usa' }: { program?: Registratio
         image={culturalProgram.image}
         primaryAction={{ label: 'Empezar inscripción', to: '#formulario-inscripcion' }}
         secondaryAction={{ label: 'Volver al programa', to: `/${registration.slug}` }}
-        breadcrumbs={[{ label: 'Inicio', to: '/' }, { label: 'Programas culturales' }, { label: registration.title, to: `/${registration.slug}` }, { label: 'Inscripción' }]}
+        breadcrumbs={inscripcionBreadcrumbs}
       />
 
       <section id="formulario-inscripcion" className="scroll-mt-24 py-6 sm:py-8">

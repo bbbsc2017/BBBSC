@@ -4,7 +4,7 @@ import { Seo } from '../components/Seo'
 import { DetailHero } from '../components/ui/DetailHero'
 import { Container } from '../components/ui/Container'
 import { CTAButton } from '../components/ui/CTAButton'
-import { SITE, whatsappLink } from '../lib/site'
+import { SITE, breadcrumbJsonLd, whatsappLink } from '../lib/site'
 
 export default function Contacto() {
   const [name, setName] = useState('')
@@ -19,18 +19,33 @@ export default function Contacto() {
     .filter(Boolean)
     .join(' ')
 
+  const breadcrumbs = [{ label: 'Inicio', to: '/' }, { label: 'Contáctanos' }]
+
   return (
     <>
       <Seo
         title="Contáctanos"
         description="Escríbenos por WhatsApp o visítanos en nuestras oficinas de Ibagué y Bucaramanga. Asesoría personalizada para tu próximo intercambio internacional."
         path="/contacto"
+        jsonLd={[
+          breadcrumbJsonLd(breadcrumbs, '/contacto'),
+          ...SITE.offices.map((office) => ({
+            '@context': 'https://schema.org',
+            '@type': 'LocalBusiness',
+            name: office.googleBusinessName,
+            image: `${SITE.url}/favicon.svg`,
+            telephone: office.phoneDisplay ?? office.phone,
+            email: SITE.email,
+            url: `${SITE.url}/contacto`,
+            address: { '@type': 'PostalAddress', streetAddress: office.address, addressLocality: office.city, addressCountry: 'CO' },
+          })),
+        ]}
       />
       <DetailHero
         eyebrow="Contáctanos"
         title="Hablemos de tu próxima experiencia"
         description="Cuéntanos qué programa te interesa y un asesor te contacta para resolver tus dudas."
-        breadcrumbs={[{ label: 'Inicio', to: '/' }, { label: 'Contáctanos' }]}
+        breadcrumbs={breadcrumbs}
       />
 
       <section className="py-16 sm:py-20">

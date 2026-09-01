@@ -9,6 +9,7 @@ import { ShowcaseHero } from '../components/ui/ShowcaseHero'
 import { getCulturalProgram } from '../data/culturalPrograms'
 import { isOfferAvailable, OFFER_PROGRAMS, programLabel, type JobOffer, type OfferProgram } from '../lib/offers'
 import { apiCredentials, apiUrl } from '../lib/apiBase'
+import { SITE, breadcrumbJsonLd } from '../lib/site'
 
 const offerProgramImages: Record<OfferProgram, string> = {
   'work-travel-usa': 'work-and-travel-usa',
@@ -104,9 +105,31 @@ export default function OffersIndex() {
   function clear() { setParams({}, { replace: true }) }
   const title = activeProgram ? `Ofertas de ${programLabel(activeProgram)}` : 'Ofertas de trabajo en el exterior'
   const selectedProgramLabel = activeProgram ? programLabel(activeProgram) : 'Todos los programas'
+  const offersPath = activeProgram ? `/ofertas/${activeProgram}` : '/ofertas'
+  // El breadcrumb visual no linkea "Ofertas" cuando es intermedio (mismo
+  // comportamiento de siempre); el de datos estructurados sí necesita esa URL,
+  // por eso son dos arrays distintos en vez de reusar uno para ambos usos.
+  const breadcrumbs = [{ label: 'Inicio', to: '/' }, { label: 'Ofertas' }, ...(activeProgram ? [{ label: selectedProgramLabel }] : [])]
+  const breadcrumbsJsonLdItems = [{ label: 'Inicio', to: '/' }, { label: 'Ofertas', to: '/ofertas' }, ...(activeProgram ? [{ label: selectedProgramLabel }] : [])]
 
   return <>
-    <Seo title={title} description={activeProgram ? `Compara empleadores, salarios, ciudades y vacantes de ${selectedProgramLabel} con BBB Student Center.` : 'Explora ofertas de trabajo en el exterior para Work and Travel, prácticas y programas de intercambio con BBB Student Center.'} path={activeProgram ? `/ofertas/${activeProgram}` : '/ofertas'} image={offerHeroImage(activeProgram).src} imageAlt={offerHeroImage(activeProgram).alt} />
+    <Seo
+      title={title}
+      description={activeProgram ? `Compara empleadores, salarios, ciudades y vacantes de ${selectedProgramLabel} con BBB Student Center.` : 'Explora ofertas de trabajo en el exterior para Work and Travel, prácticas y programas de intercambio con BBB Student Center.'}
+      path={offersPath}
+      image={offerHeroImage(activeProgram).src}
+      imageAlt={offerHeroImage(activeProgram).alt}
+      jsonLd={[
+        breadcrumbJsonLd(breadcrumbsJsonLdItems, offersPath),
+        {
+          '@context': 'https://schema.org',
+          '@type': 'CollectionPage',
+          name: title,
+          url: `${SITE.url}${offersPath}`,
+          isPartOf: { '@type': 'WebSite', name: SITE.name, url: SITE.url },
+        },
+      ]}
+    />
     <ShowcaseHero
       eyebrow="Oportunidades BBBSC"
       title={activeProgram ? `Ofertas de ${selectedProgramLabel}` : 'Tu próximo trabajo puede estar al otro lado del mundo'}
@@ -114,7 +137,7 @@ export default function OffersIndex() {
       image={offerHeroImage(activeProgram)}
       imageKey={activeProgram || 'todos-los-programas'}
       primaryAction={{ label: 'Explorar ofertas', to: '#listado-ofertas' }}
-      breadcrumbs={[{ label: 'Inicio', to: '/' }, { label: 'Ofertas' }, ...(activeProgram ? [{ label: selectedProgramLabel }] : [])]}
+      breadcrumbs={breadcrumbs}
     />
     <section id="listado-ofertas" className="bbb-grid-bg scroll-mt-24 py-6 sm:py-8"><Container>
       <nav className="mb-8 flex gap-2 overflow-x-auto pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" aria-label="Filtrar por programa"><Link to="/ofertas" className={`shrink-0 rounded-full border px-4 py-2.5 text-xs font-extrabold transition ${!activeProgram ? 'border-brand bg-brand text-white' : 'border-white/10 text-white/55 hover:border-brand/40 hover:text-white'}`}>Todos los programas</Link>{OFFER_PROGRAMS.map((item) => <Link key={item.slug} to={`/ofertas/${item.slug}`} className={`shrink-0 rounded-full border px-4 py-2.5 text-xs font-extrabold transition ${activeProgram === item.slug ? 'border-brand bg-brand text-white' : 'border-white/10 text-white/55 hover:border-brand/40 hover:text-white'}`}>{item.label}</Link>)}</nav>

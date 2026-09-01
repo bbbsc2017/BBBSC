@@ -3,7 +3,9 @@ import { Seo } from '../components/Seo'
 import { DetailHero } from '../components/ui/DetailHero'
 import { Container } from '../components/ui/Container'
 import { CTAButton } from '../components/ui/CTAButton'
-import { whatsappLink } from '../lib/site'
+import { breadcrumbJsonLd, whatsappLink } from '../lib/site'
+
+const breadcrumbs = [{ label: 'Inicio', to: '/' }, { label: 'Trabaja con Nosotros' }]
 
 const reasons = [
   {
@@ -30,12 +32,13 @@ export default function TrabajaConNosotros() {
         title="Trabaja con Nosotros"
         description="Únete al equipo de BBB Student Center y ayuda a más estudiantes colombianos a vivir experiencias internacionales."
         path="/trabaja-con-nosotros"
+        jsonLd={breadcrumbJsonLd(breadcrumbs, '/trabaja-con-nosotros')}
       />
       <DetailHero
         eyebrow="Bolsa de empleo"
         title="Trabaja con nosotros"
         description="Buscamos personas apasionadas por conectar a los colombianos con el mundo."
-        breadcrumbs={[{ label: 'Inicio', to: '/' }, { label: 'Trabaja con Nosotros' }]}
+        breadcrumbs={breadcrumbs}
       />
       <section className="py-16 sm:py-20">
         <Container className="flex flex-col items-center gap-12">

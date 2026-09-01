@@ -11,6 +11,44 @@
   # Conserva la dirección histórica y transfiere su posicionamiento a la página actual.
   RewriteRule ^work-and-travel/?$ /work-and-travel-usa [R=301,L,NE]
 
+  # Direcciones antiguas de /programas-culturales, /programas-academicos y
+  # /universidades: React Router ya las resuelve del lado del cliente
+  # (Navigate replace, ver App.tsx), pero eso responde 200 antes del salto —
+  # un crawler que no ejecute JS ve contenido duplicado en dos URLs en vez de
+  # un redirect real. Reglas exactas (sin comodín) para no arriesgar rutas
+  # que no existen; deben ir antes de la regla de "archivo físico" de abajo.
+  RewriteRule ^programas-culturales/work-and-travel-usa/inscripcion/?$ /work-and-travel-usa/inscripcion [R=301,L,NE]
+  RewriteRule ^programas-culturales/asia/inscripcion/?$ /asia/inscripcion [R=301,L,NE]
+  RewriteRule ^programas-culturales/work-and-travel-usa/?$ /work-and-travel-usa [R=301,L,NE]
+  RewriteRule ^programas-culturales/trainee-and-internship/?$ /trainee-and-internship [R=301,L,NE]
+  RewriteRule ^programas-culturales/espana-ti/?$ /espana-ti [R=301,L,NE]
+  RewriteRule ^programas-culturales/asia/?$ /asia [R=301,L,NE]
+  RewriteRule ^programas-culturales/teacher-exchange/?$ /teacher-exchange [R=301,L,NE]
+  RewriteRule ^programas-culturales/teacher-assistant/?$ /teacher-assistant [R=301,L,NE]
+  RewriteRule ^programas-culturales/aupair/?$ /aupair [R=301,L,NE]
+  RewriteRule ^programas-culturales/portugal/?$ /portugal [R=301,L,NE]
+  RewriteRule ^programas-academicos/alemania/?$ /alemania [R=301,L,NE]
+  RewriteRule ^programas-academicos/polonia/?$ /polonia [R=301,L,NE]
+  RewriteRule ^programas-academicos/canada/?$ /canada [R=301,L,NE]
+  RewriteRule ^programas-academicos/corea-del-sur/?$ /corea-del-sur [R=301,L,NE]
+  RewriteRule ^programas-academicos/usa/?$ /usa [R=301,L,NE]
+  RewriteRule ^programas-academicos/australia/?$ /australia [R=301,L,NE]
+  RewriteRule ^universidades/?$ /programas-academicos [R=301,L,NE]
+
+  # Slugs de universidad: van directo al país (misma tabla que
+  # universityDestinations en App.tsx), sin pasar por el salto intermedio
+  # que hace hoy LegacyDetailRedirect.
+  RewriteRule ^universidades/gisma-university/?$ /alemania [R=301,L,NE]
+  RewriteRule ^universidades/vistula/?$ /polonia [R=301,L,NE]
+  RewriteRule ^universidades/cape-breton/?$ /canada [R=301,L,NE]
+  RewriteRule ^universidades/woosong-university/?$ /corea-del-sur [R=301,L,NE]
+  RewriteRule ^universidades/troy-university/?$ /usa [R=301,L,NE]
+  RewriteRule ^gisma-university/?$ /alemania [R=301,L,NE]
+  RewriteRule ^vistula/?$ /polonia [R=301,L,NE]
+  RewriteRule ^cape-breton/?$ /canada [R=301,L,NE]
+  RewriteRule ^woosong-university/?$ /corea-del-sur [R=301,L,NE]
+  RewriteRule ^troy-university/?$ /usa [R=301,L,NE]
+
   # Las integraciones del servidor y sus archivos no pertenecen al router de React.
   RewriteCond %{REQUEST_URI} ^/(api|uploads|perfil)(/|$) [NC]
   RewriteRule ^ - [L]

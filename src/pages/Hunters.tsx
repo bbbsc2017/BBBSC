@@ -20,6 +20,9 @@ import huntersHero from '../assets/hunters/hunters-hero.png'
 import { apiCredentials, apiUrl } from '../lib/apiBase'
 import { executeRecaptcha } from '../lib/recaptcha'
 import bbbIcon from '../assets/logo/bbb-icon.svg'
+import { breadcrumbJsonLd } from '../lib/site'
+
+const huntersBreadcrumbs = [{ label: 'Inicio', to: '/' }, { label: 'Iniciativa Hunters' }]
 
 const TERMS_URL = 'https://na4.documents.adobe.com/public/esignWidget?wid=CBFCIBAA3AAABLblqZhAdzzu06-KYCx1yEDivO0vlvlLdVJn47OmLpgUdOk8nZ3lcybsd2ne-IePHwUqlsiA*&hosted=false'
 const emptyForm = { firstName: '', lastName: '', email: '', phone: '', cedula: '', applicantType: '', referrerCode: '' }
@@ -243,7 +246,7 @@ export default function Hunters() {
   if (status === 'success') {
     return (
       <div className="relative isolate">
-        <Seo title="Hunters" description="Refiere nuevos participantes a BBB Student Center y gana por cada referido." path="/hunters/" />
+        <Seo title="Hunters" description="Refiere nuevos participantes a BBB Student Center y gana por cada referido." path="/hunters" jsonLd={breadcrumbJsonLd(huntersBreadcrumbs, '/hunters')} />
         <section className="relative min-h-[70vh] overflow-hidden bg-ink-mesh py-24">
           <Container className="flex flex-col items-center gap-5 text-center">
             <span className="flex size-20 items-center justify-center rounded-3xl bg-brand text-white shadow-brand"><CheckCircle2 className="size-10" /></span>
@@ -260,7 +263,7 @@ export default function Hunters() {
 
   return (
     <div className="relative isolate">
-      <Seo title="Iniciativa Hunters" description="Refiere a familiares y amigos, gana dinero e impulsa tu próxima experiencia con BBB Student Center." path="/hunters/" image={huntersHero} imageAlt="Jóvenes compartiendo oportunidades de la iniciativa Hunters" />
+      <Seo title="Iniciativa Hunters" description="Refiere a familiares y amigos, gana dinero e impulsa tu próxima experiencia con BBB Student Center." path="/hunters" image={huntersHero} imageAlt="Jóvenes compartiendo oportunidades de la iniciativa Hunters" jsonLd={breadcrumbJsonLd(huntersBreadcrumbs, '/hunters')} />
 
       <ProgramHero
         eyebrow="Programa de referidos"
@@ -269,7 +272,7 @@ export default function Hunters() {
         country="BBB Student Center"
         image={{ src: huntersHero, alt: 'Jóvenes compartiendo oportunidades de la iniciativa Hunters' }}
         requirements={['Invita a familiares y amigos', 'Ellos se registran con tu código', 'Gana dinero por cada referido válido']}
-        breadcrumbs={[{ label: 'Inicio', to: '/' }, { label: 'Iniciativa Hunters' }]}
+        breadcrumbs={huntersBreadcrumbs}
         primaryTo="#registro-hunters"
         primaryLabel="Quiero participar"
         secondaryTo="#registro-hunters"
