@@ -12,10 +12,10 @@ const { subject, raw } = buildOfferApplicationEmail({
   travel_start_date: '2027-05-20',
   travel_end_date: '2027-08-20',
   applied_at: '2026-08-28T15:30:00.000Z',
-}, { from: 'accounts@bbbsc.com', recipients: ['danielgonzalez@bbbsc.com', 'accounts@bbbsc.com'] })
+}, { from: 'info@bbbsc.com', recipients: ['danielgonzalez@bbbsc.com', 'accounts@bbbsc.com'] })
 
 assert.equal(subject, 'Nueva postulación: Ana <Prueba> González')
-assert.match(raw, /From: BBB Student Center <accounts@bbbsc\.com>/)
+assert.match(raw, /From: BBB Student Center <info@bbbsc\.com>/)
 assert.match(raw, /To: danielgonzalez@bbbsc\.com, accounts@bbbsc\.com/)
 assert.match(raw, /Oferta: Lifeguard/)
 assert.match(raw, /Empleador: Blue Water Resort/)
