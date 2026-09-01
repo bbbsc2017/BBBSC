@@ -420,15 +420,15 @@ export const culturalPrograms: CulturalProgram[] = [
     slug: 'work-and-travel-alemania',
     title: 'Work and Travel Alemania',
     country: 'Alemania',
-    tagline: 'Trabaja en Alemania durante tus vacaciones semestrales',
+    tagline: 'Gana en euros, vive en Europa y conviértete en protagonista de tu propia historia de intercambio',
     description:
       'Programa de trabajo temporal en Alemania para estudiantes universitarios internacionales durante su receso semestral oficial. Trabajas en empresas aliadas de nuestra red (fábricas, logística, producción, aeropuertos y más), con salario mínimo garantizado, alojamiento compartido organizado y acompañamiento desde tu llegada hasta tu salida.',
     cta: 'Trabaja en Alemania',
     requirements: [
-      'Edad máxima de 34 años al iniciar',
-      'Disponibilidad mínima de 60 días',
-      'Disponibilidad para trabajar por turnos',
-      'Alemán no obligatorio; inglés A2 recomendado',
+      'Edad: mayor de 18 años, máximo 34 años',
+      'Idiomas: alemán no obligatorio; inglés A2 (recomendado)',
+      'Ser estudiante universitario activo',
+      'Duración del programa: 80 a 90 días',
     ],
     benefits: [
       'Salario mínimo garantizado de 15,33 EUR brutos por hora',
@@ -436,7 +436,7 @@ export const culturalPrograms: CulturalProgram[] = [
       'Alojamiento compartido organizado, con servicios básicos incluidos',
       'Acompañamiento en la llegada, el primer día de trabajo y la salida',
     ],
-    duration: 'Mínimo 60 días, idealmente 80-90, durante tus vacaciones semestrales',
+    duration: '80 a 90 días durante tus vacaciones semestrales',
     keyFacts: [
       '15,33 EUR/hora bruto mínimo',
       '30 h garantizadas por semana',
@@ -444,29 +444,34 @@ export const culturalPrograms: CulturalProgram[] = [
       'Alojamiento: 450-600 EUR/mes',
     ],
     image: {
-      src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Cologne-cathedral-aerial.jpg/1280px-Cologne-cathedral-aerial.jpg',
-      alt: 'Catedral de Colonia, uno de los destinos del programa Work and Travel Alemania',
+      src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/GER_Rothenburg_ob_der_Tauber%2C_Marktplatz_001.jpg/1280px-GER_Rothenburg_ob_der_Tauber%2C_Marktplatz_001.jpg',
+      alt: 'Casas de colores en la plaza del mercado de Rothenburg ob der Tauber, Alemania',
     },
     faq: [
       {
-        question: '¿Necesito hablar alemán?',
+        question: '¿Cómo funciona el proceso de selección y quién decide dónde termino trabajando?',
         answer:
-          'No, el alemán nunca es obligatorio. Se recomienda un nivel de inglés A2 para la mayoría de los puestos; los proyectos en aeropuertos suelen exigir mínimo B1. Algunos trabajos de producción no piden ningún idioma en absoluto.',
+          'Primero indicas tus preferencias de sector y de lugar en tu solicitud —cuanto más flexible seas, más opciones se te abren—. Con eso, tu perfil entra a una bolsa de candidatos que se presenta a las empresas aliadas de la red según la demanda que tengan en ese momento. Es la empresa la que finalmente elige qué perfiles necesita, según disponibilidad, idoneidad y la temporada. Por eso puedes indicar preferencias, pero no se garantiza un puesto o una ciudad exactos: la asignación se confirma por escrito antes de tu viaje, y solo esa asignación, tu contrato y la información de alojamiento son vinculantes.',
       },
       {
-        question: '¿Cuánto puedo llegar a ganar?',
+        question: '¿Puedo postularme con amigos y que nos ubiquen en el mismo lugar?',
         answer:
-          'El salario mínimo garantizado es de 15,33 EUR brutos por hora, con al menos 30 horas garantizadas por semana completa (el horario habitual suele ser de 35 a 37,5 horas). Como referencia, en el verano de 2026 el promedio fue de 173 horas trabajadas en un mes natural, con un pico de 220 horas para el estudiante con más horas registradas. Con 173 horas, un ejemplo orientativo deja entre 1.371 y 1.451 EUR disponibles después de impuestos, alojamiento, comida, transporte y SIM — el resultado real varía según tus horas, tu alquiler y tus gastos personales.',
+          'Sí, puedes marcar a tus amigos directamente en tu solicitud. Cuando lo haces, se intenta asignarlos a la misma empresa y alojarlos juntos siempre que sea posible, pero al depender de la demanda real de cada proyecto no es algo que se pueda garantizar al cien por ciento. Lo que sí se respeta siempre que se pueda es separar el alojamiento entre hombres y mujeres. Si viajar con alguien de confianza es importante para ti, coordina la solicitud con esa persona desde el inicio del proceso para maximizar las probabilidades.',
       },
       {
-        question: '¿Cómo funciona el alojamiento?',
+        question: '¿Qué tan exigente es el trabajo y qué tipo de tareas voy a hacer en el día a día?',
         answer:
-          'El alojamiento es compartido y se organiza para ti: el rango más frecuente es de 450 a 550 EUR al mes, con un tope general de 600 EUR. Incluye electricidad, agua, calefacción, internet y ropa de cama. Se descuenta directamente de tu salario, nunca se paga por adelantado, y se intenta alojar juntos a los amigos que se postulan en grupo, separando hombres y mujeres cuando es posible (las habitaciones individuales son poco frecuentes).',
+          'Depende del proyecto que te asignen: hay opciones en fábricas (como producción de chocolate), almacenes y logística, líneas de producción y montaje, manejo de equipaje, salas business, catering de aeropuerto, embalaje y control de calidad, entre otras tareas de temporada. Muchas de estas posiciones exigen estar de pie o caminar durante turnos largos, levantar peso y repetir movimientos, así que conviene llegar con buena condición física. Los proyectos de aeropuerto suelen pedir inglés al menos B1; en el resto, con A2 es suficiente, y algunos trabajos de producción no exigen ningún idioma.',
       },
       {
-        question: '¿Cuándo y cómo me pagan?',
+        question: '¿Cómo es la logística de llegada, el primer día de trabajo y la salida del país?',
         answer:
-          'El periodo de nómina va normalmente del primer al último día de cada mes natural, y el salario se paga el día 15 del mes siguiente. Desde la segunda semana de trabajo puedes solicitar anticipos: al menos 3 son gratuitos, desde 125 EUR y normalmente 150 EUR o más según tu saldo ganado. El impuesto salarial promedio histórico es de aproximadamente 12-15% del salario bruto.',
+          'No debes reservar vuelos hasta que tu empresa y BBBSC hayan confirmado y coordinado tu asignación por completo. La llegada suele programarse un viernes o sábado, y el trabajo empieza normalmente el lunes siguiente; el traslado desde el aeropuerto está incluido y siempre recibes acompañamiento —ya sea presencial o instrucciones detalladas con fotos, video o mapa de ruta— para tu primer trayecto. Una vez llegas, abres una cuenta bancaria en la Unión Europea de forma sencilla en línea. La salida del proyecto suele ser un domingo, y los vuelos de ida y regreso a Alemania corren por tu cuenta.',
+      },
+      {
+        question: '¿Hay beneficios o costos extra que varíen según la empresa a la que me asignen?',
+        answer:
+          'Sí, y por eso solo es vinculante lo que quede confirmado por escrito en tu asignación. Según el proyecto, puede haber recargos por trabajar de noche, domingos o festivos, y algunos ofrecen hasta 25% adicional por horas extra autorizadas. El Deutschland-Ticket de transporte cuesta 63 EUR al mes, aunque varias empresas lo dan con descuento o gratis. Algunos proyectos incluso regalan hasta tres días de alojamiento sin costo al llegar. La ropa de trabajo casi siempre se entrega (a veces con un depósito reembolsable), el seguro médico de viaje es obligatorio durante todo el programa, y las vacaciones que no alcances a usar se pagan al finalizar tu contrato.',
       },
     ],
     pricing: {
