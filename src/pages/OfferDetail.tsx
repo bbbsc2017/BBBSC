@@ -24,6 +24,7 @@ import { SubmittingOverlay } from "../components/ui/SubmittingOverlay";
 import { LoginModal } from "../components/layout/LoginModal";
 import { OfferCountdown } from "../components/offers/OfferCountdown";
 import { OfferGallery } from "../components/offers/OfferGallery";
+import { RelatedOffersCarousel } from "../components/offers/RelatedOffersCarousel";
 import {
   compensationLabel,
   isOfferAvailable,
@@ -69,6 +70,8 @@ export default function OfferDetail() {
   const { sponsor = "", employer = "", slug = "" } = useParams();
   const navigate = useNavigate();
   const [offer, setOffer] = useState<JobOffer | null>(null);
+  const [relatedOffers, setRelatedOffers] = useState<JobOffer[]>([]);
+  const [relatedTitle, setRelatedTitle] = useState("Ofertas relacionadas");
   const [session, setSession] = useState<Session | null>(null);
   const [application, setApplication] = useState<Application | null>(null);
   const [loading, setLoading] = useState(true);
@@ -152,6 +155,32 @@ export default function OfferDetail() {
         const canonical = offerPath(item);
         if (pathSlug(item.sponsor) !== sponsor || pathSlug(item.employer) !== employer)
           navigate(canonical, { replace: true });
+        fetch(apiUrl("/api/offers"), { credentials: apiCredentials })
+          .then((response) => (response.ok ? response.json() : null))
+          .then((data) => {
+            const allOffers = (data?.ok ? (data.offers as JobOffer[]) : []).filter(
+              (candidate) => candidate.id !== item.id,
+            );
+            const sameProgram = allOffers.filter((candidate) => candidate.program === item.program);
+            // Primero solo ofertas relacionadas (mismo programa y mismo tipo)
+            // que además estén disponibles; si ninguna cumple ambas cosas, se
+            // amplía a "similares" (mismo programa, cualquier tipo/estado)
+            // para que el carrusel no quede vacío.
+            const relatedAvailable = sameProgram
+              .filter((candidate) => candidate.offerType === item.offerType)
+              .filter((candidate) => isOfferAvailable(candidate));
+            const chosen = relatedAvailable.length > 0 ? relatedAvailable : sameProgram;
+            const sorted = [...chosen]
+              .sort((a, b) => {
+                const availabilityDiff = Number(isOfferAvailable(b)) - Number(isOfferAvailable(a));
+                if (availabilityDiff !== 0) return availabilityDiff;
+                return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+              })
+              .slice(0, 12);
+            setRelatedTitle(relatedAvailable.length > 0 ? "Ofertas relacionadas" : "Ofertas similares");
+            setRelatedOffers(sorted);
+          })
+          .catch(() => undefined);
       })
       .catch((err) =>
         setError(err instanceof Error ? err.message : "Oferta no encontrada."),
@@ -552,6 +581,7 @@ export default function OfferDetail() {
               </div>
             </aside>
           </section>
+          <RelatedOffersCarousel title={relatedTitle} offers={relatedOffers} />
         </Container>
       </div>
       {applyOpen && (
