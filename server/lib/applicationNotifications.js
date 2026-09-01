@@ -25,16 +25,15 @@ function formatAppliedAt(value) {
   return new Intl.DateTimeFormat('es-CO', { timeZone: 'America/Bogota', dateStyle: 'long', timeStyle: 'short' }).format(date)
 }
 
-const SANS = "'Poppins',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif"
-
-// Misma "tarjeta" de marca que usan los correos reales a participantes
-// (apps/api/src/mail/templates/_base.ts en el repo bbbsc: header negro,
-// barra dorada, tarjeta blanca con eyebrow flanqueado, footer con
-// bbbsc.com/info@bbbsc.com). Este servidor es un proyecto Node aparte sin
-// acceso a esos templates TS, así que se replica el HTML en lugar de
-// importarlo, para que el aviso interno se vea igual que el resto de la marca.
-function infoRow(label, value) {
-  return `<tr><td style="padding:12px 0;border-bottom:1px solid #EFEFF1;"><span style="display:block;font-size:10.5px;font-weight:700;color:#A0A0A6;text-transform:uppercase;letter-spacing:0.09em;margin-bottom:4px;font-family:${SANS};">${escapeHtml(label)}</span><span style="display:block;font-size:15px;font-weight:500;color:#18181B;font-family:${SANS};">${escapeHtml(value)}</span></td></tr>`
+// Misma plantilla visual del correo de bienvenida/invitación que reciben
+// los participantes (apps/api/src/mail/templates/welcome-participant.ts en
+// el repo bbbsc: tarjeta oscura #1c1c1c con borde dorado, logo BBB, badge
+// "eyebrow", título grande y bloque de datos con filas Label/Valor). Ese
+// archivo es TypeScript del repo central y este servidor es un proyecto
+// Node aparte sin acceso a él, así que se replica el HTML en lugar de
+// importarlo, para que el aviso interno se vea igual a esa plantilla.
+function dataRow(label, value, isLast) {
+  return `<tr><td style="padding:17px 20px;${isLast ? '' : 'border-bottom:1px solid #323232;'}"><div style="margin-bottom:5px;color:#818181;font-size:9px;font-weight:700;letter-spacing:1.3px;text-transform:uppercase;">${escapeHtml(label)}</div><div style="color:#fff;font-size:15px;font-weight:700;word-break:break-word;">${escapeHtml(value)}</div></td></tr>`
 }
 
 export function buildOfferApplicationEmail(record, config = notificationConfig()) {
@@ -49,72 +48,59 @@ export function buildOfferApplicationEmail(record, config = notificationConfig()
     record.travel_end_date ? `Regreso previsto: ${cleanHeader(record.travel_end_date)}` : '',
     '', 'Ver en Admin: https://admin.bbbsc.com/contenido/ofertas',
   ].filter(Boolean).join('\n')
-  const rows = [
-    infoRow('Participante', name),
-    infoRow('Correo', record.participant_email),
-    infoRow('Oferta', record.title),
-    infoRow('Empleador', record.employer),
-    infoRow('Sponsor', record.sponsor),
-    infoRow('Fecha y hora (Colombia)', appliedAt),
-    record.travel_start_date ? infoRow('Inicio previsto del viaje', record.travel_start_date) : '',
-    record.travel_end_date ? infoRow('Regreso previsto', record.travel_end_date) : '',
-  ].filter(Boolean).join('')
+  const dataItems = [
+    ['Participante', name],
+    ['Correo', record.participant_email],
+    ['Oferta', record.title],
+    ['Empleador', record.employer],
+    ['Sponsor', record.sponsor],
+    ['Fecha y hora (Colombia)', appliedAt],
+    ...(record.travel_start_date ? [['Inicio previsto del viaje', record.travel_start_date]] : []),
+    ...(record.travel_end_date ? [['Regreso previsto', record.travel_end_date]] : []),
+  ]
+  const rows = dataItems.map(([label, value], index) => dataRow(label, value, index === dataItems.length - 1)).join('')
   const html = `<!DOCTYPE html>
-<html lang="es" xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Nueva postulación a oferta</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Nueva postulación — BBB Student Center</title>
+<style>
+  @media only screen and (max-width:600px){
+    .bbb-outer{padding:20px 0!important}
+    .bbb-card{border-radius:16px!important}
+    .bbb-header{padding:18px 20px!important}
+    .bbb-header-logo{width:84px!important}
+    .bbb-panel-wrap{padding:14px 14px 8px!important}
+    .bbb-panel{padding:30px 22px!important}
+    .bbb-title{font-size:26px!important;line-height:1.22!important}
+    .bbb-intro{font-size:13px!important}
+    .bbb-body{padding:20px 22px 32px!important}
+    .bbb-data-cell{padding:14px 16px!important}
+    .bbb-cta{display:block!important;text-align:center!important}
+    .bbb-footer{padding:22px 20px!important}
+  }
+</style>
 </head>
-<body style="margin:0;padding:0;background-color:#EDEDEF;">
-<span style="display:none;max-height:0;max-width:0;opacity:0;overflow:hidden;font-size:1px;">${escapeHtml(name)} se postuló a "${escapeHtml(record.title)}" el ${appliedAt}.</span>
-<table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="background-color:#EDEDEF;border-collapse:collapse;">
-<tbody><tr><td align="center" style="padding:48px 16px 56px;">
-<table role="presentation" cellpadding="0" cellspacing="0" width="600" style="max-width:600px;width:100%;border-collapse:collapse;box-shadow:0 1px 3px rgba(0,0,0,0.06);">
-<tbody>
-<tr><td style="background-color:#18181B;border-radius:10px 10px 0 0;padding:28px 40px;">
-<table role="presentation" cellpadding="0" cellspacing="0" style="border-collapse:collapse;"><tbody><tr>
-<td style="width:34px;height:34px;background-color:#FFFFFF;border-radius:8px;text-align:center;vertical-align:middle;">
-<img src="https://admin.bbbsc.com/icons/icon-192.png" width="34" height="34" alt="BBBSC" style="display:block;width:34px;height:34px;border-radius:8px;">
-</td>
-<td style="padding-left:11px;vertical-align:middle;"><span style="display:block;font-size:14px;font-weight:700;color:#FFFFFF;letter-spacing:1.5px;line-height:1;font-family:${SANS};">BBBSC</span></td>
-</tr></tbody></table>
-</td></tr>
-<tr><td style="background-color:#F9B000;height:3px;line-height:3px;font-size:0;">&nbsp;</td></tr>
-<tr><td style="background-color:#FFFFFF;padding:52px 48px 44px;border-collapse:collapse;">
-<table role="presentation" cellpadding="0" cellspacing="0" align="center" style="margin:0 auto 18px;border-collapse:collapse;"><tbody><tr>
-<td style="width:28px;padding-right:12px;"><div style="height:1px;background-color:#E9C158;font-size:0;line-height:0;">&nbsp;</div></td>
-<td style="white-space:nowrap;"><span style="font-size:11px;font-weight:700;color:#B8860B;text-transform:uppercase;letter-spacing:2.4px;font-family:${SANS};">NUEVA POSTULACIÓN</span></td>
-<td style="width:28px;padding-left:12px;"><div style="height:1px;background-color:#E9C158;font-size:0;line-height:0;">&nbsp;</div></td>
-</tr></tbody></table>
-<h1 style="margin:0;font-size:26px;font-weight:600;color:#18181B;text-align:center;line-height:1.35;letter-spacing:-0.3px;font-family:${SANS};">Nueva postulación a oferta</h1>
-<p style="margin:6px 0 30px;font-size:15px;color:#64748B;text-align:center;font-family:${SANS};">${escapeHtml(name)} acaba de postularse desde el portal BBBSC</p>
-<table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;margin-bottom:30px;"><tbody><tr><td style="height:1px;background-color:#EAEAEC;font-size:0;line-height:0;">&nbsp;</td></tr></tbody></table>
-<table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-top:1px solid #EFEFF1;margin:4px 0 8px;border-collapse:collapse;"><tbody>${rows}</tbody></table>
-<table role="presentation" cellpadding="0" cellspacing="0" style="margin:36px auto 0;"><tbody><tr>
-<td align="center" style="border-radius:4px;background-color:#18181B;">
-<a href="https://admin.bbbsc.com/contenido/ofertas" style="display:inline-block;padding:16px 42px;font-size:13px;font-weight:600;color:#FFFFFF;text-decoration:none;border-radius:4px;font-family:${SANS};letter-spacing:1.2px;text-transform:uppercase;">Ver en Admin</a>
-</td></tr></tbody></table>
-</td></tr>
-<tr><td style="background-color:#FAFAFA;border-radius:0 0 10px 10px;padding:22px 40px;border-top:1px solid #EAEAEC;">
-<table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;"><tbody><tr><td align="center">
-<p style="margin:0 0 6px;font-size:12px;color:#A0A0A6;font-family:${SANS};">
-<a href="https://bbbsc.com" style="color:#A0A0A6;text-decoration:none;">bbbsc.com</a>
-&nbsp;&middot;&nbsp;
-<a href="mailto:info@bbbsc.com" style="color:#A0A0A6;text-decoration:none;">info@bbbsc.com</a>
-</p>
-<p style="margin:0;font-size:11px;color:#C4C4C9;font-family:${SANS};">&copy; ${new Date().getFullYear()} BBBSC &mdash; Todos los derechos reservados.</p>
-</td></tr></tbody></table>
-</td></tr>
-</tbody>
-</table>
-</td></tr></tbody>
-</table>
-</body>
-</html>`
+<body style="margin:0;padding:0;background:#eeeeee;font-family:Arial,Helvetica,sans-serif;color:#ffffff;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#eeeeee;padding:40px 15px;" class="bbb-outer"><tr><td align="center">
+    <table role="presentation" width="680" cellpadding="0" cellspacing="0" style="width:100%;max-width:680px;background:#1c1c1c;border:1px solid #4b3b13;border-radius:26px;overflow:hidden;box-shadow:0 24px 65px rgba(0,0,0,.20);" class="bbb-card">
+      <tr><td style="padding:23px 34px;background:#171717;border-bottom:1px solid #332d20;" class="bbb-header"><table role="presentation" width="100%"><tr>
+        <td><img src="https://bbbsc.com/assets/bbb-mark-white-BpLAJUN7.svg" width="105" alt="BBB Student Center" style="display:block;border:0;max-width:105px;height:auto;" class="bbb-header-logo"></td>
+        <td align="right" style="color:#f9b000;font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;">Aviso interno</td>
+      </tr></table></td></tr>
+      <tr><td style="padding:22px 22px 10px;" class="bbb-panel-wrap"><table role="presentation" width="100%" style="border:1px solid #50401a;border-radius:20px;background:#222222;"><tr><td style="padding:44px 38px;" class="bbb-panel">
+        <span style="display:inline-block;padding:7px 12px;border:1px solid #68551c;border-radius:50px;background:#302a1b;color:#f9b000;font-size:9px;font-weight:700;letter-spacing:1.1px;text-transform:uppercase;">&#9679;&nbsp; Nueva postulación</span>
+        <h1 style="margin:19px 0 15px;color:#fff;font-size:36px;line-height:1.14;letter-spacing:-1px;" class="bbb-title">${escapeHtml(name)}<br>se acaba de postular.</h1>
+        <p style="max-width:520px;margin:0;color:#bdbdbd;font-size:14px;line-height:1.8;" class="bbb-intro">Se registró una nueva postulación desde el portal BBBSC. A continuación encontrarás los datos del participante y de la oferta.</p>
+        <div style="width:50px;height:3px;margin-top:24px;border-radius:50px;background:#f9b000;">&nbsp;</div>
+      </td></tr></table></td></tr>
+      <tr><td style="padding:22px 40px 42px;" class="bbb-body">
+        <h2 style="margin:0 0 15px;color:#fff;font-size:20px;line-height:27px;">Detalles de la postulación</h2>
+        <table role="presentation" width="100%" style="background:#202020;border:1px solid #54431b;border-radius:16px;">${rows}</table>
+        <div style="padding:24px 0 4px;text-align:center;"><a href="https://admin.bbbsc.com/contenido/ofertas" target="_blank" style="display:inline-block;padding:15px 27px;border-radius:10px;background:#f9b000;color:#161616;text-decoration:none;font-size:12px;font-weight:700;letter-spacing:.4px;" class="bbb-cta">VER EN ADMIN &nbsp; &#8594;</a></div>
+        <div style="padding:16px 10px 4px;text-align:center;"><p style="margin:0;color:#888;font-size:11px;line-height:1.7;">Este es un aviso automático. La postulación ya quedó guardada en el sistema.</p></div>
+      </td></tr>
+      <tr><td align="center" style="padding:25px 30px;background:#111;border-top:1px solid #332d20;" class="bbb-footer"><img src="https://bbbsc.com/assets/bbb-mark-white-BpLAJUN7.svg" width="82" alt="BBB Student Center" style="display:block;border:0;margin:0 auto;"><p style="margin:12px 0 0;color:#686868;font-size:9px;line-height:1.8;">Expertos en Work &amp; Travel y experiencias internacionales.<br><a href="https://bbbsc.com" style="color:#f9b000;text-decoration:none;">www.bbbsc.com</a>&nbsp; &middot; &nbsp;<a href="mailto:info@bbbsc.com" style="color:#f9b000;text-decoration:none;">info@bbbsc.com</a></p></td></tr>
+    </table>
+  </td></tr></table>
+</body></html>`
   const boundary = `bbbsc-${Date.now()}-${Math.random().toString(16).slice(2)}`
   const messageId = `<bbbsc-application-${cleanHeader(record.id)}-${Date.now()}@${config.from.split('@')[1] || 'bbbsc.com'}>`
   const headers = [`From: BBB Student Center <${config.from}>`, `To: ${config.recipients.join(', ')}`, `Subject: ${subject}`, `Date: ${new Date().toUTCString()}`, `Message-ID: ${messageId}`, 'MIME-Version: 1.0', `Content-Type: multipart/alternative; boundary="${boundary}"`]
