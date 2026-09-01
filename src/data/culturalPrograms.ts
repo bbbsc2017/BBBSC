@@ -416,6 +416,69 @@ export const culturalPrograms: CulturalProgram[] = [
       note: 'Tu asesor confirmará los valores y condiciones vigentes para tu perfil.',
     },
   },
+  {
+    slug: 'work-and-travel-alemania',
+    title: 'Work and Travel Alemania',
+    country: 'Alemania',
+    tagline: 'Trabaja en Alemania durante tus vacaciones semestrales',
+    description:
+      'Programa de trabajo temporal en Alemania para estudiantes universitarios internacionales durante su receso semestral oficial. Trabajas en empresas aliadas de nuestra red (fábricas, logística, producción, aeropuertos y más), con salario mínimo garantizado, alojamiento compartido organizado y acompañamiento desde tu llegada hasta tu salida.',
+    cta: 'Trabaja en Alemania',
+    requirements: [
+      'Edad máxima de 34 años al iniciar el empleo (se permite cumplir 35 durante el programa)',
+      'Disponibilidad mínima de 60 días; se prefiere una estancia de 80 a 90 días',
+      'Disponibilidad para trabajar por turnos',
+      'El alemán nunca es obligatorio; se recomienda inglés A2, y B1 como mínimo para proyectos de aeropuerto',
+    ],
+    benefits: [
+      'Salario mínimo garantizado de 15,33 EUR brutos por hora',
+      'Mínimo 30 horas garantizadas por semana completa',
+      'Alojamiento compartido organizado, con servicios básicos incluidos',
+      'Acompañamiento en la llegada, el primer día de trabajo y la salida',
+    ],
+    duration: 'Mínimo 60 días durante las vacaciones semestrales oficiales; se prefiere una estancia de 80 a 90 días',
+    keyFacts: [
+      '15,33 EUR/hora bruto (mínimo desde el 1 de septiembre de 2026)',
+      '30 h garantizadas por semana completa',
+      'Promedio de 173 h trabajadas en verano 2026, hasta 220 h en el mes pico',
+      'Alojamiento desde 450 hasta 600 EUR al mes, descontado del salario',
+    ],
+    image: {
+      src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Cologne-cathedral-aerial.jpg/1280px-Cologne-cathedral-aerial.jpg',
+      alt: 'Catedral de Colonia, uno de los destinos del programa Work and Travel Alemania',
+    },
+    faq: [
+      {
+        question: '¿Necesito hablar alemán?',
+        answer:
+          'No, el alemán nunca es obligatorio. Se recomienda un nivel de inglés A2 para la mayoría de los puestos; los proyectos en aeropuertos suelen exigir mínimo B1. Algunos trabajos de producción no piden ningún idioma en absoluto.',
+      },
+      {
+        question: '¿Cuánto puedo llegar a ganar?',
+        answer:
+          'El salario mínimo garantizado es de 15,33 EUR brutos por hora, con al menos 30 horas garantizadas por semana completa (el horario habitual suele ser de 35 a 37,5 horas). Como referencia, en el verano de 2026 el promedio fue de 173 horas trabajadas en un mes natural, con un pico de 220 horas para el estudiante con más horas registradas. Con 173 horas, un ejemplo orientativo deja entre 1.371 y 1.451 EUR disponibles después de impuestos, alojamiento, comida, transporte y SIM — el resultado real varía según tus horas, tu alquiler y tus gastos personales.',
+      },
+      {
+        question: '¿Cómo funciona el alojamiento?',
+        answer:
+          'El alojamiento es compartido y se organiza para ti: el rango más frecuente es de 450 a 550 EUR al mes, con un tope general de 600 EUR. Incluye electricidad, agua, calefacción, internet y ropa de cama. Se descuenta directamente de tu salario, nunca se paga por adelantado, y se intenta alojar juntos a los amigos que se postulan en grupo, separando hombres y mujeres cuando es posible (las habitaciones individuales son poco frecuentes).',
+      },
+      {
+        question: '¿Cuándo y cómo me pagan?',
+        answer:
+          'El periodo de nómina va normalmente del primer al último día de cada mes natural, y el salario se paga el día 15 del mes siguiente. Desde la segunda semana de trabajo puedes solicitar anticipos: al menos 3 son gratuitos, desde 125 EUR y normalmente 150 EUR o más según tu saldo ganado. El impuesto salarial promedio histórico es de aproximadamente 12-15% del salario bruto.',
+      },
+    ],
+    pricing: {
+      badge: 'Costos referenciales',
+      headline: 'Inversión en Work and Travel Alemania',
+      items: [
+        'Inscripción: $250.000 COP',
+        'El resto del proceso (vuelos, seguro de viaje, cuenta bancaria) lo asumes tú directamente en Alemania',
+      ],
+      note: 'Tu asesor confirmará los valores y condiciones vigentes para tu perfil.',
+    },
+  },
 ]
 
 export function getCulturalProgram(slug: string) {

@@ -6,7 +6,7 @@ export const sitemapRouter = Router()
 const SITE_URL = 'https://bbbsc.com'
 const staticPaths = [
   '/', '/work-and-travel-usa', '/trainee-and-internship', '/espana-ti', '/asia', '/teacher-exchange', '/teacher-assistant', '/aupair',
-  '/portugal', '/work-and-travel-usa/inscripcion', '/asia/inscripcion', '/programas-academicos', '/alemania', '/polonia', '/canada',
+  '/portugal', '/work-and-travel-alemania', '/work-and-travel-usa/inscripcion', '/asia/inscripcion', '/programas-academicos', '/alemania', '/polonia', '/canada',
   '/corea-del-sur', '/usa', '/australia', '/contacto', '/trabaja-con-nosotros', '/hunters', '/terminos-y-condiciones', '/blog', '/ofertas',
   '/ofertas/work-travel-usa', '/ofertas/work-travel-asia', '/ofertas/trainee-internship', '/ofertas/teacher-assistant', '/ofertas/teacher-exchange',
 ]
