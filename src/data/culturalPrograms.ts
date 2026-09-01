@@ -425,10 +425,10 @@ export const culturalPrograms: CulturalProgram[] = [
       'Programa de trabajo temporal en Alemania para estudiantes universitarios internacionales durante su receso semestral oficial. Trabajas en empresas aliadas de nuestra red (fábricas, logística, producción, aeropuertos y más), con salario mínimo garantizado, alojamiento compartido organizado y acompañamiento desde tu llegada hasta tu salida.',
     cta: 'Trabaja en Alemania',
     requirements: [
-      'Edad máxima de 34 años al iniciar el empleo (se permite cumplir 35 durante el programa)',
-      'Disponibilidad mínima de 60 días; se prefiere una estancia de 80 a 90 días',
+      'Edad máxima de 34 años al iniciar',
+      'Disponibilidad mínima de 60 días',
       'Disponibilidad para trabajar por turnos',
-      'El alemán nunca es obligatorio; se recomienda inglés A2, y B1 como mínimo para proyectos de aeropuerto',
+      'Alemán no obligatorio; inglés A2 recomendado',
     ],
     benefits: [
       'Salario mínimo garantizado de 15,33 EUR brutos por hora',
@@ -436,12 +436,12 @@ export const culturalPrograms: CulturalProgram[] = [
       'Alojamiento compartido organizado, con servicios básicos incluidos',
       'Acompañamiento en la llegada, el primer día de trabajo y la salida',
     ],
-    duration: 'Mínimo 60 días durante las vacaciones semestrales oficiales; se prefiere una estancia de 80 a 90 días',
+    duration: 'Mínimo 60 días, idealmente 80-90, durante tus vacaciones semestrales',
     keyFacts: [
-      '15,33 EUR/hora bruto (mínimo desde el 1 de septiembre de 2026)',
-      '30 h garantizadas por semana completa',
-      'Promedio de 173 h trabajadas en verano 2026, hasta 220 h en el mes pico',
-      'Alojamiento desde 450 hasta 600 EUR al mes, descontado del salario',
+      '15,33 EUR/hora bruto mínimo',
+      '30 h garantizadas por semana',
+      'Promedio de 173 h/mes en verano 2026',
+      'Alojamiento: 450-600 EUR/mes',
     ],
     image: {
       src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Cologne-cathedral-aerial.jpg/1280px-Cologne-cathedral-aerial.jpg',
@@ -474,7 +474,6 @@ export const culturalPrograms: CulturalProgram[] = [
       headline: 'Inversión en Work and Travel Alemania',
       items: [
         'Inscripción: $250.000 COP',
-        'El resto del proceso (vuelos, seguro de viaje, cuenta bancaria) lo asumes tú directamente en Alemania',
       ],
       note: 'Tu asesor confirmará los valores y condiciones vigentes para tu perfil.',
     },
