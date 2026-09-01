@@ -18,6 +18,12 @@ export interface CulturalProgram {
     items: string[]
     note?: string
   }
+  /** Pasos del proceso de selección, opcional — solo algunos programas lo detallan. */
+  selectionProcess?: { title: string; description: string }[]
+  selectionNote?: string
+  /** Ejemplos de puestos de trabajo, opcional — se muestran en una grilla numerada. */
+  jobExamples?: string[]
+  jobExamplesNote?: string
 }
 
 export const culturalPrograms: CulturalProgram[] = [
@@ -420,15 +426,15 @@ export const culturalPrograms: CulturalProgram[] = [
     slug: 'work-and-travel-alemania',
     title: 'Work and Travel Alemania',
     country: 'Alemania',
-    tagline: 'Trabaja en Alemania durante tus vacaciones semestrales',
+    tagline: 'Gana en euros, vive en Europa y conviértete en protagonista de tu propia historia de intercambio',
     description:
       'Programa de trabajo temporal en Alemania para estudiantes universitarios internacionales durante su receso semestral oficial. Trabajas en empresas aliadas de nuestra red (fábricas, logística, producción, aeropuertos y más), con salario mínimo garantizado, alojamiento compartido organizado y acompañamiento desde tu llegada hasta tu salida.',
     cta: 'Trabaja en Alemania',
     requirements: [
-      'Edad máxima de 34 años al iniciar',
-      'Disponibilidad mínima de 60 días',
-      'Disponibilidad para trabajar por turnos',
-      'Alemán no obligatorio; inglés A2 recomendado',
+      'Edad: mayor de 18 años, máximo 34 años',
+      'Idiomas: alemán no obligatorio; inglés A2 (recomendado)',
+      'Ser estudiante universitario activo',
+      'Duración del programa: 80 a 90 días',
     ],
     benefits: [
       'Salario mínimo garantizado de 15,33 EUR brutos por hora',
@@ -436,7 +442,7 @@ export const culturalPrograms: CulturalProgram[] = [
       'Alojamiento compartido organizado, con servicios básicos incluidos',
       'Acompañamiento en la llegada, el primer día de trabajo y la salida',
     ],
-    duration: 'Mínimo 60 días, idealmente 80-90, durante tus vacaciones semestrales',
+    duration: '80 a 90 días durante tus vacaciones semestrales',
     keyFacts: [
       '15,33 EUR/hora bruto mínimo',
       '30 h garantizadas por semana',
@@ -444,29 +450,52 @@ export const culturalPrograms: CulturalProgram[] = [
       'Alojamiento: 450-600 EUR/mes',
     ],
     image: {
-      src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Cologne-cathedral-aerial.jpg/1280px-Cologne-cathedral-aerial.jpg',
-      alt: 'Catedral de Colonia, uno de los destinos del programa Work and Travel Alemania',
+      src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/GER_Rothenburg_ob_der_Tauber%2C_Marktplatz_001.jpg/1280px-GER_Rothenburg_ob_der_Tauber%2C_Marktplatz_001.jpg',
+      alt: 'Casas de colores en la plaza del mercado de Rothenburg ob der Tauber, Alemania',
     },
+    selectionNote: 'Puedes indicar preferencias, pero no se garantiza un puesto o lugar concreto.',
+    selectionProcess: [
+      { title: 'Preferencias', description: 'Indica los sectores y lugares que prefieres. La flexibilidad aumenta tus posibilidades.' },
+      { title: 'Bolsa de candidatos', description: 'Tu perfil se presenta a empresas adecuadas de nuestra red de empleadores.' },
+      { title: 'Selección empresarial', description: 'La empresa elige perfiles según la demanda, la disponibilidad y la idoneidad.' },
+      { title: 'Amigos', description: 'Marca a tus amigos en la solicitud. Intentamos asignarlos y alojarlos juntos cuando es posible.' },
+    ],
+    jobExamplesNote: 'La asignación exacta depende de la empresa, el lugar, la demanda y tu perfil. Los proyectos de aeropuerto suelen exigir inglés B1 como mínimo; en general se recomienda A2. El alemán nunca es obligatorio. Muchas tareas requieren estar de pie, caminar, levantar peso o repetir movimientos.',
+    jobExamples: [
+      'Fábrica de chocolate',
+      'Almacén y logística',
+      'Producción y montaje',
+      'Manipulación de equipaje',
+      'Sala business',
+      'Catering aeroportuario',
+      'Embalaje y control de calidad',
+      'Otras tareas estacionales',
+    ],
     faq: [
       {
-        question: '¿Necesito hablar alemán?',
+        question: '¿Cuánto dinero puedo tener disponible al final, con un ejemplo real?',
         answer:
-          'No, el alemán nunca es obligatorio. Se recomienda un nivel de inglés A2 para la mayoría de los puestos; los proyectos en aeropuertos suelen exigir mínimo B1. Algunos trabajos de producción no piden ningún idioma en absoluto.',
+          'Con el promedio de 173 horas trabajadas en el verano de 2026 (173 × 15,33 EUR), el salario bruto queda en 2.652,09 EUR. A eso se le resta el impuesto salarial estimado (12-15%, entre 318 y 398 EUR) y el alojamiento supuesto (550 EUR), lo que deja entre 1.704 y 1.784 EUR después de impuestos y alojamiento. Restando un estimado de gastos personales —comida (250 EUR), Deutschland-Ticket (63 EUR) y SIM (20 EUR), en total 333 EUR—, el importe que te puede quedar disponible ronda entre 1.371 y 1.451 EUR. Es un ejemplo orientativo: tus horas, tu alquiler real y tus decisiones personales cambian el resultado.',
       },
       {
-        question: '¿Cuánto puedo llegar a ganar?',
+        question: '¿Cuándo recibo mi salario y puedo pedir un adelanto si lo necesito antes?',
         answer:
-          'El salario mínimo garantizado es de 15,33 EUR brutos por hora, con al menos 30 horas garantizadas por semana completa (el horario habitual suele ser de 35 a 37,5 horas). Como referencia, en el verano de 2026 el promedio fue de 173 horas trabajadas en un mes natural, con un pico de 220 horas para el estudiante con más horas registradas. Con 173 horas, un ejemplo orientativo deja entre 1.371 y 1.451 EUR disponibles después de impuestos, alojamiento, comida, transporte y SIM — el resultado real varía según tus horas, tu alquiler y tus gastos personales.',
+          'Las horas se calculan normalmente del primer al último día de cada mes natural, y el salario se paga el día 15 del mes siguiente —no se garantiza un pago anterior a esa fecha—. Si necesitas dinero antes, desde tu segunda semana de trabajo puedes solicitar anticipos: al menos 3 son gratuitos, normalmente desde 125 EUR (habitualmente 150 EUR o más según tu saldo ya ganado); algunas empresas cobran 15 EUR por anticipos adicionales. Los anticipos se descuentan de tu nómina cuando hay saldo suficiente.',
       },
       {
-        question: '¿Cómo funciona el alojamiento?',
+        question: '¿Puedo trabajar más horas de las garantizadas si rindo bien?',
         answer:
-          'El alojamiento es compartido y se organiza para ti: el rango más frecuente es de 450 a 550 EUR al mes, con un tope general de 600 EUR. Incluye electricidad, agua, calefacción, internet y ropa de cama. Se descuenta directamente de tu salario, nunca se paga por adelantado, y se intenta alojar juntos a los amigos que se postulan en grupo, separando hombres y mujeres cuando es posible (las habitaciones individuales son poco frecuentes).',
+          'Sí, aunque nunca es algo garantizado. Todas las empresas usan cuentas de tiempo para registrar tus horas, y las pausas no se pagan. Si hay demanda, turnos disponibles y muestras un buen rendimiento, es posible que te asignen más horas de las 30 mínimas garantizadas —el horario habitual ya suele ser de 35 a 37,5 horas semanales—. Como referencia, en el verano de 2026 el promedio mensual fue de 173 horas, con un pico de 220 horas para el estudiante con más horas registradas en un mes natural completo.',
       },
       {
-        question: '¿Cuándo y cómo me pagan?',
+        question: '¿Cómo es la logística de llegada, el primer día de trabajo y la salida del país?',
         answer:
-          'El periodo de nómina va normalmente del primer al último día de cada mes natural, y el salario se paga el día 15 del mes siguiente. Desde la segunda semana de trabajo puedes solicitar anticipos: al menos 3 son gratuitos, desde 125 EUR y normalmente 150 EUR o más según tu saldo ganado. El impuesto salarial promedio histórico es de aproximadamente 12-15% del salario bruto.',
+          'No debes reservar vuelos hasta que tu empresa y BBBSC hayan confirmado y coordinado tu asignación por completo. La llegada suele programarse un viernes o sábado, y el trabajo empieza normalmente el lunes siguiente; el traslado desde el aeropuerto está incluido y siempre recibes acompañamiento —ya sea presencial o instrucciones detalladas con fotos, video o mapa de ruta— para tu primer trayecto. Una vez llegas, abres una cuenta bancaria en la Unión Europea de forma sencilla en línea. La salida del proyecto suele ser un domingo, y los vuelos de ida y regreso a Alemania corren por tu cuenta.',
+      },
+      {
+        question: '¿Hay beneficios o costos extra que varíen según la empresa a la que me asignen?',
+        answer:
+          'Sí, y por eso solo es vinculante lo que quede confirmado por escrito en tu asignación. Según el proyecto, puede haber recargos por trabajar de noche, domingos o festivos, y algunos ofrecen hasta 25% adicional por horas extra autorizadas. El Deutschland-Ticket de transporte cuesta 63 EUR al mes, aunque varias empresas lo dan con descuento o gratis. Algunos proyectos incluso regalan hasta tres días de alojamiento sin costo al llegar. La ropa de trabajo casi siempre se entrega (a veces con un depósito reembolsable), el seguro médico de viaje es obligatorio durante todo el programa, y las vacaciones que no alcances a usar se pagan al finalizar tu contrato.',
       },
     ],
     pricing: {
