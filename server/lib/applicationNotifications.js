@@ -103,7 +103,13 @@ export function buildOfferApplicationEmail(record, config = notificationConfig()
 </body></html>`
   const boundary = `bbbsc-${Date.now()}-${Math.random().toString(16).slice(2)}`
   const messageId = `<bbbsc-application-${cleanHeader(record.id)}-${Date.now()}@${config.from.split('@')[1] || 'bbbsc.com'}>`
-  const headers = [`From: BBB Student Center <${config.from}>`, `To: ${config.recipients.join(', ')}`, `Subject: ${subject}`, `Date: ${new Date().toUTCString()}`, `Message-ID: ${messageId}`, 'MIME-Version: 1.0', `Content-Type: multipart/alternative; boundary="${boundary}"`]
+  // El Subject lleva tildes (p.ej. "postulación"), y un header con bytes UTF-8
+  // crudos exige la extensión SMTPUTF8 en el envío SMTP. El LMTP local de
+  // Dovecot no la ofrece, así que Postfix rebotaba el correo de inmediato
+  // (dsn=5.6.7 "SMTPUTF8 is required"). Se codifica como encoded-word RFC 2047
+  // (7-bit ASCII) para que la entrega local funcione sin depender de SMTPUTF8.
+  const encodedSubject = `=?UTF-8?B?${Buffer.from(subject, 'utf8').toString('base64')}?=`
+  const headers = [`From: BBB Student Center <${config.from}>`, `To: ${config.recipients.join(', ')}`, `Subject: ${encodedSubject}`, `Date: ${new Date().toUTCString()}`, `Message-ID: ${messageId}`, 'MIME-Version: 1.0', `Content-Type: multipart/alternative; boundary="${boundary}"`]
   const raw = `${headers.join('\r\n')}\r\n\r\n--${boundary}\r\nContent-Type: text/plain; charset=UTF-8\r\nContent-Transfer-Encoding: 8bit\r\n\r\n${text}\r\n--${boundary}\r\nContent-Type: text/html; charset=UTF-8\r\nContent-Transfer-Encoding: 8bit\r\n\r\n${html}\r\n--${boundary}--\r\n`
   return { subject, raw }
 }
