@@ -1,5 +1,5 @@
 import { Navigate, useParams } from 'react-router-dom'
-import { Clock, ShieldCheck, Sparkles } from 'lucide-react'
+import { Briefcase, Clock, ListChecks, ShieldCheck, Sparkles } from 'lucide-react'
 import { Seo } from '../components/Seo'
 import { ProgramHero } from '../components/ui/ProgramHero'
 import { Container } from '../components/ui/Container'
@@ -84,6 +84,45 @@ export default function ProgramaCulturalDetalle() {
               </h3>
               <InfoList items={program.benefits} />
             </div>
+
+            {program.selectionProcess && (
+              <div>
+                <h3 className="mb-1.5 flex items-center gap-2 text-base font-bold text-white">
+                  <ListChecks className="size-5 text-brand" />
+                  Cómo funciona la selección
+                </h3>
+                {program.selectionNote && <p className="mb-4 text-sm text-white/55">{program.selectionNote}</p>}
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                  {program.selectionProcess.map((step, index) => (
+                    <div key={step.title} className="rounded-2xl border border-white/10 bg-ink-800 p-5">
+                      <span className="mb-3 flex size-9 items-center justify-center rounded-xl bg-brand/15 text-sm font-black text-brand">
+                        {String(index + 1).padStart(2, '0')}
+                      </span>
+                      <h4 className="text-sm font-bold text-white">{step.title}</h4>
+                      <p className="mt-1.5 text-sm leading-relaxed text-white/60">{step.description}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {program.jobExamples && (
+              <div>
+                <h3 className="mb-4 flex items-center gap-2 text-base font-bold text-white">
+                  <Briefcase className="size-5 text-brand" />
+                  Ejemplos actuales de trabajo
+                </h3>
+                <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+                  {program.jobExamples.map((job, index) => (
+                    <div key={job} className="rounded-xl border border-white/10 bg-ink-800 px-3 py-3.5 text-center">
+                      <span className="block text-xs font-black text-brand">{String(index + 1).padStart(2, '0')}</span>
+                      <span className="mt-1 block text-xs font-semibold leading-tight text-white/80">{job}</span>
+                    </div>
+                  ))}
+                </div>
+                {program.jobExamplesNote && <p className="mt-4 text-xs leading-relaxed text-white/50">{program.jobExamplesNote}</p>}
+              </div>
+            )}
 
             <div className="grid grid-cols-1 items-start gap-5 sm:grid-cols-2">
               <div className="flex items-start gap-3 rounded-2xl border border-white/10 bg-ink-800 p-5">

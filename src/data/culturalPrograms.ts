@@ -18,6 +18,12 @@ export interface CulturalProgram {
     items: string[]
     note?: string
   }
+  /** Pasos del proceso de selección, opcional — solo algunos programas lo detallan. */
+  selectionProcess?: { title: string; description: string }[]
+  selectionNote?: string
+  /** Ejemplos de puestos de trabajo, opcional — se muestran en una grilla numerada. */
+  jobExamples?: string[]
+  jobExamplesNote?: string
 }
 
 export const culturalPrograms: CulturalProgram[] = [
@@ -447,21 +453,39 @@ export const culturalPrograms: CulturalProgram[] = [
       src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/GER_Rothenburg_ob_der_Tauber%2C_Marktplatz_001.jpg/1280px-GER_Rothenburg_ob_der_Tauber%2C_Marktplatz_001.jpg',
       alt: 'Casas de colores en la plaza del mercado de Rothenburg ob der Tauber, Alemania',
     },
+    selectionNote: 'Puedes indicar preferencias, pero no se garantiza un puesto o lugar concreto.',
+    selectionProcess: [
+      { title: 'Preferencias', description: 'Indica los sectores y lugares que prefieres. La flexibilidad aumenta tus posibilidades.' },
+      { title: 'Bolsa de candidatos', description: 'Tu perfil se presenta a empresas adecuadas de nuestra red de empleadores.' },
+      { title: 'Selección empresarial', description: 'La empresa elige perfiles según la demanda, la disponibilidad y la idoneidad.' },
+      { title: 'Amigos', description: 'Marca a tus amigos en la solicitud. Intentamos asignarlos y alojarlos juntos cuando es posible.' },
+    ],
+    jobExamplesNote: 'La asignación exacta depende de la empresa, el lugar, la demanda y tu perfil. Los proyectos de aeropuerto suelen exigir inglés B1 como mínimo; en general se recomienda A2. El alemán nunca es obligatorio. Muchas tareas requieren estar de pie, caminar, levantar peso o repetir movimientos.',
+    jobExamples: [
+      'Fábrica de chocolate',
+      'Almacén y logística',
+      'Producción y montaje',
+      'Manipulación de equipaje',
+      'Sala business',
+      'Catering aeroportuario',
+      'Embalaje y control de calidad',
+      'Otras tareas estacionales',
+    ],
     faq: [
       {
-        question: '¿Cómo funciona el proceso de selección y quién decide dónde termino trabajando?',
+        question: '¿Cuánto dinero puedo tener disponible al final, con un ejemplo real?',
         answer:
-          'Primero indicas tus preferencias de sector y de lugar en tu solicitud —cuanto más flexible seas, más opciones se te abren—. Con eso, tu perfil entra a una bolsa de candidatos que se presenta a las empresas aliadas de la red según la demanda que tengan en ese momento. Es la empresa la que finalmente elige qué perfiles necesita, según disponibilidad, idoneidad y la temporada. Por eso puedes indicar preferencias, pero no se garantiza un puesto o una ciudad exactos: la asignación se confirma por escrito antes de tu viaje, y solo esa asignación, tu contrato y la información de alojamiento son vinculantes.',
+          'Con el promedio de 173 horas trabajadas en el verano de 2026 (173 × 15,33 EUR), el salario bruto queda en 2.652,09 EUR. A eso se le resta el impuesto salarial estimado (12-15%, entre 318 y 398 EUR) y el alojamiento supuesto (550 EUR), lo que deja entre 1.704 y 1.784 EUR después de impuestos y alojamiento. Restando un estimado de gastos personales —comida (250 EUR), Deutschland-Ticket (63 EUR) y SIM (20 EUR), en total 333 EUR—, el importe que te puede quedar disponible ronda entre 1.371 y 1.451 EUR. Es un ejemplo orientativo: tus horas, tu alquiler real y tus decisiones personales cambian el resultado.',
       },
       {
-        question: '¿Puedo postularme con amigos y que nos ubiquen en el mismo lugar?',
+        question: '¿Cuándo recibo mi salario y puedo pedir un adelanto si lo necesito antes?',
         answer:
-          'Sí, puedes marcar a tus amigos directamente en tu solicitud. Cuando lo haces, se intenta asignarlos a la misma empresa y alojarlos juntos siempre que sea posible, pero al depender de la demanda real de cada proyecto no es algo que se pueda garantizar al cien por ciento. Lo que sí se respeta siempre que se pueda es separar el alojamiento entre hombres y mujeres. Si viajar con alguien de confianza es importante para ti, coordina la solicitud con esa persona desde el inicio del proceso para maximizar las probabilidades.',
+          'Las horas se calculan normalmente del primer al último día de cada mes natural, y el salario se paga el día 15 del mes siguiente —no se garantiza un pago anterior a esa fecha—. Si necesitas dinero antes, desde tu segunda semana de trabajo puedes solicitar anticipos: al menos 3 son gratuitos, normalmente desde 125 EUR (habitualmente 150 EUR o más según tu saldo ya ganado); algunas empresas cobran 15 EUR por anticipos adicionales. Los anticipos se descuentan de tu nómina cuando hay saldo suficiente.',
       },
       {
-        question: '¿Qué tan exigente es el trabajo y qué tipo de tareas voy a hacer en el día a día?',
+        question: '¿Puedo trabajar más horas de las garantizadas si rindo bien?',
         answer:
-          'Depende del proyecto que te asignen: hay opciones en fábricas (como producción de chocolate), almacenes y logística, líneas de producción y montaje, manejo de equipaje, salas business, catering de aeropuerto, embalaje y control de calidad, entre otras tareas de temporada. Muchas de estas posiciones exigen estar de pie o caminar durante turnos largos, levantar peso y repetir movimientos, así que conviene llegar con buena condición física. Los proyectos de aeropuerto suelen pedir inglés al menos B1; en el resto, con A2 es suficiente, y algunos trabajos de producción no exigen ningún idioma.',
+          'Sí, aunque nunca es algo garantizado. Todas las empresas usan cuentas de tiempo para registrar tus horas, y las pausas no se pagan. Si hay demanda, turnos disponibles y muestras un buen rendimiento, es posible que te asignen más horas de las 30 mínimas garantizadas —el horario habitual ya suele ser de 35 a 37,5 horas semanales—. Como referencia, en el verano de 2026 el promedio mensual fue de 173 horas, con un pico de 220 horas para el estudiante con más horas registradas en un mes natural completo.',
       },
       {
         question: '¿Cómo es la logística de llegada, el primer día de trabajo y la salida del país?',
