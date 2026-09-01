@@ -49,3 +49,29 @@ export function whatsappLink(message?: string, phone?: string) {
 export function formatDate(iso: string) {
   return new Date(`${iso}T00:00:00`).toLocaleDateString('es-CO', { day: 'numeric', month: 'long', year: 'numeric' })
 }
+
+/**
+ * Convierte el mismo array `{ label, to? }` que ya usan todas las páginas
+ * para pintar <Breadcrumbs> en un schema.org BreadcrumbList — así Google
+ * puede mostrar la ruta de navegación en el resultado de búsqueda sin
+ * duplicar esa lista a mano en cada página. El último item (sin `to`, la
+ * página actual) usa `currentPath` como su URL; un item intermedio sin `to`
+ * (ej. "Programas culturales", que no tiene página propia) omite `item` en
+ * vez de apuntar por error a la misma URL que otro nivel del breadcrumb.
+ */
+export function breadcrumbJsonLd(items: { label: string; to?: string }[], currentPath: string) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: items.map((item, index) => {
+      const isLast = index === items.length - 1
+      const url = item.to ?? (isLast ? currentPath : undefined)
+      return {
+        '@type': 'ListItem',
+        position: index + 1,
+        name: item.label,
+        ...(url ? { item: `${SITE.url}${url}` } : {}),
+      }
+    }),
+  }
+}

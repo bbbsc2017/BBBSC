@@ -9,7 +9,7 @@ import { ImageLinkCard } from '../components/ui/ImageLinkCard'
 import { ProgramFAQ } from '../components/ui/ProgramFAQ'
 import { academicPrograms, getAcademicProgram } from '../data/academicPrograms'
 import { getUniversity } from '../data/universities'
-import { SITE } from '../lib/site'
+import { SITE, breadcrumbJsonLd } from '../lib/site'
 
 export default function ProgramaAcademicoDetalle() {
   const { slug = '' } = useParams()
@@ -19,6 +19,11 @@ export default function ProgramaAcademicoDetalle() {
 
   const relatedUniversity = program.universitySlugs.map((s) => getUniversity(s)).find(Boolean)
   const otherDestinations = academicPrograms.filter((item) => item.slug !== program.slug)
+  const breadcrumbs = [
+    { label: 'Inicio', to: '/' },
+    { label: 'Programas académicos' },
+    { label: program.country },
+  ]
 
   return (
     <>
@@ -28,15 +33,27 @@ export default function ProgramaAcademicoDetalle() {
         path={`/${program.slug}`}
         image={program.image.src}
         imageAlt={program.image.alt}
-        jsonLd={{
-          '@context': 'https://schema.org',
-          '@type': 'Course',
-          name: program.title,
-          description: program.description,
-          image: program.image.src,
-          url: `${SITE.url}/${program.slug}`,
-          provider: { '@type': 'Organization', name: SITE.name, sameAs: SITE.url },
-        }}
+        jsonLd={[
+          breadcrumbJsonLd(breadcrumbs, `/${program.slug}`),
+          {
+            '@context': 'https://schema.org',
+            '@type': 'Course',
+            name: program.title,
+            description: program.description,
+            image: program.image.src,
+            url: `${SITE.url}/${program.slug}`,
+            provider: { '@type': 'Organization', name: SITE.name, sameAs: SITE.url },
+          },
+          {
+            '@context': 'https://schema.org',
+            '@type': 'FAQPage',
+            mainEntity: program.faq.map((item) => ({
+              '@type': 'Question',
+              name: item.question,
+              acceptedAnswer: { '@type': 'Answer', text: item.answer },
+            })),
+          },
+        ]}
       />
       <ProgramHero
         eyebrow="Programa académico"
@@ -45,11 +62,7 @@ export default function ProgramaAcademicoDetalle() {
         country={program.country}
         image={program.image}
         requirements={program.requirements}
-        breadcrumbs={[
-          { label: 'Inicio', to: '/' },
-          { label: 'Programas académicos' },
-          { label: program.country },
-        ]}
+        breadcrumbs={breadcrumbs}
       />
 
       <section id="contenido-programa" className="scroll-mt-24 py-16 sm:py-20">

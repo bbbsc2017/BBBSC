@@ -8,7 +8,7 @@ import { CTAButton } from '../components/ui/CTAButton'
 import { BlogPostCard } from '../components/ui/BlogPostCard'
 import { CommentsSection } from '../components/blog/CommentsSection'
 import { fetchPost, fetchPosts, type PublicPost, type PublicPostDetail } from '../lib/api'
-import { SITE, formatDate, whatsappLink } from '../lib/site'
+import { SITE, breadcrumbJsonLd, formatDate, whatsappLink } from '../lib/site'
 
 export default function BlogPost() {
   const { slug = '' } = useParams()
@@ -32,6 +32,7 @@ export default function BlogPost() {
 
   const related = allPosts.filter((item) => item.slug !== post.slug && item.category === post.category).slice(0, 3)
   const relatedPosts = related.length > 0 ? related : allPosts.filter((item) => item.slug !== post.slug).slice(0, 3)
+  const breadcrumbs = [{ label: 'Inicio', to: '/' }, { label: 'Blog', to: '/blog' }, { label: post.title }]
 
   return (
     <>
@@ -43,24 +44,27 @@ export default function BlogPost() {
         image={post.image.src}
         imageAlt={post.image.alt}
         publishedTime={post.date}
-        jsonLd={{
-          '@context': 'https://schema.org',
-          '@type': 'BlogPosting',
-          headline: post.title,
-          description: post.excerpt,
-          datePublished: post.date,
-          image: post.image.src,
-          mainEntityOfPage: `${SITE.url}/blog/${post.slug}`,
-          author: { '@type': 'Person', name: post.author.name, jobTitle: post.author.role },
-          publisher: { '@type': 'Organization', name: SITE.name, url: SITE.url },
-        }}
+        jsonLd={[
+          breadcrumbJsonLd(breadcrumbs, `/blog/${post.slug}`),
+          {
+            '@context': 'https://schema.org',
+            '@type': 'BlogPosting',
+            headline: post.title,
+            description: post.excerpt,
+            datePublished: post.date,
+            image: post.image.src,
+            mainEntityOfPage: `${SITE.url}/blog/${post.slug}`,
+            author: { '@type': 'Person', name: post.author.name, jobTitle: post.author.role },
+            publisher: { '@type': 'Organization', name: SITE.name, url: SITE.url },
+          },
+        ]}
       />
 
       <DetailHero
         eyebrow={post.category}
         title={post.title}
         description={post.excerpt}
-        breadcrumbs={[{ label: 'Inicio', to: '/' }, { label: 'Blog', to: '/blog' }, { label: post.title }]}
+        breadcrumbs={breadcrumbs}
       />
 
       <DestinationBanner image={post.image} caption={`${formatDate(post.date)} · ${post.readTime}`} />

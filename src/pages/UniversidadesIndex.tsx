@@ -5,6 +5,9 @@ import { Container } from '../components/ui/Container'
 import { ShowcaseHero } from '../components/ui/ShowcaseHero'
 import { academicPrograms } from '../data/academicPrograms'
 import { getUniversity } from '../data/universities'
+import { breadcrumbJsonLd } from '../lib/site'
+
+const breadcrumbs = [{ label: 'Inicio', to: '/' }, { label: 'Programas académicos' }]
 
 export default function UniversidadesIndex() {
   const featuredProgram = academicPrograms.find((program) => program.slug === 'corea-del-sur') ?? academicPrograms[0]
@@ -22,6 +25,7 @@ export default function UniversidadesIndex() {
         path="/programas-academicos"
         image={featuredProgram.image.src}
         imageAlt={featuredProgram.image.alt}
+        jsonLd={breadcrumbJsonLd(breadcrumbs, '/programas-academicos')}
       />
       <ShowcaseHero
         eyebrow="Programas académicos"
@@ -38,7 +42,7 @@ export default function UniversidadesIndex() {
         itemHeading="Tu futuro académico sin fronteras"
         primaryAction={{ label: 'Explorar destinos', to: '#destinos-academicos' }}
         secondaryAction={{ label: 'Hablar con un asesor', to: '/contacto' }}
-        breadcrumbs={[{ label: 'Inicio', to: '/' }, { label: 'Programas académicos' }]}
+        breadcrumbs={breadcrumbs}
       />
       <section id="destinos-academicos" className="scroll-mt-24 py-16 sm:py-20">
         <Container>

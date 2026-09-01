@@ -1,6 +1,21 @@
 <!doctype html>
 <html lang="es">
   <head>
+    <!-- Google Consent Mode: por defecto todo denegado hasta que la persona
+         elija en el banner de cookies (CookieConsent.tsx). Tiene que ir ANTES
+         de cargar gtm.js para que las etiquetas dentro del contenedor respeten
+         este estado desde la primera carga, no solo después de aceptar. -->
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      window.gtag = function () { window.dataLayer.push(arguments); };
+      gtag('consent', 'default', {
+        ad_storage: 'denied',
+        analytics_storage: 'denied',
+        ad_user_data: 'denied',
+        ad_personalization: 'denied',
+        wait_for_update: 500,
+      });
+    </script>
     <!-- Google Tag Manager -->
     <script>
       (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':

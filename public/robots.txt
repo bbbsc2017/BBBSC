@@ -3,4 +3,10 @@ Allow: /
 Disallow: /intranet
 Disallow: /api/
 
-Sitemap: https://bbbsc.com/sitemap.xml
+# El VPS sirve /sitemap.xml como archivo estático (public/sitemap.xml, sin
+# ofertas ni blog) antes de que la petición llegue a la ruta dinámica del
+# backend. Se apunta directo a la ruta que sí trae todo (server/routes/sitemap.js):
+# ofertas activas, entradas del blog y las páginas de programas, con lastmod.
+# La directiva Sitemap se procesa aparte de Allow/Disallow, así que el
+# Disallow: /api/ de arriba no bloquea que Google la lea.
+Sitemap: https://bbbsc.com/api/sitemap.xml

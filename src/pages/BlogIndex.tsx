@@ -6,7 +6,7 @@ import { Container } from '../components/ui/Container'
 import { BlogPostCard } from '../components/ui/BlogPostCard'
 import { ShowcaseHero } from '../components/ui/ShowcaseHero'
 import { fetchPosts, sortByDateDesc, type PublicPost } from '../lib/api'
-import { formatDate } from '../lib/site'
+import { SITE, breadcrumbJsonLd, formatDate } from '../lib/site'
 
 const categories: Array<PublicPost['category']> = ['Embajada', 'Programas', 'Consejos']
 
@@ -61,6 +61,8 @@ export default function BlogIndex() {
     )
   }
 
+  const breadcrumbs = [{ label: 'Inicio', to: '/' }, { label: 'Blog' }]
+
   return (
     <>
       <Seo
@@ -69,6 +71,16 @@ export default function BlogIndex() {
         path="/blog"
         image={featured.image.src}
         imageAlt={featured.image.alt}
+        jsonLd={[
+          breadcrumbJsonLd(breadcrumbs, '/blog'),
+          {
+            '@context': 'https://schema.org',
+            '@type': 'CollectionPage',
+            name: 'Blog — BBB News',
+            url: `${SITE.url}/blog`,
+            isPartOf: { '@type': 'WebSite', name: SITE.name, url: SITE.url },
+          },
+        ]}
       />
 
       <ShowcaseHero
@@ -86,7 +98,7 @@ export default function BlogIndex() {
         itemHeading="Explora BBB News"
         primaryAction={{ label: 'Leer noticia destacada', to: `/blog/${featured.slug}` }}
         secondaryAction={{ label: 'Ver publicaciones', to: '#publicaciones' }}
-        breadcrumbs={[{ label: 'Inicio', to: '/' }, { label: 'Blog' }]}
+        breadcrumbs={breadcrumbs}
       />
 
       <section id="publicaciones" className="scroll-mt-24 py-16 sm:py-20">

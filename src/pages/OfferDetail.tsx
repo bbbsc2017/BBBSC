@@ -34,6 +34,7 @@ import {
   type JobOffer,
 } from "../lib/offers";
 import { apiCredentials, apiUrl } from "../lib/apiBase";
+import { breadcrumbJsonLd } from "../lib/site";
 
 interface Session {
   user: { id: string; role: string; firstName: string };
@@ -265,11 +266,32 @@ export default function OfferDetail() {
     .toISOString()
     .slice(0, 10);
 
+  // Algunas ofertas no tienen ciudad/estado cargados y la API los devuelve
+  // como el texto "No Especificado" — sin este chequeo, ese placeholder se
+  // filtraba tal cual al snippet de Google ("... en No Especificado, No
+  // Especificado..."). Se omite la cláusula de ubicación cuando no hay un
+  // dato real que mostrar.
+  const hasRealLocation = Boolean(
+    offer.city &&
+      offer.state &&
+      offer.city !== "No Especificado" &&
+      offer.state !== "No Especificado",
+  );
+  const locationClause = hasRealLocation
+    ? ` en ${offer.city}, ${offer.state}`
+    : "";
+  const offerBreadcrumbs = [
+    { label: "Inicio", to: "/" },
+    { label: "Ofertas", to: "/ofertas" },
+    { label: programLabel(offer.program), to: `/ofertas/${offer.program}` },
+    { label: offer.title },
+  ];
+
   return (
     <>
       <Seo
         title={`${offer.title} en ${offer.employer}`}
-        description={`Oferta de ${programLabel(offer.program)} en ${offer.city}, ${offer.state}. ${compensationLabel(offer)}. Consulta requisitos, beneficios y vacantes.`}
+        description={`Oferta de ${programLabel(offer.program)}${locationClause}. ${compensationLabel(offer)}. Consulta requisitos, beneficios y vacantes.`}
         path={offerPath(offer)}
         image={offer.imageSrc || undefined}
         imageAlt={
@@ -277,7 +299,8 @@ export default function OfferDetail() {
             ? `${offer.title} con ${offer.employer} en ${offer.city}, ${offer.state}`
             : undefined
         }
-        jsonLd={
+        jsonLd={[
+          breadcrumbJsonLd(offerBreadcrumbs, offerPath(offer)),
           available
             ? {
                 "@context": "https://schema.org",
@@ -322,8 +345,8 @@ export default function OfferDetail() {
                   offer.description ||
                   `Oportunidad de ${programLabel(offer.program)} con ${offer.employer}.`,
                 url: `https://bbbsc.com${offerPath(offer)}`,
-              }
-        }
+              },
+        ]}
       />
       <div className="bbb-grid-bg pb-20 pt-8 sm:pt-12">
         <Container>

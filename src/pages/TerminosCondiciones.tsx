@@ -1,7 +1,9 @@
 import { Seo } from '../components/Seo'
 import { DetailHero } from '../components/ui/DetailHero'
 import { Container } from '../components/ui/Container'
-import { SITE } from '../lib/site'
+import { SITE, breadcrumbJsonLd } from '../lib/site'
+
+const breadcrumbs = [{ label: 'Inicio', to: '/' }, { label: 'Términos y Condiciones' }]
 
 const sections = [
   {
@@ -37,12 +39,13 @@ export default function TerminosCondiciones() {
         title="Términos y Condiciones"
         description="Términos y condiciones de uso del sitio web y los servicios de asesoría de BBB Student Center."
         path="/terminos-y-condiciones"
+        jsonLd={breadcrumbJsonLd(breadcrumbs, '/terminos-y-condiciones')}
       />
       <DetailHero
         eyebrow="Legal"
         title="Términos y Condiciones"
         description="Conoce las condiciones de uso de nuestro sitio web y de nuestros servicios de asesoría en intercambios."
-        breadcrumbs={[{ label: 'Inicio', to: '/' }, { label: 'Términos y Condiciones' }]}
+        breadcrumbs={breadcrumbs}
       />
       <section className="py-16 sm:py-20">
         <Container className="flex max-w-3xl flex-col gap-8">
