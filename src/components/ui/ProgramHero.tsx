@@ -1,7 +1,51 @@
-import { ArrowDown, ArrowRight, CheckCircle2 } from 'lucide-react'
+import type { ComponentType } from 'react'
+import {
+  AlertCircle,
+  ArrowDown,
+  ArrowRight,
+  Briefcase,
+  BookOpen,
+  Calendar,
+  Car,
+  CheckCircle2,
+  Clock,
+  FileCheck,
+  GraduationCap,
+  Languages,
+  UserCheck,
+} from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { Breadcrumbs, type Crumb } from './Breadcrumbs'
 import { Container } from './Container'
+
+export interface RequirementItem {
+  label: string
+  value: string
+}
+
+// Ícono por tema del requisito (buscado por el título exacto). CheckCircle2
+// es el respaldo genérico para cualquier título que no esté en esta lista.
+const requirementIcons: Record<string, ComponentType<{ className?: string }>> = {
+  Edad: Calendar,
+  'Edad y documentos': Calendar,
+  'Nivel de inglés': Languages,
+  Idiomas: Languages,
+  'Nivel de idioma': Languages,
+  'Idioma y finanzas': Languages,
+  'Modalidad de estudio': BookOpen,
+  Restricciones: AlertCircle,
+  Internship: Briefcase,
+  Trainee: Briefcase,
+  Experiencia: Briefcase,
+  Documentos: FileCheck,
+  Perfil: UserCheck,
+  'Perfil académico': GraduationCap,
+  'Nivel académico': GraduationCap,
+  'Antigüedad de estudios': GraduationCap,
+  Formación: GraduationCap,
+  'Licencia de conducción': Car,
+  Duración: Clock,
+}
 
 interface ProgramHeroProps {
   eyebrow: string
@@ -9,7 +53,9 @@ interface ProgramHeroProps {
   description: string
   country: string
   image: { src: string; alt: string }
-  requirements: string[]
+  /** Un requisito puede ser texto simple (Hunters, reporte de vuelo) o { label, value }
+   *  para mostrar un título temático real (Edad, Nivel de inglés...) con su ícono. */
+  requirements: (string | RequirementItem)[]
   breadcrumbs: Crumb[]
   primaryTo?: string
   primaryLabel?: string
@@ -43,10 +89,27 @@ export function ProgramHero({ eyebrow, title, description, country, image, requi
           <div className="mt-auto border-t border-white/15 pt-5 sm:pt-6">
             <p className="mb-4 text-[10px] font-black uppercase tracking-[.22em] text-brand">{requirementsLabel}</p>
             <div className={`grid gap-3 ${requirements.length === 3 ? 'sm:grid-cols-3' : 'sm:grid-cols-2 lg:grid-cols-4'}`}>
-              {requirements.slice(0, 4).map((requirement, index) => <div key={requirement} className="group flex items-start gap-3 rounded-2xl border border-white/[0.08] bg-[#1c1c1c]/45 p-4 backdrop-blur-md transition hover:border-brand/25 hover:bg-[#1c1c1c]/70">
-                <span className="mt-0.5 flex size-7 shrink-0 items-center justify-center rounded-full bg-brand text-white"><CheckCircle2 className="size-4" /></span>
-                <div><span className="text-[9px] font-black uppercase tracking-[.18em] text-white/30">{itemLabel} {String(index + 1).padStart(2, '0')}</span><p className="mt-1 text-xs font-semibold leading-5 text-white/80">{requirement}</p></div>
-              </div>)}
+              {requirements.slice(0, 4).map((requirement, index) => {
+                const isStructured = typeof requirement !== 'string'
+                const label = isStructured ? requirement.label : `${itemLabel} ${String(index + 1).padStart(2, '0')}`
+                const value = isStructured ? requirement.value : requirement
+                const Icon = isStructured ? (requirementIcons[requirement.label] ?? CheckCircle2) : CheckCircle2
+                return (
+                  <div
+                    key={label + value}
+                    style={{ animationDelay: `${index * 80}ms` }}
+                    className="group flex animate-[fadeInUp_0.5s_ease-out_both] items-start gap-3 rounded-2xl border border-white/[0.08] bg-[#1c1c1c]/45 p-4 backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:border-brand/35 hover:bg-[#1c1c1c]/70 hover:shadow-lg hover:shadow-brand/10"
+                  >
+                    <span className="mt-0.5 flex size-7 shrink-0 items-center justify-center rounded-full bg-brand text-white transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6">
+                      <Icon className="size-4" />
+                    </span>
+                    <div>
+                      <span className="text-[9px] font-black uppercase tracking-[.18em] text-white/30">{label}</span>
+                      <p className="mt-1 text-xs font-semibold leading-5 text-white/80">{value}</p>
+                    </div>
+                  </div>
+                )
+              })}
             </div>
           </div>
         </div>

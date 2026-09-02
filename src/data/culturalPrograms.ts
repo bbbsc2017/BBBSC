@@ -5,7 +5,7 @@ export interface CulturalProgram {
   tagline: string
   description: string
   cta: string
-  requirements: string[]
+  requirements: { label: string; value: string }[]
   benefits: string[]
   duration: string
   keyFacts: string[]
@@ -33,10 +33,10 @@ export const culturalPrograms: CulturalProgram[] = [
       'Programa de intercambio cultural que permite a estudiantes universitarios trabajar legalmente en empresas estadounidenses durante el verano (hoteles, restaurantes, parques acuáticos, parques de diversiones y resorts), mientras practican inglés en contextos reales y exploran Estados Unidos.',
     cta: 'Viaja y Aprende',
     requirements: [
-      'Edad entre 18 y 26 años',
-      'Nivel de inglés mínimo B1 (conversacional)',
-      'Estudiante universitario de tiempo completo, jornada diurna y modalidad presencial',
-      'No se aceptan carreras virtuales ni estudiantes en último semestre',
+      { label: 'Edad', value: '18 a 26 años' },
+      { label: 'Nivel de inglés', value: 'Mínimo B1 (conversacional)' },
+      { label: 'Modalidad de estudio', value: 'Tiempo completo, jornada diurna y presencial' },
+      { label: 'Restricciones', value: 'No se aceptan carreras virtuales ni último semestre' },
     ],
     benefits: [
       'Experiencia laboral internacional en el currículum',
@@ -98,10 +98,10 @@ export const culturalPrograms: CulturalProgram[] = [
       'Programa de prácticas en empresas internacionales dirigido a estudiantes y recién graduados que buscan desarrollar su carrera en negocios, ingeniería y hotelería, fortaleciendo su perfil profesional en Estados Unidos.',
     cta: '¿Qué Esperas?',
     requirements: [
-      'Internship: estudiantes en último semestre o recién graduados (máximo 12 meses post-graduación)',
-      'Trainee: mínimo 1 año de experiencia laboral con título universitario, o 5 años sin título',
-      'Pasaporte vigente',
-      'CV en inglés y certificado de estudios o diploma',
+      { label: 'Internship', value: 'Último semestre o hasta 12 meses post-graduación' },
+      { label: 'Trainee', value: 'Mínimo 1 año con título, o 5 años sin título' },
+      { label: 'Documentos', value: 'Pasaporte vigente' },
+      { label: 'Perfil', value: 'CV en inglés y certificado de estudios' },
     ],
     benefits: [
       'Mejora del CV con experiencia internacional',
@@ -144,10 +144,10 @@ export const culturalPrograms: CulturalProgram[] = [
       'Oportunidad para adquirir experiencia laboral en reconocidos hoteles y restaurantes de España, desarrollando competencias en la industria de la hotelería, el turismo y la gastronomía mientras exploras la cultura del país.',
     cta: 'Vive España',
     requirements: [
-      'Edad mínima de 18 años',
-      'Estudiante de tiempo completo, profesional graduado o con certificado de educación superior',
-      'Profesionales: mínimo 2 años de experiencia laboral',
-      'No más de 12 años desde la conclusión de los estudios',
+      { label: 'Edad', value: 'Mínima 18 años' },
+      { label: 'Perfil académico', value: 'Estudiante tiempo completo o graduado' },
+      { label: 'Experiencia', value: 'Profesionales, mínimo 2 años' },
+      { label: 'Antigüedad de estudios', value: 'Máximo 12 años desde graduarse' },
     ],
     benefits: [
       'Asignación garantizada de oferta laboral',
@@ -190,9 +190,9 @@ export const culturalPrograms: CulturalProgram[] = [
       'Oportunidad laboral en el sector de hotelería y turismo en países como Tailandia, Emiratos Árabes e Islas Maldivas. Combina experiencia profesional, intercambio cultural y proyección internacional en establecimientos de alta categoría.',
     cta: 'Explora Asia',
     requirements: [
-      'Mínimo 2 años de experiencia certificada en gastronomía, hotelería o turismo',
-      'Mayor de 18 años',
-      'Nivel de inglés B2 conversacional',
+      { label: 'Experiencia', value: 'Mínimo 2 años certificada en gastronomía, hotelería o turismo' },
+      { label: 'Edad', value: 'Mayor de 18 años' },
+      { label: 'Nivel de inglés', value: 'B2 conversacional' },
     ],
     benefits: [
       'Asignación de oferta laboral',
@@ -234,10 +234,10 @@ export const culturalPrograms: CulturalProgram[] = [
       'Intercambio para docentes que permite enseñar en escuelas de Estados Unidos, compartiendo su cultura y conocimientos mientras mejoran sus habilidades pedagógicas en un entorno educativo diverso.',
     cta: 'Vive la Experiencia',
     requirements: [
-      'Licenciatura completa y 2 años de experiencia docente',
-      'Nivel de inglés B2-C1 (avanzado)',
-      'Mayor de 18 años y pasaporte vigente',
-      'CV en inglés, escalafón docente y certificado Foreign',
+      { label: 'Formación', value: 'Licenciatura completa + 2 años de experiencia docente' },
+      { label: 'Nivel de inglés', value: 'B2-C1 (avanzado)' },
+      { label: 'Edad y documentos', value: 'Mayor de 18 años, pasaporte vigente' },
+      { label: 'Perfil', value: 'CV en inglés, escalafón docente, certificado Foreign' },
     ],
     benefits: [
       'Seguimiento personalizado durante todo el proceso',
@@ -279,10 +279,10 @@ export const culturalPrograms: CulturalProgram[] = [
       'Programa para trabajar como asistente de profesor en escuelas estadounidenses apoyando a docentes, fortaleciendo el inglés y ganando experiencia práctica en el sistema educativo norteamericano.',
     cta: 'El Mundo te Espera',
     requirements: [
-      'Mínimo sexto semestre cursado; máximo 12 meses después de graduarse',
-      'Nivel de inglés B2 conversacional',
-      '18 años en adelante',
-      'Pasaporte vigente y examen ITEP',
+      { label: 'Formación', value: 'Sexto semestre o hasta 12 meses post-grado' },
+      { label: 'Nivel de inglés', value: 'B2 conversacional' },
+      { label: 'Edad', value: '18 años en adelante' },
+      { label: 'Documentos', value: 'Pasaporte vigente y examen ITEP' },
     ],
     benefits: [
       'Asignación laboral garantizada',
@@ -324,10 +324,10 @@ export const culturalPrograms: CulturalProgram[] = [
       'Experiencia de intercambio cultural donde jóvenes viven con familias estadounidenses cuidando niños a cambio de alojamiento, alimentación y compensación económica, con oportunidad de estudiar y mejorar su inglés.',
     cta: 'Viaja y Aprende',
     requirements: [
-      'Edad entre 18 y 26 años',
-      'Pasaporte vigente durante el programa',
-      'Licencia de conducción actualizada (últimos 6 meses)',
-      'Nivel de inglés B2 y 1000-1500 horas de experiencia cuidando niños',
+      { label: 'Edad', value: '18 a 26 años' },
+      { label: 'Documentos', value: 'Pasaporte vigente y licencia de conducción reciente' },
+      { label: 'Nivel de inglés', value: 'B2' },
+      { label: 'Experiencia', value: '1000 a 1500 horas cuidando niños' },
     ],
     benefits: [
       'Alojamiento y alimentación incluidos',
@@ -369,10 +369,10 @@ export const culturalPrograms: CulturalProgram[] = [
       'Vive una experiencia profesional en Portugal con oportunidades de práctica en empresas de culinaria, hotelería y turismo. Fortalece tu perfil, desarrolla habilidades en un entorno internacional y descubre la cultura portuguesa mientras avanzas en tu carrera.',
     cta: 'Impulsa tu carrera',
     requirements: [
-      'Edad mínima de 18 años',
-      'Pasaporte vigente',
-      'Formación o experiencia relacionada con culinaria, hotelería o turismo',
-      'Nivel de idioma requerido según la vacante y el empleador',
+      { label: 'Edad', value: 'Mínima 18 años' },
+      { label: 'Documentos', value: 'Pasaporte vigente' },
+      { label: 'Formación', value: 'Culinaria, hotelería o turismo' },
+      { label: 'Nivel de idioma', value: 'Según la vacante y el empleador' },
     ],
     benefits: [
       'Experiencia profesional internacional para fortalecer tu CV',
@@ -428,10 +428,10 @@ export const culturalPrograms: CulturalProgram[] = [
       'Programa de trabajo temporal en Alemania para estudiantes universitarios internacionales durante su receso semestral oficial. Trabajas en empresas aliadas de nuestra red (fábricas, logística, producción, aeropuertos y más), con salario mínimo garantizado, alojamiento compartido organizado y acompañamiento desde tu llegada hasta tu salida.',
     cta: 'Trabaja en Alemania',
     requirements: [
-      'Edad: mayor de 18 años, máximo 34 años',
-      'Idiomas: alemán no obligatorio; inglés A2 (recomendado)',
-      'Ser estudiante universitario activo',
-      'Duración del programa: 80 a 90 días',
+      { label: 'Edad', value: 'Mayor de 18 años, máximo 34' },
+      { label: 'Idiomas', value: 'Alemán no obligatorio; inglés A2 recomendado' },
+      { label: 'Nivel académico', value: 'Estudiante universitario activo' },
+      { label: 'Duración', value: '80 a 90 días' },
     ],
     benefits: [
       'Salario mínimo garantizado de 15,33 EUR brutos por hora',
