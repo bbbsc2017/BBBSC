@@ -86,7 +86,9 @@ export default function ProgramaAcademicoDetalle() {
                 <Sparkles className="size-5 text-brand" />
                 Beneficios del programa
               </h3>
-              <InfoList items={program.benefits} />
+              <div className="pl-7">
+                <InfoList items={program.benefits} />
+              </div>
             </div>
 
             <ProgramFAQ items={program.faq} />

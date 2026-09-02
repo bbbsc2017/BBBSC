@@ -6,7 +6,7 @@ export interface AcademicProgram {
   description: string
   programTypes: string[]
   benefits: string[]
-  requirements: string[]
+  requirements: { label: string; value: string }[]
   costs: string[]
   universitySlugs: string[]
   image: { src: string; alt: string }
@@ -32,10 +32,10 @@ export const academicPrograms: AcademicProgram[] = [
       'Posibilidad de permanecer hasta 18 meses para buscar trabajo después de graduarte',
     ],
     requirements: [
-      'Edad mínima de 18 años',
-      'Certificado de bachillerato o título previo según el nivel del programa',
-      'Nivel de inglés B2-C1',
-      'Pasaporte vigente y soporte financiero para el proceso de visa',
+      { label: 'Edad', value: 'Mínima 18 años' },
+      { label: 'Formación', value: 'Bachillerato o título previo' },
+      { label: 'Nivel de inglés', value: 'B2-C1' },
+      { label: 'Documentos', value: 'Pasaporte y soporte financiero' },
     ],
     costs: [
       'Inscripción BBB Student Center: $250.000 COP',
@@ -71,10 +71,10 @@ export const academicPrograms: AcademicProgram[] = [
       'Experiencia multicultural en Varsovia',
     ],
     requirements: [
-      'Edad mínima de 18 años',
-      'Certificado de bachillerato apostillado',
-      'Pasaporte vigente',
-      'Certificado de idioma y soporte financiero comprobable',
+      { label: 'Edad', value: 'Mínima 18 años' },
+      { label: 'Formación', value: 'Bachillerato apostillado' },
+      { label: 'Documentos', value: 'Pasaporte vigente' },
+      { label: 'Idioma y finanzas', value: 'Certificado de idioma y soporte financiero' },
     ],
     costs: ['Inscripción: $250.000 COP', 'Programa total: entre $12.000 y $14.000 USD según especialidad'],
     universitySlugs: ['vistula'],
@@ -107,10 +107,10 @@ export const academicPrograms: AcademicProgram[] = [
       'Opciones de trabajo posteriores a la graduación según la normativa vigente',
     ],
     requirements: [
-      'Edad mínima de 18 años',
-      'Certificado de bachillerato apostillado',
-      'Certificado de inglés',
-      'Pasaporte vigente y soporte financiero para el proceso de visa',
+      { label: 'Edad', value: 'Mínima 18 años' },
+      { label: 'Formación', value: 'Bachillerato apostillado' },
+      { label: 'Nivel de inglés', value: 'Certificado requerido' },
+      { label: 'Documentos', value: 'Pasaporte y soporte financiero' },
     ],
     costs: [
       'Inscripción BBB Student Center: $250.000 COP',
@@ -146,10 +146,10 @@ export const academicPrograms: AcademicProgram[] = [
       'Conexiones y prácticas con empresas como Samsung y Hyundai',
     ],
     requirements: [
-      'Edad mínima de 18 años',
-      'Certificado de bachillerato o título previo según el programa',
-      'Certificación de inglés aceptada por la universidad',
-      'Pasaporte vigente y documentos financieros para el proceso de visa',
+      { label: 'Edad', value: 'Mínima 18 años' },
+      { label: 'Formación', value: 'Bachillerato o título previo' },
+      { label: 'Nivel de inglés', value: 'Certificación aceptada por la universidad' },
+      { label: 'Documentos', value: 'Pasaporte y soportes financieros' },
     ],
     costs: [
       'Inscripción BBB Student Center: $250.000 COP',
@@ -185,10 +185,10 @@ export const academicPrograms: AcademicProgram[] = [
       'Acceso a OPT y CPT sujeto a la normativa de la visa F-1',
     ],
     requirements: [
-      'Edad mínima de 18 años',
-      'Certificado de bachillerato o título previo según el programa',
-      'Certificación de inglés TOEFL, IELTS u otra aceptada',
-      'Pasaporte vigente y soporte financiero para solicitar la visa F-1',
+      { label: 'Edad', value: 'Mínima 18 años' },
+      { label: 'Formación', value: 'Bachillerato o título previo' },
+      { label: 'Nivel de inglés', value: 'TOEFL, IELTS u otra aceptada' },
+      { label: 'Documentos', value: 'Pasaporte y soporte financiero' },
     ],
     costs: [
       'Inscripción BBB Student Center: $250.000 COP',
@@ -223,7 +223,12 @@ export const academicPrograms: AcademicProgram[] = [
       'Red de contactos multicultural',
       'Exploración de playas y ciudades vibrantes',
     ],
-    requirements: ['Edad mínima de 18 años', 'Pasaporte vigente', 'Nivel de inglés avanzado', 'Ser egresado de pregrado y demostrar soporte financiero'],
+    requirements: [
+      { label: 'Edad', value: 'Mínima 18 años' },
+      { label: 'Documentos', value: 'Pasaporte vigente' },
+      { label: 'Nivel de inglés', value: 'Avanzado' },
+      { label: 'Perfil', value: 'Egresado de pregrado y soporte financiero' },
+    ],
     costs: ['Inscripción: $250.000 COP', 'Pago 1: 3.000 AUD (escuela + CoE)', 'Pago 2: 2.000 AUD (seguro + visa)'],
     universitySlugs: [],
     image: {
