@@ -224,6 +224,14 @@ export const culturalPrograms: CulturalProgram[] = [
         answer: 'Asignación de oferta laboral, seguro médico internacional, y vivienda y alimentación incluidas.',
       },
     ],
+    pricing: {
+      badge: 'Costos referenciales',
+      headline: 'Inversión en Trainee & Internship Asia',
+      items: [
+        'Inscripción: $250.000 COP',
+      ],
+      note: 'Tu asesor confirmará los valores y condiciones vigentes para tu perfil.',
+    },
   },
   {
     slug: 'teacher-exchange',
@@ -429,7 +437,7 @@ export const culturalPrograms: CulturalProgram[] = [
     cta: 'Trabaja en Alemania',
     requirements: [
       { label: 'Edad', value: 'Mayor de 18 años, máximo 34' },
-      { label: 'Idiomas', value: 'Alemán no obligatorio; inglés A2 recomendado' },
+      { label: 'Idiomas', value: 'Inglés A2' },
       { label: 'Nivel académico', value: 'Estudiante universitario activo' },
       { label: 'Duración', value: '80 a 90 días' },
     ],
