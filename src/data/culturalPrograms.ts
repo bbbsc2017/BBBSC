@@ -256,8 +256,8 @@ export const culturalPrograms: CulturalProgram[] = [
     duration: 'Hasta 5 años con visa J-1',
     keyFacts: ['Ubicaciones comunes: Texas, Carolina del Norte, Florida, Virginia, Arizona'],
     image: {
-      src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/The_Statue_of_Liberty_1.jpg/1280px-The_Statue_of_Liberty_1.jpg',
-      alt: 'Estatua de la Libertad en Nueva York',
+      src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Dallas_Skyline_with_Arts_District.jpg/1280px-Dallas_Skyline_with_Arts_District.jpg',
+      alt: 'Horizonte de Dallas, Texas, uno de los destinos comunes de Teacher Exchange',
     },
     faq: [
       {
