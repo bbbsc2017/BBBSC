@@ -256,7 +256,7 @@ export const culturalPrograms: CulturalProgram[] = [
     duration: 'Hasta 5 años con visa J-1',
     keyFacts: ['Ubicaciones comunes: Texas, Carolina del Norte, Florida, Virginia, Arizona'],
     image: {
-      src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Front_view_of_Statue_of_Liberty_%28cropped%29.jpg/1280px-Front_view_of_Statue_of_Liberty_%28cropped%29.jpg',
+      src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/The_Statue_of_Liberty_1.jpg/1280px-The_Statue_of_Liberty_1.jpg',
       alt: 'Estatua de la Libertad en Nueva York',
     },
     faq: [
