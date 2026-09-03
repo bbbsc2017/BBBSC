@@ -34,14 +34,19 @@ function setLink(rel: string, href: string) {
   el.setAttribute('href', href)
 }
 
-export function Seo({ title, description, path, image, imageAlt, type = 'website', noIndex = false, publishedTime, modifiedTime, jsonLd }: SeoProps) {
+export function Seo({ title, description, path, type = 'website', noIndex = false, publishedTime, modifiedTime, jsonLd }: SeoProps) {
   const jsonLdText = jsonLd ? JSON.stringify(jsonLd) : ''
 
   useEffect(() => {
     const fullTitle = `${title} | ${SITE.name}`
     const url = `${SITE.url}${path}`
-    const ogImage = image ? (image.startsWith('/') ? `${SITE.url}${image}` : image) : SITE.defaultSocialImage
-    const socialImageAlt = imageAlt || `${title} — ${SITE.name}`
+    // La imagen de vista previa al compartir es siempre la portada de marca,
+    // sin importar la foto propia de cada página — así cualquier link
+    // (oferta, programa, blog...) se ve igual de reconocible al compartirse.
+    // `image`/`imageAlt` se mantienen como props por si algún día se quiere
+    // volver a una portada por página; hoy no se usan para esto.
+    const ogImage = SITE.defaultSocialImage
+    const socialImageAlt = `${SITE.name} — ${SITE.tagline}`
 
     document.title = fullTitle
     setMeta('name', 'description', description)
@@ -81,7 +86,7 @@ export function Seo({ title, description, path, image, imageAlt, type = 'website
     return () => {
       document.getElementById('page-jsonld')?.remove()
     }
-  }, [title, description, path, image, imageAlt, type, noIndex, publishedTime, modifiedTime, jsonLdText])
+  }, [title, description, path, type, noIndex, publishedTime, modifiedTime, jsonLdText])
 
   return null
 }
