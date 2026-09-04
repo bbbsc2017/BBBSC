@@ -499,7 +499,7 @@ export const culturalPrograms: CulturalProgram[] = [
     pricing: {
       badge: 'Precio de lanzamiento',
       headline: 'Inversión en Work and Travel Alemania',
-      price: { amount: '€600', unit: 'EUR', originalAmount: '€1.000' },
+      price: { amount: '€600', originalAmount: '€1.000' },
       items: [
         'Asesoría del programa',
         'Asesoría del viaje',
