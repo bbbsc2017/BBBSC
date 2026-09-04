@@ -451,7 +451,7 @@ export const culturalPrograms: CulturalProgram[] = [
     keyFacts: [
       '15,33 EUR/hora bruto mínimo',
       '30 h garantizadas por semana',
-      'Promedio de 173 h/mes en verano 2026',
+      'Promedio de 173 h/mes en invierno 2026',
       'Alojamiento: 450-600 EUR/mes',
     ],
     image: {
@@ -473,7 +473,7 @@ export const culturalPrograms: CulturalProgram[] = [
       {
         question: '¿Cuánto dinero puedo tener disponible al final, con un ejemplo real?',
         answer:
-          'Con el promedio de 173 horas trabajadas en el verano de 2026 (173 × 15,33 EUR), el salario bruto queda en 2.652,09 EUR. A eso se le resta el impuesto salarial estimado (12-15%, entre 318 y 398 EUR) y el alojamiento supuesto (550 EUR), lo que deja entre 1.704 y 1.784 EUR después de impuestos y alojamiento. Restando un estimado de gastos personales —comida (250 EUR), Deutschland-Ticket (63 EUR) y SIM (20 EUR), en total 333 EUR—, el importe que te puede quedar disponible ronda entre 1.371 y 1.451 EUR. Es un ejemplo orientativo: tus horas, tu alquiler real y tus decisiones personales cambian el resultado.',
+          'Con el promedio de 173 horas trabajadas en el invierno de 2026 (173 × 15,33 EUR), el salario bruto queda en 2.652,09 EUR. A eso se le resta el impuesto salarial estimado (12-15%, entre 318 y 398 EUR) y el alojamiento supuesto (550 EUR), lo que deja entre 1.704 y 1.784 EUR después de impuestos y alojamiento. Restando un estimado de gastos personales —comida (250 EUR), Deutschland-Ticket (63 EUR) y SIM (20 EUR), en total 333 EUR—, el importe que te puede quedar disponible ronda entre 1.371 y 1.451 EUR. Es un ejemplo orientativo: tus horas, tu alquiler real y tus decisiones personales cambian el resultado.',
       },
       {
         question: '¿Cuándo recibo mi salario y puedo pedir un adelanto si lo necesito antes?',
@@ -483,7 +483,7 @@ export const culturalPrograms: CulturalProgram[] = [
       {
         question: '¿Puedo trabajar más horas de las garantizadas si rindo bien?',
         answer:
-          'Sí, aunque nunca es algo garantizado. Todas las empresas usan cuentas de tiempo para registrar tus horas, y las pausas no se pagan. Si hay demanda, turnos disponibles y muestras un buen rendimiento, es posible que te asignen más horas de las 30 mínimas garantizadas —el horario habitual ya suele ser de 35 a 37,5 horas semanales—. Como referencia, en el verano de 2026 el promedio mensual fue de 173 horas, con un pico de 220 horas para el estudiante con más horas registradas en un mes natural completo.',
+          'Sí, aunque nunca es algo garantizado. Todas las empresas usan cuentas de tiempo para registrar tus horas, y las pausas no se pagan. Si hay demanda, turnos disponibles y muestras un buen rendimiento, es posible que te asignen más horas de las 30 mínimas garantizadas —el horario habitual ya suele ser de 35 a 37,5 horas semanales—. Como referencia, en el invierno de 2026 el promedio mensual fue de 173 horas, con un pico de 220 horas para el estudiante con más horas registradas en un mes natural completo.',
       },
       {
         question: '¿Cómo es la logística de llegada, el primer día de trabajo y la salida del país?',
