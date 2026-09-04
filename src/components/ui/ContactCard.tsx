@@ -22,10 +22,14 @@ interface ContactCardProps {
 
 export function ContactCard({ programTitle, image, pricing, registrationTo, formKey, interestTag }: ContactCardProps) {
   const hasPricing = !!pricing?.items?.length
+  // Frases cortas ("Asesoría del viaje") se leen mejor como etiquetas que
+  // flotan una junto a otra; frases largas con datos concretos (montos,
+  // fechas) necesitan su propia línea para no romper feo al envolver.
+  const itemsAreShort = hasPricing && pricing.items.every((item) => item.length <= 28)
 
   if (hasPricing) {
     return (
-      <div className="sticky top-24 relative flex flex-col gap-6 overflow-hidden rounded-3xl border border-brand/40 bg-ink-800 p-6 shadow-[0_0_60px_-15px_rgba(249,176,0,0.35)]">
+      <div className="sticky top-24 relative flex flex-col gap-5 overflow-hidden rounded-3xl border border-brand/40 bg-ink-800 p-6 shadow-[0_0_60px_-15px_rgba(249,176,0,0.35)]">
         <div aria-hidden="true" className="pointer-events-none absolute -right-16 -top-16 size-56 rounded-full bg-brand/15 blur-3xl" />
 
         <div className="relative flex flex-col items-center gap-5 text-center">
@@ -34,12 +38,12 @@ export function ContactCard({ programTitle, image, pricing, registrationTo, form
               {pricing.badge}
             </span>
           )}
-          <h3 className="text-xl font-extrabold text-white">{pricing.headline ?? `Inversión de ${programTitle}`}</h3>
+          <h3 className="text-lg font-extrabold text-white">{pricing.headline ?? `Inversión de ${programTitle}`}</h3>
 
           {pricing.price && (
-            <div className="flex flex-col items-center gap-2">
+            <div className="flex flex-col items-center gap-1.5">
               <span className="text-xs font-bold uppercase tracking-widest text-white/50">Desde</span>
-              <span className="animate-[price-glow_2.6s_ease-in-out_infinite] text-7xl font-extrabold text-white sm:text-8xl">
+              <span className="animate-[price-glow_2.6s_ease-in-out_infinite] text-5xl font-extrabold text-white sm:text-6xl">
                 {pricing.price.amount}
                 {pricing.price.unit && <span className="ml-2 text-sm font-semibold text-white/60">{pricing.price.unit}</span>}
               </span>
@@ -54,6 +58,35 @@ export function ContactCard({ programTitle, image, pricing, registrationTo, form
               )}
             </div>
           )}
+
+          {/* Contenedor propio para "qué incluye", pegado justo debajo del
+              precio — así no se ve como una lista de texto suelta. */}
+          <div className="w-full rounded-2xl border border-white/10 bg-white/[0.04] p-4">
+            {itemsAreShort ? (
+              <div className="flex flex-wrap justify-center gap-2">
+                {pricing.items.map((item) => (
+                  <span
+                    key={item}
+                    className="inline-flex items-center gap-1.5 rounded-full border border-brand/25 bg-brand/10 px-3 py-1.5 text-xs font-semibold text-white/85"
+                  >
+                    <Check className="size-3 text-brand" />
+                    {item}
+                  </span>
+                ))}
+              </div>
+            ) : (
+              <ul className="flex flex-col gap-3 text-left">
+                {pricing.items.map((item) => (
+                  <li key={item} className="flex items-start gap-2.5 text-xs leading-relaxed text-white/80">
+                    <span className="mt-0.5 flex size-4 shrink-0 items-center justify-center rounded-full bg-brand text-white">
+                      <Check className="size-2.5" />
+                    </span>
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
 
           {registrationTo ? (
             <div className="flex w-full flex-col gap-3">
@@ -70,19 +103,6 @@ export function ContactCard({ programTitle, image, pricing, registrationTo, form
               </CTAButton>
             </div>
           ) : formKey && interestTag ? <div className="w-full text-left"><h4 className="mb-1 text-base font-bold text-white">¿Listo para aplicar?</h4><p className="mb-4 text-xs leading-5 text-white/55">Déjanos tus datos y un asesor te contará cómo iniciar.</p><InterestForm formKey={formKey} programTitle={programTitle} interestTag={interestTag} /><CTAButton href={whatsappLink(`¡Hola! Quiero más información sobre ${programTitle}.`)} icon={false} variant="ghost" className="mt-3 w-full">Prefiero escribir por WhatsApp</CTAButton></div> : <CTAButton href={whatsappLink(`¡Hola! Quiero inscribirme a ${programTitle}.`)} icon={false} className="w-full">¡Inscríbete ya!</CTAButton>}
-
-          <div className="h-px w-full bg-white/10" />
-
-          <ul className="flex w-full flex-col gap-4 text-left">
-            {pricing.items.map((item) => (
-              <li key={item} className="flex items-start gap-3 text-sm leading-relaxed text-white/80">
-                <span className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-brand text-white">
-                  <Check className="size-3" />
-                </span>
-                {item}
-              </li>
-            ))}
-          </ul>
 
           {pricing.note && <p className="text-center text-xs text-white/50">{pricing.note}</p>}
 
