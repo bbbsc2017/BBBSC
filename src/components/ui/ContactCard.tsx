@@ -9,7 +9,9 @@ interface ContactCardProps {
   pricing?: {
     badge?: string
     headline?: string
-    price?: { amount: string; unit?: string }
+    /** `originalAmount`, si viene, se muestra tachado (con animación de barrido
+     *  en bucle) arriba del precio grande — para promociones tipo "antes/ahora". */
+    price?: { amount: string; unit?: string; originalAmount?: string }
     items: string[]
     note?: string
   }
@@ -36,9 +38,20 @@ export function ContactCard({ programTitle, image, pricing, registrationTo, form
 
           {pricing.price && (
             <div className="flex flex-col items-center gap-1">
+              {pricing.price.originalAmount && (
+                <span className="relative inline-block text-sm font-bold text-white/40">
+                  {pricing.price.originalAmount}
+                  <span
+                    aria-hidden="true"
+                    className="absolute left-0 top-1/2 h-[2px] -translate-y-1/2 animate-[strike-sweep_4s_ease-in-out_infinite] bg-red-400/80"
+                  />
+                </span>
+              )}
               <span className="text-xs font-bold uppercase tracking-widest text-white/50">Desde</span>
               <div className="flex flex-wrap items-end justify-center gap-2">
-                <span className="text-6xl font-extrabold text-white sm:text-7xl">{pricing.price.amount}</span>
+                <span className="animate-[price-glow_2.6s_ease-in-out_infinite] text-6xl font-extrabold text-white sm:text-7xl">
+                  {pricing.price.amount}
+                </span>
                 {pricing.price.unit && <span className="pb-2 text-sm font-semibold text-white/60">{pricing.price.unit}</span>}
               </div>
             </div>

@@ -41,6 +41,36 @@
   to { opacity: 1; transform: translateY(0); }
 }
 
+/* Precio de lanzamiento (ContactCard): brillo suave en bucle sobre el precio
+   grande, y el tachado del precio anterior se "dibuja" de nuevo cada
+   pocos segundos en vez de quedar estático. */
+@keyframes price-glow {
+  0%,
+  100% {
+    text-shadow: 0 0 0 rgba(249, 176, 0, 0);
+    transform: scale(1);
+  }
+  50% {
+    text-shadow: 0 0 28px rgba(249, 176, 0, 0.5);
+    transform: scale(1.035);
+  }
+}
+
+@keyframes strike-sweep {
+  0%,
+  10% {
+    width: 0%;
+  }
+  40%,
+  80% {
+    width: 100%;
+  }
+  95%,
+  100% {
+    width: 0%;
+  }
+}
+
 @keyframes float {
   0%,
   100% {

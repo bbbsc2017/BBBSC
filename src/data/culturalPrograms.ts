@@ -14,7 +14,7 @@ export interface CulturalProgram {
   pricing?: {
     badge?: string
     headline?: string
-    price?: { amount: string; unit?: string }
+    price?: { amount: string; unit?: string; originalAmount?: string }
     items: string[]
     note?: string
   }
@@ -497,10 +497,13 @@ export const culturalPrograms: CulturalProgram[] = [
       },
     ],
     pricing: {
-      badge: 'Costos referenciales',
+      badge: 'Precio de lanzamiento',
       headline: 'Inversión en Work and Travel Alemania',
+      price: { amount: '€600', unit: 'EUR', originalAmount: '€1.000' },
       items: [
-        'Inscripción: $250.000 COP',
+        'Asesoría del programa',
+        'Asesoría del viaje',
+        'Seguro internacional',
       ],
       note: 'Tu asesor confirmará los valores y condiciones vigentes para tu perfil.',
     },
