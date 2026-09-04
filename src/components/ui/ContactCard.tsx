@@ -37,7 +37,12 @@ export function ContactCard({ programTitle, image, pricing, registrationTo, form
           <h3 className="text-xl font-extrabold text-white">{pricing.headline ?? `Inversión de ${programTitle}`}</h3>
 
           {pricing.price && (
-            <div className="flex flex-col items-center gap-1">
+            <div className="flex flex-col items-center gap-2">
+              <span className="text-xs font-bold uppercase tracking-widest text-white/50">Desde</span>
+              <span className="animate-[price-glow_2.6s_ease-in-out_infinite] text-7xl font-extrabold text-white sm:text-8xl">
+                {pricing.price.amount}
+                {pricing.price.unit && <span className="ml-2 text-sm font-semibold text-white/60">{pricing.price.unit}</span>}
+              </span>
               {pricing.price.originalAmount && (
                 <span className="relative inline-block text-sm font-bold text-white/40">
                   {pricing.price.originalAmount}
@@ -47,29 +52,11 @@ export function ContactCard({ programTitle, image, pricing, registrationTo, form
                   />
                 </span>
               )}
-              <span className="text-xs font-bold uppercase tracking-widest text-white/50">Desde</span>
-              <div className="flex flex-wrap items-end justify-center gap-2">
-                <span className="animate-[price-glow_2.6s_ease-in-out_infinite] text-6xl font-extrabold text-white sm:text-7xl">
-                  {pricing.price.amount}
-                </span>
-                {pricing.price.unit && <span className="pb-2 text-sm font-semibold text-white/60">{pricing.price.unit}</span>}
-              </div>
             </div>
           )}
 
-          <ul className="flex w-full flex-col gap-5 text-left">
-            {pricing.items.map((item) => (
-              <li key={item} className="flex items-start gap-3 text-sm leading-relaxed text-white/80">
-                <span className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-brand text-white">
-                  <Check className="size-3" />
-                </span>
-                {item}
-              </li>
-            ))}
-          </ul>
-
           {registrationTo ? (
-            <>
+            <div className="flex w-full flex-col gap-3">
               <CTAButton to={registrationTo} icon={false} className="w-full">
                 ¡Inscríbete ya!
               </CTAButton>
@@ -81,11 +68,21 @@ export function ContactCard({ programTitle, image, pricing, registrationTo, form
               >
                 Prefiero escribir por WhatsApp
               </CTAButton>
-            </>
-          ) : formKey && interestTag ? <>
-            <div className="w-full border-t border-white/10 pt-5 text-left"><h4 className="mb-1 text-base font-bold text-white">¿Listo para aplicar?</h4><p className="mb-4 text-xs leading-5 text-white/55">Déjanos tus datos y un asesor te contará cómo iniciar.</p><InterestForm formKey={formKey} programTitle={programTitle} interestTag={interestTag} /></div>
-            <CTAButton href={whatsappLink(`¡Hola! Quiero más información sobre ${programTitle}.`)} icon={false} variant="ghost" className="w-full">Prefiero escribir por WhatsApp</CTAButton>
-          </> : <CTAButton href={whatsappLink(`¡Hola! Quiero inscribirme a ${programTitle}.`)} icon={false} className="w-full">¡Inscríbete ya!</CTAButton>}
+            </div>
+          ) : formKey && interestTag ? <div className="w-full text-left"><h4 className="mb-1 text-base font-bold text-white">¿Listo para aplicar?</h4><p className="mb-4 text-xs leading-5 text-white/55">Déjanos tus datos y un asesor te contará cómo iniciar.</p><InterestForm formKey={formKey} programTitle={programTitle} interestTag={interestTag} /><CTAButton href={whatsappLink(`¡Hola! Quiero más información sobre ${programTitle}.`)} icon={false} variant="ghost" className="mt-3 w-full">Prefiero escribir por WhatsApp</CTAButton></div> : <CTAButton href={whatsappLink(`¡Hola! Quiero inscribirme a ${programTitle}.`)} icon={false} className="w-full">¡Inscríbete ya!</CTAButton>}
+
+          <div className="h-px w-full bg-white/10" />
+
+          <ul className="flex w-full flex-col gap-4 text-left">
+            {pricing.items.map((item) => (
+              <li key={item} className="flex items-start gap-3 text-sm leading-relaxed text-white/80">
+                <span className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-brand text-white">
+                  <Check className="size-3" />
+                </span>
+                {item}
+              </li>
+            ))}
+          </ul>
 
           {pricing.note && <p className="text-center text-xs text-white/50">{pricing.note}</p>}
 
