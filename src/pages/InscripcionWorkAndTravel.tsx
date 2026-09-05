@@ -203,7 +203,7 @@ export function ProgramRegistration({ program = 'usa' }: { program?: Registratio
                     <span className="flex size-14 items-center justify-center rounded-2xl bg-brand text-white"><CheckCircle2 className="size-7" /></span>
                     <p className="mt-6 text-sm font-bold uppercase tracking-widest text-brand">Inscripción recibida</p>
                     <h1 className="mt-2 text-3xl font-extrabold text-white sm:text-4xl">¡Estás a un paso de completar tu registro!</h1>
-                    <p className="mt-4 max-w-xl leading-relaxed text-white/65">Aprovecha y realiza ahora el pago de tu inscripción. En Zona Pagos deberás ingresar el valor de <strong className="text-white">{registration.payment.amount}</strong>.</p>
+                    <p className="mt-4 max-w-xl text-sm leading-relaxed text-white/65">Aprovecha y realiza ahora el pago de tu inscripción. En Zona Pagos deberás ingresar el valor de <strong className="text-white">{registration.payment.amount}</strong>.</p>
                     <a href={registration.payment.url} target="_blank" rel="noopener noreferrer" className="mt-8 inline-flex min-h-13 items-center justify-center gap-2 rounded-full bg-brand px-7 py-3.5 text-sm font-bold text-white shadow-brand transition-transform hover:-translate-y-0.5">
                       Ir a Zona Pagos <ExternalLink className="size-4" />
                     </a>
@@ -212,12 +212,12 @@ export function ProgramRegistration({ program = 'usa' }: { program?: Registratio
                     <div className="mt-8 flex items-center gap-3 text-xs font-bold uppercase tracking-widest text-white/40">
                       <span className="h-px flex-1 bg-white/10" /> o paga con Bre-B <span className="h-px flex-1 bg-white/10" />
                     </div>
-                    <div className="mt-6 flex flex-col items-center gap-4 rounded-2xl border border-white/10 bg-black/20 p-6 text-center sm:flex-row sm:items-start sm:text-left">
-                      <img src={brebQr} alt="Código QR Bre-B de Brave Bold and Brilliant Student Center SAS" width={144} height={144} className="size-36 shrink-0 rounded-xl bg-white p-2" />
+                    <div className="mt-6 flex flex-col items-center gap-5 rounded-2xl border border-white/10 bg-black/20 p-6 text-center sm:flex-row sm:items-start sm:text-left">
+                      <img src={brebQr} alt="Código QR Bre-B de Brave Bold and Brilliant Student Center SAS" width={192} height={192} className="size-48 shrink-0 rounded-xl bg-white p-2" />
                       <div>
                         <p className="flex items-center justify-center gap-2 text-sm font-bold text-white sm:justify-start"><QrCode className="size-4 text-brand" /> Bre-B</p>
-                        <p className="mt-1 text-xs text-white/55">Brave Bold and Brilliant Student Center SAS</p>
-                        <p className="mt-3 text-xs leading-relaxed text-white/65">Escanea desde la app o billetera de tu banco, selecciona la cuenta y digita el valor de <strong className="text-white">{registration.payment.amount}</strong>.</p>
+                        <p className="mt-1 text-sm text-white/55">Brave Bold and Brilliant Student Center SAS</p>
+                        <p className="mt-3 text-sm leading-relaxed text-white/65">Escanea desde la app o billetera de tu banco, selecciona la cuenta y digita el valor de <strong className="text-white">{registration.payment.amount}</strong>.</p>
                       </div>
                     </div>
                   </div>
