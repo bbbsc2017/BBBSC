@@ -1,5 +1,6 @@
 import { useMemo, useRef, useState, type FormEvent } from 'react'
-import { ArrowLeft, ArrowRight, Check, CheckCircle2, ClipboardCheck, ExternalLink, LockKeyhole, Send, ShieldCheck } from 'lucide-react'
+import { ArrowLeft, ArrowRight, Check, CheckCircle2, ClipboardCheck, ExternalLink, LockKeyhole, QrCode, Send, ShieldCheck } from 'lucide-react'
+import brebQr from '../assets/payments/bbbsc-breb-qr.png'
 import { Seo } from '../components/Seo'
 import { ShowcaseHero } from '../components/ui/ShowcaseHero'
 import { Container } from '../components/ui/Container'
@@ -207,6 +208,18 @@ export function ProgramRegistration({ program = 'usa' }: { program?: Registratio
                       Ir a Zona Pagos <ExternalLink className="size-4" />
                     </a>
                     <p className="mt-4 flex items-center gap-2 text-xs text-white/45"><LockKeyhole className="size-4 text-brand" /> El pago se realiza de forma segura en el portal de Zona Pagos.</p>
+
+                    <div className="mt-8 flex items-center gap-3 text-xs font-bold uppercase tracking-widest text-white/40">
+                      <span className="h-px flex-1 bg-white/10" /> o paga con Bre-B <span className="h-px flex-1 bg-white/10" />
+                    </div>
+                    <div className="mt-6 flex flex-col items-center gap-4 rounded-2xl border border-white/10 bg-black/20 p-6 text-center sm:flex-row sm:items-start sm:text-left">
+                      <img src={brebQr} alt="Código QR Bre-B de Brave Bold and Brilliant Student Center SAS" width={144} height={144} className="size-36 shrink-0 rounded-xl bg-white p-2" />
+                      <div>
+                        <p className="flex items-center justify-center gap-2 text-sm font-bold text-white sm:justify-start"><QrCode className="size-4 text-brand" /> Bre-B</p>
+                        <p className="mt-1 text-xs text-white/55">Brave Bold and Brilliant Student Center SAS</p>
+                        <p className="mt-3 text-xs leading-relaxed text-white/65">Escanea desde la app o billetera de tu banco, selecciona la cuenta y digita el valor de <strong className="text-white">{registration.payment.amount}</strong>.</p>
+                      </div>
+                    </div>
                   </div>
                   <aside className="border-t border-white/10 bg-black/20 p-6 sm:p-8 lg:border-l lg:border-t-0">
                     <p className="text-xs font-bold uppercase tracking-widest text-white/45">Resumen</p>
