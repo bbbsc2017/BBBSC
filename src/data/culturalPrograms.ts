@@ -290,7 +290,7 @@ export const culturalPrograms: CulturalProgram[] = [
       { label: 'Estudios', value: 'Desde sexto semestre o máximo 12 meses después de graduarte de una licenciatura en cualquier carrera académica' },
       { label: 'Edad', value: 'Ser mayor de 18 años' },
       { label: 'Nivel de inglés', value: 'B2-C1 avanzado' },
-      { label: 'Documentos', value: 'Pasaporte vigente durante todo el programa y presentación de examen ITEP' },
+      { label: 'Documentos', value: 'Pasaporte vigente durante todo el programa' },
     ],
     benefits: [
       'Trabaja en escuelas de Estados Unidos y fortalece tu CV',
@@ -311,11 +311,15 @@ export const culturalPrograms: CulturalProgram[] = [
       },
       {
         question: '¿Qué nivel de inglés necesito?',
-        answer: 'Se requiere un nivel de inglés B2-C1 avanzado y la presentación del examen ITEP.',
+        answer: 'Se requiere un nivel de inglés B2-C1 avanzado.',
       },
       {
         question: '¿Qué documentos debo tener?',
-        answer: 'Necesitas un pasaporte vigente durante todo el programa y presentar el examen ITEP.',
+        answer: 'Necesitas un pasaporte vigente durante todo el programa.',
+      },
+      {
+        question: '¿Necesito una licencia docente?',
+        answer: 'No se exige una licencia docente. Cuando aplique, la Foreign Credential Evaluation valida que tus estudios corresponden a formación docente.',
       },
       {
         question: '¿Qué acompañamiento incluye el programa?',
