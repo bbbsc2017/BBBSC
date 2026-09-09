@@ -287,7 +287,7 @@ export const culturalPrograms: CulturalProgram[] = [
       'El programa Teacher Assistant USA es una oportunidad para trabajar en escuelas de Estados Unidos apoyando a docentes en el aula, mientras adquieres experiencia en el sistema educativo estadounidense.',
     cta: 'El Mundo te Espera',
     requirements: [
-      { label: 'Estudios', value: 'Desde sexto semestre o máximo 12 meses después de graduarte de una licenciatura en cualquier carrera académica' },
+      { label: 'Estudios', value: 'Desde sexto semestre o hasta 12 meses después de graduarte' },
       { label: 'Edad', value: 'Ser mayor de 18 años' },
       { label: 'Nivel de inglés', value: 'B2-C1 avanzado' },
       { label: 'Documentos', value: 'Pasaporte vigente durante todo el programa' },

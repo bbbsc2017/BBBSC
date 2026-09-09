@@ -38,7 +38,9 @@ export function ContactCard({ programTitle, image, pricing, registrationTo, form
               {pricing.badge}
             </span>
           )}
-          <h3 className="text-lg font-extrabold text-white">{pricing.headline ?? `Inversión de ${programTitle}`}</h3>
+          <h3 className={pricing.headline === 'Teacher Assistant' ? 'text-3xl font-extrabold text-white sm:text-4xl' : 'text-lg font-extrabold text-white'}>
+            {pricing.headline ?? `Inversión de ${programTitle}`}
+          </h3>
 
           {pricing.price && (
             <div className="flex flex-col items-center gap-1.5">
