@@ -84,6 +84,15 @@ export function ProgramLandingPreview({ program, registrationTo }: { program: Cu
     ['Un programa pensado para ti', 'Conoce las condiciones, tiempos y requisitos antes de tomar tu decisión.'],
   ]
   const price = program.pricing?.price
+  const isWorkAndTravelUsa = program.slug === 'work-and-travel-usa'
+
+  const EnrollmentCTA = ({ className = '' }: { className?: string }) => {
+    const content = <>Inscríbete ya <ArrowRight className="size-4" /></>
+    const buttonClass = `inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-brand px-5 text-sm font-black text-white transition duration-300 hover:-translate-y-0.5 hover:bg-brand-400 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand ${className}`
+    return registrationTo
+      ? <Link to={registrationTo} className={buttonClass}>{content}</Link>
+      : <a href="#inscripcion" className={buttonClass}>{content}</a>
+  }
 
   useEffect(() => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
@@ -101,6 +110,7 @@ export function ProgramLandingPreview({ program, registrationTo }: { program: Cu
           <p className="text-[10px] font-black uppercase tracking-[.24em] text-brand">Conoce la experiencia</p>
           <h2 className="mt-4 text-3xl font-black tracking-tight text-white sm:text-5xl">Más que un viaje: una oportunidad para crecer.</h2>
           <p className="mx-auto mt-5 max-w-2xl text-base leading-relaxed text-white/65">{program.description}</p>
+          <EnrollmentCTA className="mt-7" />
           </section>
         </Reveal>
 
@@ -132,6 +142,7 @@ export function ProgramLandingPreview({ program, registrationTo }: { program: Cu
               </div>
             </article>
             </div>
+            <div className="mt-7 flex justify-end"><EnrollmentCTA /></div>
           </div>
         </section>
 
@@ -141,21 +152,24 @@ export function ProgramLandingPreview({ program, registrationTo }: { program: Cu
             {reasons.map(([title, copy], index) => { const Icon = reasonIcons[index]; return <article key={title} className="group rounded-[1.5rem] bg-white/[.035] p-6 transition duration-300 hover:-translate-y-1.5 hover:bg-white/[.075] hover:shadow-xl hover:shadow-black/15"><span className="flex size-11 items-center justify-center rounded-2xl bg-brand/12 text-brand transition-transform duration-300 group-hover:scale-110"><Icon className="size-5" /></span><h3 className="mt-5 text-lg font-black text-white">{title}</h3><p className="mt-2 text-sm leading-relaxed text-white/60">{copy}</p></article> })}
           </div>
           {program.jobExamples && <div className="mt-10 flex flex-wrap justify-center gap-2">{program.jobExamples.map((job) => <span key={job} className="rounded-full bg-white/[.055] px-3 py-2 text-xs font-semibold text-white/65 transition duration-300 hover:-translate-y-0.5 hover:bg-brand/15 hover:text-white">{job}</span>)}</div>}
+          <div className="mt-9 flex justify-center"><EnrollmentCTA /></div>
         </section></Reveal>
 
         <Reveal><section id="inscripcion" className="relative">
           <div aria-hidden="true" className="pointer-events-none absolute right-0 top-0 size-64 rounded-full bg-brand/10 blur-3xl" />
           <div className="relative grid items-center gap-10 md:grid-cols-[.82fr_1.18fr] lg:gap-16">
             <div className="self-center"><Sparkles className="size-7 text-brand" /><p className="mt-6 text-[10px] font-black uppercase tracking-[.24em] text-brand">Tu siguiente paso</p><h2 className="mt-3 text-4xl font-black leading-[.95] text-white">Tu próxima experiencia puede empezar hoy.</h2><p className="mt-5 max-w-md text-sm leading-relaxed text-white/65">Conoce la inversión, recibe orientación y empieza tu proceso con un asesor.</p>
-              {price && <div className="mt-8 inline-flex items-end gap-3"><div><p className="text-[10px] font-bold uppercase tracking-widest text-white/45">Inversión desde</p><p className="mt-1 text-5xl font-black text-brand">{price.amount}</p></div>{price.originalAmount && <p className="mb-1 text-sm font-bold text-white/40 line-through">{price.originalAmount}</p>}</div>}
+              {price && !isWorkAndTravelUsa && <div className="mt-8 inline-flex items-end gap-3"><div><p className="text-[10px] font-bold uppercase tracking-widest text-white/45">Inversión desde</p><p className="mt-1 text-5xl font-black text-brand">{price.amount}</p></div>{price.originalAmount && <p className="mb-1 text-sm font-bold text-white/40 line-through">{price.originalAmount}</p>}</div>}
               {program.pricing?.items && <ul className="mt-6 space-y-2">{program.pricing.items.map((item) => <li key={item} className="flex gap-2 text-sm text-white/70"><span className="text-brand">✓</span>{item}</li>)}</ul>}
               {program.pricing?.note && <p className="mt-5 max-w-md text-xs leading-relaxed text-white/60">{program.pricing.note}</p>}
             </div>
-            <div className="rounded-[1.75rem] bg-white/[.035] p-6 shadow-[0_24px_70px_-34px_rgba(0,0,0,0.75)] backdrop-blur-xl sm:p-8"><p className="text-lg font-black text-white">¿Listo para recibir información?</p><p className="mt-2 text-sm leading-relaxed text-white/60">{registrationTo ? 'Inicia tu inscripción en el formulario completo del programa.' : 'Déjanos tus datos y un asesor te contará cómo iniciar.'}</p>{registrationTo ? <div className="mt-6"><Link to={registrationTo} className="inline-flex min-h-12 w-full items-center justify-center rounded-full bg-brand px-6 text-sm font-black text-white transition hover:-translate-y-0.5 hover:bg-brand-400">Iniciar inscripción <ArrowRight className="ml-2 size-4" /></Link></div> : <div className="mt-6"><InterestForm formKey={`cultural_${program.slug}`} programTitle={program.title} interestTag={`interesado_${program.slug.replaceAll('-', '_')}`} /></div>}<a className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-brand hover:text-white" href={whatsappLink(`¡Hola! Quiero más información sobre ${program.title}.`)}>Prefiero escribir por WhatsApp <ArrowRight className="size-4" /></a></div>
+            <div className="rounded-[1.75rem] bg-white/[.035] p-6 shadow-[0_24px_70px_-34px_rgba(0,0,0,0.75)] backdrop-blur-xl sm:p-8">
+              {isWorkAndTravelUsa && price && <div className="rounded-2xl bg-brand/10 px-5 py-5 text-center"><p className="text-[10px] font-black uppercase tracking-[.2em] text-brand">Precio temporada 2027</p><div className="mt-2 flex items-end justify-center gap-2"><p className="text-5xl font-black text-white">{price.amount}</p>{price.unit && <p className="mb-1 text-sm font-bold text-white/60">{price.unit}</p>}</div>{price.originalAmount && <p className="mt-1 text-xs font-bold text-white/40 line-through">{price.originalAmount}</p>}</div>}
+              <p className={`${isWorkAndTravelUsa ? 'mt-6' : ''} text-lg font-black text-white`}>{registrationTo ? '¿Listo para inscribirte?' : '¿Listo para recibir información?'}</p><p className="mt-2 text-sm leading-relaxed text-white/60">{registrationTo ? 'Completa tu inscripción en el formulario del programa.' : 'Déjanos tus datos y un asesor te contará cómo iniciar.'}</p>{registrationTo ? <div className="mt-6"><EnrollmentCTA className="min-h-12 w-full px-6" /></div> : <div className="mt-6"><InterestForm formKey={`cultural_${program.slug}`} programTitle={program.title} interestTag={`interesado_${program.slug.replaceAll('-', '_')}`} /></div>}<a className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-brand hover:text-white" href={whatsappLink(`¡Hola! Quiero más información sobre ${program.title}.`)}>Prefiero escribir por WhatsApp <ArrowRight className="size-4" /></a></div>
           </div>
         </section></Reveal>
 
-        <Reveal><section className="grid gap-10 lg:grid-cols-[.8fr_1.2fr]"><div><p className="text-[10px] font-black uppercase tracking-[.24em] text-brand">Preguntas frecuentes</p><h2 className="mt-4 text-3xl font-black leading-tight text-white">Resuelve tus dudas antes de empezar.</h2><p className="mt-4 text-sm leading-relaxed text-white/60">Aquí encuentras las respuestas más importantes del programa.</p></div><ProgramFAQ items={program.faq} minimal /></section></Reveal>
+        <Reveal><section className="grid gap-10 lg:grid-cols-[.8fr_1.2fr]"><div><p className="text-[10px] font-black uppercase tracking-[.24em] text-brand">Preguntas frecuentes</p><h2 className="mt-4 text-3xl font-black leading-tight text-white">Resuelve tus dudas antes de empezar.</h2><p className="mt-4 text-sm leading-relaxed text-white/60">Aquí encuentras las respuestas más importantes del programa.</p><EnrollmentCTA className="mt-7" /></div><ProgramFAQ items={program.faq} minimal /></section></Reveal>
       </Container>
     </div>
   )
