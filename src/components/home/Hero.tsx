@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { ArrowRight, Globe2, GraduationCap, Plane, Sparkles } from 'lucide-react'
 import { CTAButton } from '../ui/CTAButton'
 import { Container } from '../ui/Container'
+import { whatsappLink } from '../../lib/site'
 
 const stats = [
   { label: 'Años de experiencia', value: '10+' },
@@ -99,7 +100,7 @@ export function Hero() {
 
           <div className="flex flex-wrap items-center gap-4">
             <CTAButton to="/work-and-travel-usa">Explora los programas</CTAButton>
-            <CTAButton to="/contacto" variant="ghost">
+            <CTAButton href={whatsappLink()} variant="ghost">
               Cuéntanos tu plan
             </CTAButton>
           </div>

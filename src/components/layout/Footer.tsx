@@ -77,9 +77,9 @@ export function Footer() {
           <h3 className="mb-4 text-sm font-bold uppercase tracking-wide text-brand">Enlaces</h3>
           <ul className="flex flex-col gap-2.5 text-sm text-white/70">
             <li>
-              <Link to="/contacto" className="transition-colors hover:text-white">
+              <a href={whatsappLink()} target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-white">
                 Contáctanos
-              </Link>
+              </a>
             </li>
             <li>
               <Link to="/hunters" className="transition-colors hover:text-white">

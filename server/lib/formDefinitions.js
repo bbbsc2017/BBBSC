@@ -57,6 +57,18 @@ const asiaRegistrationFields = [
   { key: 'disponibilidadViaje', label: 'Disponibilidad para viajar', defaultTarget: 'ignore' },
 ]
 
+const germanyRegistrationFields = [
+  ...registrationFields.filter(({ key }) => key !== 'fechaGrado'),
+  { key: 'diasParticipacionAlemania', label: 'Días de participación en Alemania', defaultTarget: 'ignore' },
+  { key: 'planDiasRestantesAlemania', label: 'Plan para los días restantes', defaultTarget: 'ignore' },
+  { key: 'cargosPreferidosAlemania', label: 'Cargos de interés', defaultTarget: 'ignore' },
+  { key: 'disponibleCualquierVacanteAlemania', label: 'Disponible para cualquier vacante', defaultTarget: 'ignore' },
+  { key: 'tallaPantalonAlemania', label: 'Talla de pantalón (COL/EU)', defaultTarget: 'ignore' },
+  { key: 'tallaCamisetaAlemania', label: 'Talla de camiseta (COL/EU)', defaultTarget: 'ignore' },
+  { key: 'tallaZapatosAlemania', label: 'Talla de zapatos (COL/EU)', defaultTarget: 'ignore' },
+  { key: 'viajaraAcompanadoAlemania', label: 'Viaja solo/a o acompañado/a', defaultTarget: 'ignore' },
+]
+
 const offerApplicationFields = [
   { key: 'firstName', label: 'Nombre del participante', defaultTarget: 'standard:first_name' },
   { key: 'lastName', label: 'Apellidos del participante', defaultTarget: 'standard:last_name' },
@@ -114,6 +126,16 @@ export const FORM_DEFINITIONS = [
     programTag: 'asia',
     visaType: 'Según destino',
     fields: asiaRegistrationFields,
+  },
+  {
+    key: 'registration_work-and-travel-alemania',
+    label: 'Inscripción · Winter Work Alemania',
+    title: 'Winter Work Alemania',
+    interestTag: 'interesado_winter_work_alemania',
+    source: 'Formulario Web - Inscripción Winter Work Alemania',
+    programTag: 'work-and-travel-alemania',
+    visaType: 'Alemania',
+    fields: germanyRegistrationFields,
   },
   ...programs.map(([key, title, tag]) => ({
     key,

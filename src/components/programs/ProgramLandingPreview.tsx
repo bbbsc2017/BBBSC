@@ -63,7 +63,6 @@ export function ProgramRequirementsStrip({ requirements }: { requirements: Cultu
 
 export function ProgramLandingPreview({ program, registrationTo }: { program: CulturalProgram; registrationTo?: string }) {
   const [selectedFeature, setSelectedFeature] = useState(0)
-  const [rotationKey, setRotationKey] = useState(0)
   const isWinterGermany = program.slug === 'work-and-travel-alemania'
   const coreFeatureItems = [
     { title: 'Cómo funciona', eyebrow: 'Duración y requisitos', Icon: FileCheck2, copy: `La experiencia dura ${program.duration.charAt(0).toLowerCase() + program.duration.slice(1)} y se realiza durante el receso oficial de tu universidad.`, details: program.requirements.filter((item) => item.label !== 'Duración').map((item) => `${item.label}: ${item.value}.`), note: undefined },
@@ -94,14 +93,6 @@ export function ProgramLandingPreview({ program, registrationTo }: { program: Cu
       : <a href="#inscripcion" className={buttonClass}>{content}</a>
   }
 
-  useEffect(() => {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
-    const timer = window.setInterval(() => {
-      setSelectedFeature((current) => (current + 1) % featureItems.length)
-    }, 6000)
-    return () => window.clearInterval(timer)
-  }, [featureItems.length, rotationKey])
-
   return (
     <div id="contenido-programa" className="scroll-mt-24 pb-20 pt-16 sm:pt-20">
       <Container className="flex flex-col gap-24 sm:gap-36 lg:gap-44">
@@ -125,8 +116,8 @@ export function ProgramLandingPreview({ program, registrationTo }: { program: Cu
               {featureItems.map((feature, index) => {
                 const Icon = feature.Icon
                 const isActive = selectedFeature === index
-                return <button key={feature.title} id={`program-topic-${index}`} type="button" role="tab" aria-selected={isActive} aria-controls="program-topic-content" onClick={() => { setSelectedFeature(index); setRotationKey((key) => key + 1) }} className={`group flex min-h-14 items-center justify-center gap-2 bg-transparent py-3 text-left transition-all duration-300 hover:translate-x-1 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand sm:min-h-16 sm:justify-start sm:gap-3 ${isActive ? 'text-brand' : 'text-white/55 hover:text-white'}`}>
-                  <span className="hidden text-xs font-semibold tabular-nums opacity-65 sm:inline">0{index + 1}</span><span className="text-[10px] font-semibold tabular-nums opacity-65 sm:hidden">0{index + 1}</span><Icon aria-hidden="true" className="size-4 shrink-0 sm:size-5" /><span className="hidden text-sm font-bold leading-tight sm:inline">{feature.title}</span><span className="sr-only sm:hidden">{feature.title}</span><ArrowRight aria-hidden="true" className={`ml-auto hidden size-4 shrink-0 transition-opacity lg:block ${isActive ? 'opacity-100' : 'opacity-0'}`} />
+                return <button key={feature.title} id={`program-topic-${index}`} type="button" role="tab" aria-selected={isActive} aria-controls="program-topic-content" onClick={() => setSelectedFeature(index)} className={`group flex min-h-14 items-center justify-center gap-2 bg-transparent py-3 text-left transition-all duration-300 hover:translate-x-1 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand sm:min-h-16 sm:justify-start sm:gap-3 sm:hover:pl-2 ${isActive ? 'text-brand' : 'text-white/55 hover:text-white'}`}>
+                  <span className="hidden text-xs font-semibold tabular-nums opacity-65 transition-opacity group-hover:opacity-100 sm:inline">0{index + 1}</span><span className="text-[10px] font-semibold tabular-nums opacity-65 transition-opacity group-hover:opacity-100 sm:hidden">0{index + 1}</span><Icon aria-hidden="true" className="size-4 shrink-0 transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-6 sm:size-5" /><span className="hidden text-sm font-bold leading-tight sm:inline">{feature.title}</span><span className="sr-only sm:hidden">{feature.title}</span><ArrowRight aria-hidden="true" className={`ml-auto hidden size-4 shrink-0 transition-all duration-300 lg:block ${isActive ? 'opacity-100' : 'translate-x-[-6px] opacity-0 group-hover:translate-x-0 group-hover:opacity-75'}`} />
                 </button>
               })}
             </div>

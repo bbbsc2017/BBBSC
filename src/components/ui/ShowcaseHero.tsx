@@ -33,7 +33,9 @@ function Action({ action, primary }: { action: ShowcaseAction; primary?: boolean
     : 'inline-flex min-h-12 items-center justify-center rounded-full border border-white/20 bg-[#1c1c1c]/35 px-6 text-sm font-bold text-white backdrop-blur-md transition hover:border-brand/50 hover:text-brand'
   const Icon = action.to.startsWith('#') ? ArrowDown : ArrowRight
   const content = <>{action.label}<Icon className="ml-2 size-4" /></>
-  return action.to.startsWith('#') ? <a href={action.to} className={className}>{content}</a> : <Link to={action.to} className={className}>{content}</Link>
+  return action.to.startsWith('#') || action.to.startsWith('http')
+    ? <a href={action.to} target={action.to.startsWith('http') ? '_blank' : undefined} rel={action.to.startsWith('http') ? 'noopener noreferrer' : undefined} className={className}>{content}</a>
+    : <Link to={action.to} className={className}>{content}</Link>
 }
 
 export function ShowcaseHero({ eyebrow, title, description, image, items = [], itemHeading = 'Información destacada', breadcrumbs, primaryAction, secondaryAction, imageKey }: ShowcaseHeroProps) {
