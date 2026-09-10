@@ -11,6 +11,7 @@ import {
   ShieldCheck,
   Sparkles,
   UtensilsCrossed,
+  WalletCards,
   Warehouse,
   Wrench,
 } from 'lucide-react'
@@ -27,6 +28,8 @@ const jobExampleIcons: Record<string, ComponentType<{ className?: string }>> = {
   'Embalaje y control de calidad': PackageCheck,
   'Otras tareas estacionales': CalendarClock,
 }
+
+const planningCostIcons = [ShieldCheck, Luggage, WalletCards]
 import { Seo } from '../components/Seo'
 import { ProgramHero } from '../components/ui/ProgramHero'
 import { Container } from '../components/ui/Container'
@@ -158,6 +161,35 @@ export default function ProgramaCulturalDetalle() {
                   </ul>
                 </div>
               </div>
+              {program.planningCosts && (
+                <div className="relative overflow-hidden rounded-2xl border border-brand/25 bg-ink-800 p-5 sm:col-span-2">
+                  <div aria-hidden="true" className="pointer-events-none absolute -right-12 -top-12 size-40 rounded-full bg-brand/10 blur-3xl" />
+                  <div className="relative">
+                    <div className="flex items-start gap-3">
+                      <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-brand/15 text-brand">
+                        <WalletCards className="size-5" />
+                      </span>
+                      <div>
+                        <h4 className="text-sm font-bold text-white">Costos para planificar</h4>
+                        <p className="mt-1 text-xs leading-relaxed text-white/60">Tenlos en cuenta antes de confirmar tu viaje.</p>
+                      </div>
+                    </div>
+                    <div className="mt-5 grid gap-3 sm:grid-cols-3">
+                      {program.planningCosts.map((cost, index) => {
+                        const Icon = planningCostIcons[index] ?? WalletCards
+                        return (
+                          <div key={cost.label} className="group rounded-xl border border-white/10 bg-white/[0.035] p-3.5 transition-all duration-300 hover:-translate-y-1 hover:border-brand/45 hover:bg-brand/10">
+                            <Icon className="size-4 text-brand transition-transform duration-300 group-hover:scale-110" />
+                            <p className="mt-3 text-[10px] font-bold uppercase tracking-wider text-white/45">{cost.label}</p>
+                            <p className="mt-1 text-lg font-extrabold text-white">{cost.amount}</p>
+                            {cost.detail && <p className="mt-0.5 text-[11px] text-white/55">{cost.detail}</p>}
+                          </div>
+                        )
+                      })}
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
 
             <ProgramFAQ items={program.faq} />

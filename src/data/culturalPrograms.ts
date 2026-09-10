@@ -9,6 +9,7 @@ export interface CulturalProgram {
   benefits: string[]
   duration: string
   keyFacts: string[]
+  planningCosts?: { label: string; amount: string; detail?: string }[]
   image: { src: string; alt: string }
   faq: { question: string; answer: string }[]
   pricing?: {
@@ -438,7 +439,7 @@ export const culturalPrograms: CulturalProgram[] = [
   },
   {
     slug: 'work-and-travel-alemania',
-    title: 'Work and Travel Alemania',
+    title: 'Winter Work Alemania',
     country: 'Alemania',
     tagline: 'Gana en euros, vive en Europa y conviértete en protagonista de tu propia historia de intercambio',
     description:
@@ -462,6 +463,11 @@ export const culturalPrograms: CulturalProgram[] = [
       '30 h garantizadas por semana',
       'Promedio de 173 h/mes en invierno 2026',
       'Alojamiento: 450-600 EUR/mes',
+    ],
+    planningCosts: [
+      { label: 'Seguro de viaje', amount: '€30' },
+      { label: 'Tiquetes aéreos', amount: '≈ €800', detail: 'Valor aproximado' },
+      { label: 'Dinero de bolsillo', amount: '€1.000', detail: 'Recomendado' },
     ],
     image: {
       src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/GER_Rothenburg_ob_der_Tauber%2C_Marktplatz_001.jpg/1280px-GER_Rothenburg_ob_der_Tauber%2C_Marktplatz_001.jpg',
@@ -507,7 +513,7 @@ export const culturalPrograms: CulturalProgram[] = [
     ],
     pricing: {
       badge: 'Precio de lanzamiento',
-      headline: 'Winter Work and Travel Alemania',
+      headline: 'Winter Work Alemania',
       price: { amount: '€600', originalAmount: '€1.000' },
       items: [
         'Asesoría del programa',
