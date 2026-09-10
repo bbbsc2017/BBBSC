@@ -58,7 +58,7 @@ const asiaRegistrationFields = [
 ]
 
 const germanyRegistrationFields = [
-  ...registrationFields.filter(({ key }) => key !== 'fechaGrado'),
+  ...registrationFields.filter(({ key }) => !['fechaGrado', 'visaAplicada', 'visaNegada'].includes(key)),
   { key: 'diasParticipacionAlemania', label: 'Días de participación en Alemania', defaultTarget: 'ignore' },
   { key: 'planDiasRestantesAlemania', label: 'Plan para los días restantes', defaultTarget: 'ignore' },
   { key: 'cargosPreferidosAlemania', label: 'Cargos de interés', defaultTarget: 'ignore' },
