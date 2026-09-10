@@ -62,7 +62,6 @@ const germanyRegistrationFields = [
   { key: 'diasParticipacionAlemania', label: 'Días de participación en Alemania', defaultTarget: 'ignore' },
   { key: 'planDiasRestantesAlemania', label: 'Plan para los días restantes', defaultTarget: 'ignore' },
   { key: 'cargosPreferidosAlemania', label: 'Cargos de interés', defaultTarget: 'ignore' },
-  { key: 'disponibleCualquierVacanteAlemania', label: 'Disponible para cualquier vacante', defaultTarget: 'ignore' },
   { key: 'tallaPantalonAlemania', label: 'Talla de pantalón (CO/EU)', defaultTarget: 'ignore' },
   { key: 'tallaCamisetaAlemania', label: 'Talla de camiseta (CO/EU)', defaultTarget: 'ignore' },
   { key: 'tallaZapatosAlemania', label: 'Talla de zapatos (CO/EU)', defaultTarget: 'ignore' },

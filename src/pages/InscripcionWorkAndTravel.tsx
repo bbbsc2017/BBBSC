@@ -74,7 +74,7 @@ const initialForm = {
   departamentoUniversidad: '', municipioUniversidad: '', universidad: '',
   nombrePadre: '', telefonoPadre: '', nombreMadre: '', telefonoMadre: '', familiaresEEUU: '',
   tiempoExperiencia: '', areaExperiencia: '', cargoExperiencia: '', empresaExperiencia: '', disponibilidadViaje: '',
-  diasParticipacionAlemania: '', planDiasRestantesAlemania: '', cargosPreferidosAlemania: '', disponibleCualquierVacanteAlemania: '',
+  diasParticipacionAlemania: '', planDiasRestantesAlemania: '', cargosPreferidosAlemania: '',
   tallaPantalonAlemania: '', tallaCamisetaAlemania: '', tallaZapatosAlemania: '', viajaraAcompanadoAlemania: '',
   gdprAceptado: false,
 }
@@ -172,11 +172,7 @@ export function ProgramRegistration({ program = 'usa' }: { program?: Registratio
     setForm((previous) => {
       const selected = previous.cargosPreferidosAlemania ? previous.cargosPreferidosAlemania.split(' | ') : []
       const next = selected.includes(role) ? selected.filter((item) => item !== role) : [...selected, role]
-      return {
-        ...previous,
-        cargosPreferidosAlemania: next.join(' | '),
-        disponibleCualquierVacanteAlemania: next.includes(germanyFlexibleVacancy) ? 'Sí' : 'No',
-      }
+      return { ...previous, cargosPreferidosAlemania: next.join(' | ') }
     })
     setStatus('idle')
     setErrorMessage('')

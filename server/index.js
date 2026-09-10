@@ -178,7 +178,7 @@ app.post('/api/registrations', jsonSmall, requireRegistrationRecaptcha, async (r
   const programRequiredFields = form.key === 'registration_asia'
     ? ['tiempoExperiencia', 'areaExperiencia', 'cargoExperiencia', 'empresaExperiencia', 'disponibilidadViaje']
     : form.key === 'registration_work-and-travel-alemania'
-      ? ['diasParticipacionAlemania', 'cargosPreferidosAlemania', 'disponibleCualquierVacanteAlemania', 'tallaPantalonAlemania', 'tallaCamisetaAlemania', 'tallaZapatosAlemania', 'viajaraAcompanadoAlemania']
+      ? ['diasParticipacionAlemania', 'cargosPreferidosAlemania', 'tallaPantalonAlemania', 'tallaCamisetaAlemania', 'tallaZapatosAlemania', 'viajaraAcompanadoAlemania']
       : ['fechaGrado']
   if (form.key === 'registration_work-and-travel-alemania' && body.diasParticipacionAlemania !== '90 días (programa completo)' && !body.planDiasRestantesAlemania) {
     return res.status(400).json({ ok: false, error: 'Indica qué harás con los días restantes del programa.' })
@@ -207,7 +207,7 @@ app.post('/api/registrations', jsonSmall, requireRegistrationRecaptcha, async (r
     const asiaExperienceSummary = form.key === 'registration_asia'
       ? ` Experiencia: ${body.tiempoExperiencia}; área: ${body.areaExperiencia}; cargo: ${body.cargoExperiencia}; empresa: ${body.empresaExperiencia}; disponibilidad para viajar: ${body.disponibilidadViaje}.`
       : form.key === 'registration_work-and-travel-alemania'
-        ? ` Participación: ${body.diasParticipacionAlemania}; días restantes: ${body.planDiasRestantesAlemania || 'No aplica'}; cargos: ${body.cargosPreferidosAlemania}; disponible para cualquier vacante: ${body.disponibleCualquierVacanteAlemania}; tallas: pantalón ${body.tallaPantalonAlemania}, camiseta ${body.tallaCamisetaAlemania}, zapatos ${body.tallaZapatosAlemania}; viaje: ${body.viajaraAcompanadoAlemania}.`
+        ? ` Participación: ${body.diasParticipacionAlemania}; días restantes: ${body.planDiasRestantesAlemania || 'No aplica'}; cargos: ${body.cargosPreferidosAlemania}; tallas: pantalón ${body.tallaPantalonAlemania}, camiseta ${body.tallaCamisetaAlemania}, zapatos ${body.tallaZapatosAlemania}; viaje: ${body.viajaraAcompanadoAlemania}.`
         : ''
     const payload = buildClientifyPayload(form, {
       ...body,
