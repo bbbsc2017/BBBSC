@@ -14,6 +14,7 @@ const InscripcionAlemania = lazy(() => import('./pages/InscripcionAlemania'))
 const ProgramaAcademicoDetalle = lazy(() => import('./pages/ProgramaAcademicoDetalle'))
 const UniversidadesIndex = lazy(() => import('./pages/UniversidadesIndex'))
 const ContratoSwt = lazy(() => import('./pages/ContratoSwt'))
+const ContratoTraineeAndInternship = lazy(() => import('./pages/ContratoTraineeAndInternship'))
 const HojaDeVidaSwt = lazy(() => import('./pages/HojaDeVidaSwt'))
 const HojaDeVidaTraineeAndInternship = lazy(() => import('./pages/HojaDeVidaTraineeAndInternship'))
 const ReportaVuelo = lazy(() => import('./pages/ReportaVuelo'))
@@ -72,6 +73,7 @@ function App() {
           <Route path="universidades/:slug" element={<LegacyDetailRedirect />} />
           <Route path="contrato-swt-a" element={<ContratoSwt variant="a" />} />
           <Route path="contrato-swt-acc" element={<ContratoSwt variant="acc" />} />
+          <Route path="contrato-trainee-and-internship" element={<ContratoTraineeAndInternship />} />
           <Route path="hoja-de-vida-swt" element={<HojaDeVidaSwt />} />
           <Route path="hoja-de-vida-trainee-and-internship" element={<HojaDeVidaTraineeAndInternship />} />
           <Route path="reporte-vuelo-ida" element={<ReportaVuelo direction="ida" />} />
