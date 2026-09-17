@@ -48,7 +48,7 @@ export default function ProgramaCulturalDetalle() {
   if (!program) return <Navigate to="/" replace />
 
   const related = culturalPrograms.filter((item) => item.slug !== program.slug).slice(0, 3)
-  const registrationTo = program.slug === 'work-and-travel-usa' || program.slug === 'asia' || program.slug === 'work-and-travel-alemania' ? `/${program.slug}/inscripcion` : undefined
+  const registrationTo = program.slug === 'work-and-travel-usa' || program.slug === 'asia' || program.slug === 'winter-work-alemania' ? `/${program.slug}/inscripcion` : undefined
   const usesNewTemplate = true
   const breadcrumbs = [
     { label: 'Inicio', to: '/' },

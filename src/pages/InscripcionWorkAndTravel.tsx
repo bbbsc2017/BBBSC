@@ -41,7 +41,7 @@ const registrationPrograms = {
     payment: { amount: '$250.000 COP', url: 'https://www.zonapagos.com/t_bbbacademiasas/pagos.asp' },
   },
   alemania: {
-    slug: 'work-and-travel-alemania',
+    slug: 'winter-work-alemania',
     title: 'Winter Work Alemania',
     formKey: 'registration_work-and-travel-alemania',
     interestTag: 'interesado_winter_work_alemania',

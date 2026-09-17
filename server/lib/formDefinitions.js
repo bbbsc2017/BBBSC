@@ -132,7 +132,7 @@ export const FORM_DEFINITIONS = [
     title: 'Winter Work Alemania',
     interestTag: 'interesado_winter_work_alemania',
     source: 'Formulario Web - Inscripción Winter Work Alemania',
-    programTag: 'work-and-travel-alemania',
+    programTag: 'winter-work-alemania',
     visaType: 'Alemania',
     fields: germanyRegistrationFields,
   },

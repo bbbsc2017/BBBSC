@@ -63,7 +63,7 @@ export function ProgramRequirementsStrip({ requirements }: { requirements: Cultu
 
 export function ProgramLandingPreview({ program, registrationTo }: { program: CulturalProgram; registrationTo?: string }) {
   const [selectedFeature, setSelectedFeature] = useState(0)
-  const isWinterGermany = program.slug === 'work-and-travel-alemania'
+  const isWinterGermany = program.slug === 'winter-work-alemania'
   const coreFeatureItems = [
     { title: 'Cómo funciona', eyebrow: 'Duración y requisitos', Icon: FileCheck2, copy: `La experiencia dura ${program.duration.charAt(0).toLowerCase() + program.duration.slice(1)} y se realiza durante el receso oficial de tu universidad.`, details: program.requirements.filter((item) => item.label !== 'Duración').map((item) => `${item.label}: ${item.value}.`), note: undefined },
     { title: 'Tu experiencia', eyebrow: 'Beneficios y acompañamiento', Icon: Sparkles, copy: `Conoce los beneficios y el acompañamiento que hacen parte de tu experiencia en ${program.country}.`, details: program.benefits, note: program.jobExamplesNote },
