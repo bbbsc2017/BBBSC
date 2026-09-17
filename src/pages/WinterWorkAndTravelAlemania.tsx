@@ -99,7 +99,7 @@ const projectItems = [
 ]
 
 export default function WinterWorkAndTravelAlemania() {
-  const program = getCulturalProgram('work-and-travel-alemania')
+  const program = getCulturalProgram('winter-work-alemania')
   const path = '/winter-work-and-travel-alemania'
   const breadcrumbs = [{ label: 'Inicio', to: '/' }, { label: 'Winter Work and Travel Alemania' }]
 
@@ -141,7 +141,7 @@ export default function WinterWorkAndTravelAlemania() {
           </p>
 
           <div className="flex flex-wrap items-center gap-4">
-            <CTAButton to="/work-and-travel-alemania">Quiero inscribirme</CTAButton>
+            <CTAButton to="/winter-work-alemania">Quiero inscribirme</CTAButton>
             <CTAButton href={whatsappLink('¡Hola! Vi la página de Winter Work and Travel Alemania y tengo dudas.')} variant="ghost">
               Escríbenos por WhatsApp
             </CTAButton>
@@ -427,7 +427,7 @@ export default function WinterWorkAndTravelAlemania() {
             Un asesor te acompaña desde la inscripción hasta tu regreso: requisitos, documentos, asignación y logística de viaje.
           </p>
           <div className="flex flex-wrap items-center justify-center gap-4">
-            <CTAButton to="/work-and-travel-alemania">Quiero inscribirme</CTAButton>
+            <CTAButton to="/winter-work-alemania">Quiero inscribirme</CTAButton>
             <CTAButton href={whatsappLink('¡Hola! Quiero más información sobre Winter Work and Travel Alemania.')} variant="ghost">
               Escríbenos por WhatsApp
             </CTAButton>
