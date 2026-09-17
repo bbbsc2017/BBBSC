@@ -438,7 +438,7 @@ export const culturalPrograms: CulturalProgram[] = [
     },
   },
   {
-    slug: 'work-and-travel-alemania',
+    slug: 'winter-work-alemania',
     title: 'Winter Work Alemania',
     country: 'Alemania',
     tagline: 'Gana en euros, vive en Europa y conviértete en protagonista de tu propia historia de intercambio',
