@@ -37,6 +37,7 @@ import { InfoList } from '../components/ui/InfoList'
 import { ContactCard } from '../components/ui/ContactCard'
 import { ProgramCard } from '../components/ui/ProgramCard'
 import { ProgramFAQ } from '../components/ui/ProgramFAQ'
+import { ProgramLandingPreview, ProgramRequirementsStrip } from '../components/programs/ProgramLandingPreview'
 import { culturalPrograms, getCulturalProgram } from '../data/culturalPrograms'
 import { SITE, breadcrumbJsonLd } from '../lib/site'
 
@@ -47,7 +48,8 @@ export default function ProgramaCulturalDetalle() {
   if (!program) return <Navigate to="/" replace />
 
   const related = culturalPrograms.filter((item) => item.slug !== program.slug).slice(0, 3)
-  const registrationTo = program.slug === 'work-and-travel-usa' || program.slug === 'asia' ? `/${program.slug}/inscripcion` : undefined
+  const registrationTo = program.slug === 'work-and-travel-usa' || program.slug === 'asia' || program.slug === 'work-and-travel-alemania' ? `/${program.slug}/inscripcion` : undefined
+  const usesNewTemplate = true
   const breadcrumbs = [
     { label: 'Inicio', to: '/' },
     { label: 'Programas culturales' },
@@ -97,7 +99,13 @@ export default function ProgramaCulturalDetalle() {
         requirements={program.requirements}
         primaryTo={registrationTo}
         breadcrumbs={breadcrumbs}
+        showRequirements={!usesNewTemplate}
+        compact={usesNewTemplate}
       />
+
+      {usesNewTemplate ? (
+        <><ProgramRequirementsStrip requirements={program.requirements} /><ProgramLandingPreview program={program} registrationTo={registrationTo} /></>
+      ) : (
 
       <section id="contenido-programa" className="scroll-mt-24 py-16 sm:py-20">
         <Container className="grid grid-cols-1 items-start gap-12 lg:grid-cols-[1.6fr_1fr]">
@@ -205,6 +213,8 @@ export default function ProgramaCulturalDetalle() {
           />
         </Container>
       </section>
+
+      )}
 
       <section className="border-t border-white/10 bg-black/15 py-16 sm:py-20">
         <Container className="flex flex-col gap-10">

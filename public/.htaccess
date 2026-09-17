@@ -11,6 +11,7 @@
   # Conserva la dirección histórica y transfiere su posicionamiento a la página actual.
   RewriteRule ^work-and-travel/?$ /work-and-travel-usa [R=301,L,NE]
   RewriteRule ^work-and-travel-alemania/?$ /winter-work-alemania [R=301,L,NE]
+  RewriteRule ^work-and-travel-alemania/inscripcion/?$ /winter-work-alemania/inscripcion [R=301,L,NE]
 
   # Direcciones antiguas de /programas-culturales, /programas-academicos y
   # /universidades: React Router ya las resuelve del lado del cliente
@@ -20,6 +21,8 @@
   # que no existen; deben ir antes de la regla de "archivo físico" de abajo.
   RewriteRule ^programas-culturales/work-and-travel-usa/inscripcion/?$ /work-and-travel-usa/inscripcion [R=301,L,NE]
   RewriteRule ^programas-culturales/asia/inscripcion/?$ /asia/inscripcion [R=301,L,NE]
+  RewriteRule ^programas-culturales/work-and-travel-alemania/inscripcion/?$ /winter-work-alemania/inscripcion [R=301,L,NE]
+  RewriteRule ^programas-culturales/winter-work-alemania/inscripcion/?$ /winter-work-alemania/inscripcion [R=301,L,NE]
   RewriteRule ^programas-culturales/work-and-travel-usa/?$ /work-and-travel-usa [R=301,L,NE]
   RewriteRule ^programas-culturales/trainee-and-internship/?$ /trainee-and-internship [R=301,L,NE]
   RewriteRule ^programas-culturales/espana-ti/?$ /espana-ti [R=301,L,NE]

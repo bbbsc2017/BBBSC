@@ -5,7 +5,7 @@ import { Container } from '../components/ui/Container'
 import { ShowcaseHero } from '../components/ui/ShowcaseHero'
 import { academicPrograms } from '../data/academicPrograms'
 import { getUniversity } from '../data/universities'
-import { breadcrumbJsonLd } from '../lib/site'
+import { breadcrumbJsonLd, whatsappLink } from '../lib/site'
 
 const breadcrumbs = [{ label: 'Inicio', to: '/' }, { label: 'Programas académicos' }]
 
@@ -41,7 +41,7 @@ export default function UniversidadesIndex() {
         ]}
         itemHeading="Tu futuro académico sin fronteras"
         primaryAction={{ label: 'Explorar destinos', to: '#destinos-academicos' }}
-        secondaryAction={{ label: 'Hablar con un asesor', to: '/contacto' }}
+        secondaryAction={{ label: 'Hablar con un asesor', to: whatsappLink() }}
         breadcrumbs={breadcrumbs}
       />
       <section id="destinos-academicos" className="scroll-mt-24 py-16 sm:py-20">

@@ -1,23 +1,24 @@
-import { lazy, Suspense } from 'react'
+import { lazy, Suspense, useEffect } from 'react'
 import { Navigate, Route, Routes, useParams } from 'react-router-dom'
 import { Layout } from './components/layout/Layout'
 import Home from './pages/Home'
 import { getCulturalProgram } from './data/culturalPrograms'
 import { getAcademicProgram } from './data/academicPrograms'
 import { getUniversity } from './data/universities'
+import { whatsappLink } from './lib/site'
 
 const ProgramaCulturalDetalle = lazy(() => import('./pages/ProgramaCulturalDetalle'))
-const WinterWorkAndTravelAlemania = lazy(() => import('./pages/WinterWorkAndTravelAlemania'))
 const InscripcionWorkAndTravel = lazy(() => import('./pages/InscripcionWorkAndTravel'))
 const InscripcionAsia = lazy(() => import('./pages/InscripcionAsia'))
+const InscripcionAlemania = lazy(() => import('./pages/InscripcionAlemania'))
 const ProgramaAcademicoDetalle = lazy(() => import('./pages/ProgramaAcademicoDetalle'))
 const UniversidadesIndex = lazy(() => import('./pages/UniversidadesIndex'))
 const ContratoSwt = lazy(() => import('./pages/ContratoSwt'))
+const ContratoTraineeAndInternship = lazy(() => import('./pages/ContratoTraineeAndInternship'))
 const HojaDeVidaSwt = lazy(() => import('./pages/HojaDeVidaSwt'))
 const HojaDeVidaTraineeAndInternship = lazy(() => import('./pages/HojaDeVidaTraineeAndInternship'))
 const ReportaVuelo = lazy(() => import('./pages/ReportaVuelo'))
 const Hunters = lazy(() => import('./pages/Hunters'))
-const Contacto = lazy(() => import('./pages/Contacto'))
 const BlogIndex = lazy(() => import('./pages/BlogIndex'))
 const BlogPost = lazy(() => import('./pages/BlogPost'))
 const TerminosCondiciones = lazy(() => import('./pages/TerminosCondiciones'))
@@ -29,6 +30,11 @@ const NotFound = lazy(() => import('./pages/NotFound'))
 function LegacyDetailRedirect() {
   const { slug = '' } = useParams()
   return <Navigate to={`/${slug}`} replace />
+}
+
+function ContactRedirect() {
+  useEffect(() => { window.location.replace(whatsappLink()) }, [])
+  return <div className="min-h-screen bg-ink" aria-busy="true" aria-label="Abriendo WhatsApp" />
 }
 
 function RootDetailRoute() {
@@ -54,24 +60,28 @@ function App() {
         <Route element={<Layout />}>
           <Route index element={<Home />} />
           <Route path="work-and-travel" element={<Navigate to="/work-and-travel-usa" replace />} />
-          <Route path="winter-work-and-travel-alemania" element={<WinterWorkAndTravelAlemania />} />
           <Route path="work-and-travel-usa/inscripcion" element={<InscripcionWorkAndTravel />} />
           <Route path="asia/inscripcion" element={<InscripcionAsia />} />
+          <Route path="winter-work-alemania/inscripcion" element={<InscripcionAlemania />} />
+          <Route path="work-and-travel-alemania/inscripcion" element={<Navigate to="/winter-work-alemania/inscripcion" replace />} />
           <Route path="programas-academicos" element={<UniversidadesIndex />} />
           <Route path="universidades" element={<Navigate to="/programas-academicos" replace />} />
           <Route path="programas-culturales/work-and-travel-usa/inscripcion" element={<Navigate to="/work-and-travel-usa/inscripcion" replace />} />
           <Route path="programas-culturales/asia/inscripcion" element={<Navigate to="/asia/inscripcion" replace />} />
+          <Route path="programas-culturales/work-and-travel-alemania/inscripcion" element={<Navigate to="/winter-work-alemania/inscripcion" replace />} />
+          <Route path="programas-culturales/winter-work-alemania/inscripcion" element={<Navigate to="/winter-work-alemania/inscripcion" replace />} />
           <Route path="programas-culturales/:slug" element={<LegacyDetailRedirect />} />
           <Route path="programas-academicos/:slug" element={<LegacyDetailRedirect />} />
           <Route path="universidades/:slug" element={<LegacyDetailRedirect />} />
           <Route path="contrato-swt-a" element={<ContratoSwt variant="a" />} />
           <Route path="contrato-swt-acc" element={<ContratoSwt variant="acc" />} />
+          <Route path="contrato-trainee-and-internship" element={<ContratoTraineeAndInternship />} />
           <Route path="hoja-de-vida-swt" element={<HojaDeVidaSwt />} />
           <Route path="hoja-de-vida-trainee-and-internship" element={<HojaDeVidaTraineeAndInternship />} />
           <Route path="reporte-vuelo-ida" element={<ReportaVuelo direction="ida" />} />
           <Route path="reporte-vuelo-regreso" element={<ReportaVuelo direction="regreso" />} />
           <Route path="hunters" element={<Hunters />} />
-          <Route path="contacto" element={<Contacto />} />
+          <Route path="contacto" element={<ContactRedirect />} />
           <Route path="blog" element={<BlogIndex />} />
           <Route path="blog/:slug" element={<BlogPost />} />
           <Route path="ofertas/:sponsor/:employer/:slug" element={<OfferDetail />} />

@@ -17,7 +17,7 @@ import { apiCredentials, apiUrl } from '../lib/apiBase'
 import { RecaptchaNotice } from '../components/ui/RecaptchaNotice'
 import { SubmittingOverlay } from '../components/ui/SubmittingOverlay'
 
-type RegistrationProgram = 'usa' | 'asia'
+type RegistrationProgram = 'usa' | 'asia' | 'alemania'
 
 const registrationPrograms = {
   usa: {
@@ -40,12 +40,29 @@ const registrationPrograms = {
     relativesRegion: 'Asia',
     payment: { amount: '$250.000 COP', url: 'https://www.zonapagos.com/t_bbbacademiasas/pagos.asp' },
   },
+  alemania: {
+    slug: 'work-and-travel-alemania',
+    title: 'Winter Work Alemania',
+    formKey: 'registration_work-and-travel-alemania',
+    interestTag: 'interesado_winter_work_alemania',
+    // Reutiliza la acción ya configurada de reCAPTCHA para inscripciones de Work & Travel.
+    recaptchaAction: 'work_travel_registration',
+    visaRegion: 'Alemania',
+    relativesRegion: 'Alemania',
+    payment: undefined,
+  },
 } as const
 
 const experienceDurations = ['Sin experiencia', 'Menos de 6 meses', '6 meses a 1 año', '1 a 2 años', '2 a 3 años', 'Más de 3 años']
 const experienceAreas = ['Gastronomía', 'Hotelería', 'Turismo', 'Restaurante', 'Bar', 'Panadería', 'Pastelería', 'Cafetería', 'Eventos', 'Recepción', 'Housekeeping', 'Cocina', 'Otra']
 const experienceRoles = ['Mesero', 'Auxiliar de cocina', 'Cocinero', 'Chef', 'Chef de partida', 'Ayudante de cocina', 'Bartender', 'Barista', 'Panadero', 'Pastelero', 'Recepcionista', 'Botones', 'Housekeeper', 'Camarera de hotel', 'Supervisor de restaurante', 'Supervisor de cocina', 'Supervisor de housekeeping', 'Anfitrión', 'Cajero', 'Atención al cliente', 'Guía turístico', 'Agente de viajes', 'Otra']
 const travelAvailability = ['Inmediata', '1 mes', '2 meses', '3 meses o más']
+const germanyParticipationDays = ['60 días', '70 días', '80 días', '90 días (programa completo)']
+const germanyRoles = ['Fábrica de chocolate', 'Almacén y logística', 'Producción y montaje', 'Manipulación de equipaje', 'Sala business', 'Catering aeroportuario', 'Embalaje y control de calidad', 'Otras tareas estacionales']
+const germanyFlexibleVacancy = 'Estoy dispuesto/a a participar en cualquier vacante disponible'
+const germanyShoeSizes = ['Hombre · CO 38 → EU 40', 'Hombre · CO 39 → EU 41', 'Hombre · CO 40 → EU 42', 'Hombre · CO 41 → EU 43', 'Hombre · CO 42 → EU 44', 'Hombre · CO 43 → EU 45', 'Mujer · CO 35 → EU 37', 'Mujer · CO 36 → EU 38', 'Mujer · CO 37 → EU 39', 'Mujer · CO 38 → EU 40', 'Mujer · CO 39 → EU 41', 'Mujer · CO 40 → EU 42']
+const germanyShirtSizes = ['Hombre · S → EU 46–48', 'Hombre · M → EU 48–50', 'Hombre · L → EU 52–54', 'Hombre · XL → EU 54–56', 'Hombre · XXL → EU 58', 'Mujer · XS → EU 32–34', 'Mujer · S → EU 36–38', 'Mujer · M → EU 40–42', 'Mujer · L → EU 44–46', 'Mujer · XL → EU 48–50']
+const germanyPantsSizes = ['Hombre · CO 30 → EU 46', 'Hombre · CO 32 → EU 48', 'Hombre · CO 34 → EU 50', 'Hombre · CO 36 → EU 52', 'Hombre · CO 38 → EU 54', 'Hombre · CO 40 → EU 56', 'Mujer · CO 6 → EU 36', 'Mujer · CO 8 → EU 38', 'Mujer · CO 10 → EU 40', 'Mujer · CO 12 → EU 42', 'Mujer · CO 14 → EU 44', 'Mujer · CO 16 → EU 46']
 
 const initialForm = {
   firstName: '', lastName: '', cedula: '', email: '', phone: '', fechaNacimiento: '',
@@ -57,6 +74,8 @@ const initialForm = {
   departamentoUniversidad: '', municipioUniversidad: '', universidad: '',
   nombrePadre: '', telefonoPadre: '', nombreMadre: '', telefonoMadre: '', familiaresEEUU: '',
   tiempoExperiencia: '', areaExperiencia: '', cargoExperiencia: '', empresaExperiencia: '', disponibilidadViaje: '',
+  diasParticipacionAlemania: '', planDiasRestantesAlemania: '', cargosPreferidosAlemania: '',
+  tallaPantalonAlemania: '', tallaCamisetaAlemania: '', tallaZapatosAlemania: '', viajaraAcompanadoAlemania: '',
   gdprAceptado: false,
 }
 
@@ -81,14 +100,14 @@ function StepHeading({ number, title, description }: { number: number; title: st
   )
 }
 
-function ChoiceField({ name, label, value, onChange, required }: { name: string; label: string; value: string; onChange: (value: string) => void; required?: boolean }) {
+function ChoiceField({ name, label, value, onChange, required, options = yesNo }: { name: string; label: string; value: string; onChange: (value: string) => void; required?: boolean; options?: readonly string[] }) {
   return (
     <fieldset className="flex flex-col gap-2">
       <legend className="text-sm font-semibold text-white">
         {label}{required && <span className="ml-1 text-brand" aria-hidden="true">*</span>}
       </legend>
       <div className="grid grid-cols-2 gap-2">
-        {yesNo.map((option) => (
+        {options.map((option) => (
           <label key={option} className={`flex min-h-12 cursor-pointer items-center justify-center rounded-xl border px-4 text-sm font-semibold transition-colors ${value === option ? 'border-brand bg-brand/15 text-brand' : 'border-white/15 bg-ink/70 text-white/65 hover:border-white/30'}`}>
             <input className="sr-only" type="radio" name={name} required={required} checked={value === option} onChange={() => onChange(option)} />
             {value === option && <Check className="mr-2 size-4" aria-hidden="true" />}
@@ -124,6 +143,7 @@ function StepActions({ step, onBack, onNext, submitting }: { step: number; onBac
 export function ProgramRegistration({ program = 'usa' }: { program?: RegistrationProgram }) {
   const registration = registrationPrograms[program]
   const isAsia = program === 'asia'
+  const isGermany = program === 'alemania'
   const culturalProgram = getCulturalProgram(registration.slug)!
   const pagePath = `/${registration.slug}/inscripcion`
   const inscripcionBreadcrumbs = [{ label: 'Inicio', to: '/' }, { label: 'Programas culturales' }, { label: registration.title, to: `/${registration.slug}` }, { label: 'Inscripción' }]
@@ -148,6 +168,16 @@ export function ProgramRegistration({ program = 'usa' }: { program?: Registratio
     setForm((previous) => ({ ...previous, departamentoUniversidad: key, municipioUniversidad: '', universidad: '' }))
   }
 
+  function toggleGermanyRole(role: string) {
+    setForm((previous) => {
+      const selected = previous.cargosPreferidosAlemania ? previous.cargosPreferidosAlemania.split(' | ') : []
+      const next = selected.includes(role) ? selected.filter((item) => item !== role) : [...selected, role]
+      return { ...previous, cargosPreferidosAlemania: next.join(' | ') }
+    })
+    setStatus('idle')
+    setErrorMessage('')
+  }
+
   function goToStep(nextStep: number) {
     setStep(nextStep)
     requestAnimationFrame(() => formRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }))
@@ -155,12 +185,22 @@ export function ProgramRegistration({ program = 'usa' }: { program?: Registratio
 
   function goNext() {
     if (!formRef.current?.reportValidity()) return
+    if (isGermany && step === 2 && !form.cargosPreferidosAlemania) {
+      setStatus('error')
+      setErrorMessage('Selecciona al menos un cargo de interés para continuar.')
+      return
+    }
     goToStep(Math.min(step + 1, steps.length - 1))
   }
 
   async function handleSubmit(event: FormEvent) {
     event.preventDefault()
     if (!formRef.current?.reportValidity()) return
+    if (isGermany && !form.cargosPreferidosAlemania) {
+      setStatus('error')
+      setErrorMessage('Selecciona al menos un cargo de interés antes de enviar la inscripción.')
+      return
+    }
     setStatus('submitting')
     setErrorMessage('')
 
@@ -263,7 +303,7 @@ export function ProgramRegistration({ program = 'usa' }: { program?: Registratio
       <ShowcaseHero
         eyebrow={`Inscripción ${registration.title}`}
         title={`Inscríbete a ${registration.title}`}
-        description={isAsia ? 'Cuéntanos sobre tu perfil, estudios y experiencia laboral para orientarte hacia oportunidades en hotelería y turismo en Asia.' : 'Cuéntanos sobre ti y descubre si este programa encaja con tus planes. Completar tu perfil toma aproximadamente 8 minutos.'}
+        description={isAsia ? 'Cuéntanos sobre tu perfil, estudios y experiencia laboral para orientarte hacia oportunidades en hotelería y turismo en Asia.' : isGermany ? 'Completa tu perfil y preferencias para que podamos orientarte hacia las vacantes de Winter Work Alemania que mejor encajen contigo.' : 'Cuéntanos sobre ti y descubre si este programa encaja con tus planes. Completar tu perfil toma aproximadamente 8 minutos.'}
         image={culturalProgram.image}
         primaryAction={{ label: 'Empezar inscripción', to: '#formulario-inscripcion' }}
         secondaryAction={{ label: 'Volver al programa', to: `/${registration.slug}` }}
@@ -326,10 +366,10 @@ export function ProgramRegistration({ program = 'usa' }: { program?: Registratio
                   <fieldset className="flex flex-col gap-5 border-t border-white/10 pt-7">
                     <h3 className="text-sm font-bold uppercase tracking-wider text-brand">Experiencia previa</h3>
                     <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-                      <ChoiceField name="participacionPrevia" label={`¿Has participado antes en el programa de ${isAsia ? 'Asia' : 'Work and Travel'}?`} required value={form.participacionPrevia} onChange={(value) => update('participacionPrevia', value)} />
+                      <ChoiceField name="participacionPrevia" label={`¿Has participado antes en el programa de ${isAsia ? 'Asia' : isGermany ? 'Winter Work Alemania' : 'Work and Travel'}?`} required value={form.participacionPrevia} onChange={(value) => update('participacionPrevia', value)} />
                       {form.participacionPrevia === 'Si' && <FormField label="Número de participaciones anteriores"><SelectInput value={form.numeroParticipaciones} onChange={(event) => update('numeroParticipaciones', event.target.value)}>{previousSwtCount.filter((value) => value !== '0').map((value) => <option key={value} value={value}>{value}</option>)}</SelectInput></FormField>}
-                      <ChoiceField name="visaAplicada" label={`¿Has aplicado a alguna visa en ${registration.visaRegion}?`} required value={form.visaAplicada} onChange={(value) => update('visaAplicada', value)} />
-                      <ChoiceField name="visaNegada" label={`¿Te han negado alguna visa para ${registration.visaRegion}?`} required value={form.visaNegada} onChange={(value) => update('visaNegada', value)} />
+                      {!isGermany && <ChoiceField name="visaAplicada" label={`¿Has aplicado a alguna visa en ${registration.visaRegion}?`} required value={form.visaAplicada} onChange={(value) => update('visaAplicada', value)} />}
+                      {!isGermany && <ChoiceField name="visaNegada" label={`¿Te han negado alguna visa para ${registration.visaRegion}?`} required value={form.visaNegada} onChange={(value) => update('visaNegada', value)} />}
                     </div>
                   </fieldset>
                   <fieldset className="flex flex-col gap-5 border-t border-white/10 pt-7">
@@ -354,7 +394,7 @@ export function ProgramRegistration({ program = 'usa' }: { program?: Registratio
                       <FormField label="Jornada académica"><SelectInput value={form.jornadaAcademica} onChange={(event) => update('jornadaAcademica', event.target.value)}>{academicShifts.map((value) => <option key={value} value={value}>{value}</option>)}</SelectInput></FormField>
                       <FormField label="Programa académico" className="sm:col-span-2"><SelectInput value={form.programaAcademico} onChange={(event) => update('programaAcademico', event.target.value)}>{careers.map((value) => <option key={value} value={value}>{value}</option>)}</SelectInput></FormField>
                       {!isAsia && <FormField label="Semestre"><SelectInput value={form.semestre} onChange={(event) => update('semestre', event.target.value)}>{semesters.map((value) => <option key={value} value={value}>{value}</option>)}</SelectInput></FormField>}
-                      {!isAsia && <FormField label="Fecha tentativa de grado" required><TextInput required type="date" value={form.fechaGrado} onChange={(event) => update('fechaGrado', event.target.value)} /></FormField>}
+                      {!isAsia && !isGermany && <FormField label="Fecha tentativa de grado" required><TextInput required type="date" value={form.fechaGrado} onChange={(event) => update('fechaGrado', event.target.value)} /></FormField>}
                     </div>
                     <div className="mt-2 grid grid-cols-1 gap-5 border-t border-white/10 pt-6 sm:grid-cols-2">
                       <h4 className="text-sm font-bold text-white sm:col-span-2">Tu universidad</h4>
@@ -388,6 +428,18 @@ export function ProgramRegistration({ program = 'usa' }: { program?: Registratio
                       </div>
                     </fieldset>
                   )}
+                  {isGermany && (
+                    <fieldset className="flex flex-col gap-5 border-t border-white/10 pt-7">
+                      <div><h3 className="text-sm font-bold uppercase tracking-wider text-brand">Tu participación en Alemania</h3><p className="mt-2 text-sm leading-relaxed text-white/55">Estas preferencias nos ayudan a revisar las vacantes disponibles. La asignación final depende de la empresa y sus necesidades.</p></div>
+                      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+                        <FormField label="¿Cuántos días participarás?" required><SelectInput required value={form.diasParticipacionAlemania} onChange={(event) => { update('diasParticipacionAlemania', event.target.value); if (event.target.value.startsWith('90')) update('planDiasRestantesAlemania', '') }}>{germanyParticipationDays.map((value) => <option key={value} value={value}>{value}</option>)}</SelectInput></FormField>
+                        {form.diasParticipacionAlemania && !form.diasParticipacionAlemania.startsWith('90') && <FormField label="Al terminar, ¿qué harás con los días restantes?" required><SelectInput required value={form.planDiasRestantesAlemania} onChange={(event) => update('planDiasRestantesAlemania', event.target.value)}><option value="Turismo">Los usaré para turismo</option><option value="Regreso">Regresaré al terminar mi participación</option></SelectInput></FormField>}
+                      </div>
+                      <fieldset><legend className="text-sm font-semibold text-white">Cargos que te gustaría considerar <span className="text-brand">*</span></legend><p className="mt-1 text-xs leading-relaxed text-white/45">Puedes seleccionar más de una opción, incluida la disponibilidad para cualquier vacante.</p><div className="mt-3 grid gap-2 sm:grid-cols-2">{[...germanyRoles, germanyFlexibleVacancy].map((role) => { const selected = form.cargosPreferidosAlemania.split(' | ').includes(role); return <label key={role} className={`flex cursor-pointer items-center gap-3 rounded-xl border p-3 text-sm font-semibold transition-colors ${selected ? 'border-brand bg-brand/15 text-white' : 'border-white/15 bg-ink/70 text-white/65 hover:border-white/30'}`}><input type="checkbox" className="size-4 accent-brand" checked={selected} onChange={() => toggleGermanyRole(role)} />{role}</label> })}</div>{!form.cargosPreferidosAlemania && <p className="mt-3 text-xs text-white/45">Selecciona al menos una vacante de interés.</p>}</fieldset>
+                      <fieldset className="border-t border-white/10 pt-7"><legend className="text-sm font-bold uppercase tracking-wider text-brand">Tallas de dotación</legend><p className="mt-2 text-sm leading-relaxed text-white/55">Selecciona la equivalencia que corresponda a tu talla colombiana y a la categoría de la prenda.</p><div className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-3"><FormField label="Pantalón" required><SelectInput required value={form.tallaPantalonAlemania} onChange={(event) => update('tallaPantalonAlemania', event.target.value)}>{germanyPantsSizes.map((value) => <option key={value} value={value}>{value}</option>)}</SelectInput></FormField><FormField label="Camiseta" required><SelectInput required value={form.tallaCamisetaAlemania} onChange={(event) => update('tallaCamisetaAlemania', event.target.value)}>{germanyShirtSizes.map((value) => <option key={value} value={value}>{value}</option>)}</SelectInput></FormField><FormField label="Zapatos" required><SelectInput required value={form.tallaZapatosAlemania} onChange={(event) => update('tallaZapatosAlemania', event.target.value)}>{germanyShoeSizes.map((value) => <option key={value} value={value}>{value}</option>)}</SelectInput></FormField></div></fieldset>
+                      <div className="sm:max-w-sm"><ChoiceField name="viajaraAcompanadoAlemania" label="¿Viajarás solo/a o acompañado/a?" required options={['Solo/a', 'Acompañado/a']} value={form.viajaraAcompanadoAlemania} onChange={(value) => update('viajaraAcompanadoAlemania', value)} /></div>
+                    </fieldset>
+                  )}
                 </div>
               )}
 
@@ -398,7 +450,7 @@ export function ProgramRegistration({ program = 'usa' }: { program?: Registratio
                     <div><dt className="text-white/45">Nombre</dt><dd className="mt-1 font-semibold text-white">{form.firstName} {form.lastName}</dd></div>
                     <div><dt className="text-white/45">Correo</dt><dd className="mt-1 break-all font-semibold text-white">{form.email}</dd></div>
                     <div><dt className="text-white/45">Nivel de inglés</dt><dd className="mt-1 font-semibold text-white">{form.nivelIngles}</dd></div>
-                    <div><dt className="text-white/45">{isAsia ? 'Experiencia' : 'Fecha tentativa de grado'}</dt><dd className="mt-1 font-semibold text-white">{isAsia ? form.tiempoExperiencia : form.fechaGrado}</dd></div>
+                    <div><dt className="text-white/45">{isAsia ? 'Experiencia' : isGermany ? 'Días de participación' : 'Fecha tentativa de grado'}</dt><dd className="mt-1 font-semibold text-white">{isAsia ? form.tiempoExperiencia : isGermany ? form.diasParticipacionAlemania : form.fechaGrado}</dd></div>
                   </dl>
                   <fieldset className="rounded-2xl border border-brand/25 bg-brand/5 p-5">
                     <label className="flex cursor-pointer items-start gap-3 text-sm leading-relaxed text-white/80">

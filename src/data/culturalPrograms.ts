@@ -449,7 +449,7 @@ export const culturalPrograms: CulturalProgram[] = [
       { label: 'Edad', value: 'Mayor de 18 años, máximo 34' },
       { label: 'Idiomas', value: 'Inglés A2' },
       { label: 'Nivel académico', value: 'Estudiante universitario activo' },
-      { label: 'Duración', value: '80 a 90 días' },
+      { label: 'Duración', value: '60 a 90 días' },
     ],
     benefits: [
       'Salario mínimo garantizado de 15,33 EUR brutos por hora',
@@ -457,7 +457,7 @@ export const culturalPrograms: CulturalProgram[] = [
       'Alojamiento compartido organizado, con servicios básicos incluidos',
       'Acompañamiento en la llegada, el primer día de trabajo y la salida',
     ],
-    duration: '80 a 90 días durante tus vacaciones semestrales',
+    duration: '60 a 90 días durante tus vacaciones semestrales',
     keyFacts: [
       '15,33 EUR/hora bruto mínimo',
       '30 h garantizadas por semana',
