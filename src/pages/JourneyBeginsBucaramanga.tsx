@@ -20,13 +20,15 @@ import { Seo } from '../components/Seo'
 import { Container } from '../components/ui/Container'
 import { RecaptchaNotice } from '../components/ui/RecaptchaNotice'
 import { SubmittingOverlay } from '../components/ui/SubmittingOverlay'
+import heroDesktop from '../assets/journey/journey-begins-hero-desktop.png'
+import heroMobile from '../assets/journey/journey-begins-hero-mobile.png'
 import { apiCredentials, apiUrl } from '../lib/apiBase'
 import { executeRecaptcha } from '../lib/recaptcha'
 
 type Attendee = { firstName: string; lastName: string; email: string; phone: string }
 type FormStatus = 'idle' | 'submitting' | 'success' | 'error'
 
-const eventImage = 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=1800&q=90'
+const eventImage = heroDesktop
 const summerImage = 'https://images.unsplash.com/photo-1506869640319-fe1a24fd76dc?auto=format&fit=crop&w=1200&q=90'
 const emptyAttendee = (): Attendee => ({ firstName: '', lastName: '', email: '', phone: '' })
 
@@ -151,7 +153,10 @@ export default function JourneyBeginsBucaramanga() {
     <section className="relative isolate overflow-hidden pb-16 pt-8 sm:pb-24 sm:pt-12">
       <Container>
         <div className="relative animate-[fadeIn_0.5s_ease-out_both] overflow-hidden rounded-[1.5rem] border border-white/10 bg-[#1c1c1c] shadow-2xl shadow-black/35 sm:rounded-[2rem]">
-          <img src={eventImage} alt="Participantes colombianos disfrutando una experiencia internacional" className="absolute inset-0 size-full object-cover object-center" fetchPriority="high" />
+          <picture>
+            <source media="(max-width: 639px)" srcSet={heroMobile} />
+            <img src={eventImage} alt="Participantes colombianos disfrutando una experiencia internacional" className="absolute inset-0 size-full object-cover object-center" fetchPriority="high" />
+          </picture>
           <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(28,28,28,.94)_0%,rgba(28,28,28,.76)_45%,rgba(28,28,28,.32)_100%)]" />
           <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-[#1c1c1c] via-[#1c1c1c]/65 to-transparent" />
           <div className="relative flex min-h-[520px] flex-col justify-end px-5 py-8 sm:min-h-[620px] sm:px-12 sm:py-12 lg:px-16">
