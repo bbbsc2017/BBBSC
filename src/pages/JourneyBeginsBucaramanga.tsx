@@ -27,7 +27,6 @@ type Attendee = { firstName: string; lastName: string; email: string; phone: str
 type FormStatus = 'idle' | 'submitting' | 'success' | 'error'
 
 const eventImage = 'https://d25ltszcjeom5i.cloudfront.net/206553/aoztnyskdh/journey-begins-participantes-colombianos.png'
-const storyImage = 'https://d25ltszcjeom5i.cloudfront.net/206553/jwklpqfmxt/b36aa274-d08e-4951-b6df-9fde086a0b0a.png'
 const summerImage = 'https://images.unsplash.com/photo-1504150558240-0b4fd8946624?auto=format&fit=crop&w=1200&q=85'
 const emptyAttendee = (): Attendee => ({ firstName: '', lastName: '', email: '', phone: '' })
 
@@ -43,7 +42,7 @@ function AttendeeFields({
   onRemove?: () => void
 }) {
   const isParticipant = index === 0
-  const inputClass = 'mt-2 min-h-12 w-full rounded-xl border border-black/15 bg-[#1c1c1c] px-4 text-sm font-medium text-white outline-none transition placeholder:text-white/40 focus:border-white focus:ring-2 focus:ring-white/25'
+  const inputClass = 'mt-2 min-h-12 w-full rounded-xl border border-white bg-white px-4 text-sm font-medium text-[#1c1c1c] outline-none transition placeholder:text-black/40 focus:border-[#f9b000] focus:ring-2 focus:ring-[#f9b000]/45'
   return (
     <fieldset className={`${isParticipant ? '' : 'border-t border-black/15 pt-6'} ${isParticipant ? '' : 'mt-2'}`}>
       <div className="mb-5 flex items-start justify-between gap-4">
@@ -211,20 +210,17 @@ export default function JourneyBeginsBucaramanga() {
 
     <section id="registro" className="scroll-mt-20 pb-24 sm:pb-36">
       <Container>
-        <div className="relative isolate overflow-hidden rounded-[2.5rem] border border-white/10 bg-white/[.025] px-6 py-10 sm:px-10 sm:py-14 lg:px-14">
-          <img src={storyImage} alt="Una participante preparando su aventura internacional" loading="lazy" className="absolute inset-0 -z-20 size-full object-cover opacity-[.23] brightness-125 saturate-110" />
-          <div className="absolute inset-0 -z-10 bg-gradient-to-r from-[#1c1c1c]/65 via-[#1c1c1c]/35 to-transparent" />
-          <div aria-hidden="true" className="absolute -left-24 bottom-0 -z-10 size-72 rounded-full bg-brand/20 blur-3xl" />
+        <div className="px-1 py-4 sm:px-0 sm:py-8">
           <div className="grid items-start gap-10 lg:grid-cols-[.82fr_1.18fr] lg:gap-16">
             <div className="pt-2 lg:pt-8">
-              <p className="text-xs font-black uppercase tracking-[.22em] text-brand">Registro de asistentes</p>
+              <p className="text-xs font-black uppercase tracking-[.22em] text-[#f9b000]">Registro de asistentes</p>
               <h2 className="mt-5 max-w-md text-balance text-4xl font-black leading-[.94] tracking-[-.055em] text-white sm:text-5xl">La pregunta no es si vas. Es con quién empiezas.</h2>
               <p className="mt-6 max-w-md text-pretty leading-7 text-white/65">Registra tu asistencia y la de las personas que quieres llevar contigo. Cada registro se gestiona de forma independiente para que podamos acompañarlos mejor.</p>
-              <a href="/work-and-travel-usa" className="mt-8 inline-flex items-center gap-2 text-sm font-black text-brand transition hover:text-white">Conoce Summer Work &amp; Travel USA <Plane className="size-4" /></a>
-              <div className="mt-10 flex items-center gap-3 text-sm text-white/60"><ShieldCheck className="size-5 text-brand" /> Tus datos están protegidos.</div>
+              <a href="/work-and-travel-usa" className="mt-8 inline-flex items-center gap-2 text-sm font-black text-[#f9b000] transition hover:text-white">Conoce Summer Work &amp; Travel USA <Plane className="size-4" /></a>
+              <div className="mt-10 flex items-center gap-3 text-sm text-white/60"><ShieldCheck className="size-5 text-[#f9b000]" /> Tus datos están protegidos.</div>
             </div>
 
-            <div className="rounded-[2rem] border border-white/20 bg-white/[.15] p-5 shadow-2xl shadow-black/20 backdrop-blur-xl sm:p-8">
+            <div className="rounded-[2rem] border border-white/10 bg-[#2b2b2b] p-5 shadow-2xl shadow-black/20 sm:p-8">
               <p className="text-[10px] font-black uppercase tracking-[.22em] text-white/60">Journey Begins Bucaramanga</p>
               <h3 className="mt-2 text-3xl font-black tracking-[-.045em] text-white">Reserva tu lugar.</h3>
               <p className="mt-2 text-sm leading-6 text-white/70">Completa tus datos y añade a tus invitados si vienes acompañado.</p>
@@ -232,17 +228,17 @@ export default function JourneyBeginsBucaramanga() {
               <AttendeeFields attendee={participant} index={0} onChange={updateParticipant} />
               <div ref={guestSectionRef} className="space-y-4">
                 {guests.map((guest, index) => <AttendeeFields key={index} attendee={guest} index={index + 1} onChange={(key, value) => updateGuest(index, key, value)} onRemove={() => setGuests((current) => current.filter((_, guestIndex) => guestIndex !== index))} />)}
-                <button type="button" onClick={addGuest} disabled={guests.length >= 8} className="flex min-h-12 w-full items-center justify-center gap-2 rounded-xl border border-dashed border-black/35 px-5 text-sm font-black text-[#1c1c1c] transition hover:bg-black/10 disabled:cursor-not-allowed disabled:opacity-50"><Plus className="size-4" /> {guests.length ? 'Agregar otro invitado' : 'Agregar un invitado'}</button>
-                {guests.length >= 8 && <p className="text-center text-xs text-black/55">Puedes registrar hasta ocho invitados en un mismo envío.</p>}
+                <button type="button" onClick={addGuest} disabled={guests.length >= 8} className="flex min-h-12 w-full items-center justify-center gap-2 rounded-xl border border-dashed border-[#f9b000]/70 px-5 text-sm font-black text-[#f9b000] transition hover:bg-[#f9b000]/10 disabled:cursor-not-allowed disabled:opacity-50"><Plus className="size-4" /> {guests.length ? 'Agregar otro invitado' : 'Agregar un invitado'}</button>
+                {guests.length >= 8 && <p className="text-center text-xs text-white/55">Puedes registrar hasta ocho invitados en un mismo envío.</p>}
               </div>
 
               <label className="flex cursor-pointer items-start gap-3 text-sm leading-6 text-white/75">
-                <input type="checkbox" required checked={dataConsent} onChange={(event) => { setDataConsent(event.target.checked); setStatus('idle') }} className="mt-0.5 size-5 shrink-0 accent-brand" />
+                <input type="checkbox" required checked={dataConsent} onChange={(event) => { setDataConsent(event.target.checked); setStatus('idle') }} className="mt-0.5 size-5 shrink-0 accent-[#f9b000]" />
                 <span>Autorizo a BBB Student Center a recolectar y tratar mis datos personales para gestionar mi asistencia al evento, contactarme sobre Summer Work &amp; Travel USA 2027 y compartir información relacionada, de acuerdo con la <a href="/terminos-y-condiciones" target="_blank" rel="noreferrer" className="font-bold text-white underline underline-offset-2">política de tratamiento de datos</a>.</span>
               </label>
               <RecaptchaNotice />
               {status === 'error' && <p role="alert" className="rounded-xl border border-red-900/25 bg-red-900/10 px-4 py-3 text-sm font-medium text-red-900">{error}</p>}
-              <button disabled={status === 'submitting'} className="inline-flex min-h-14 w-full items-center justify-center rounded-full bg-[#1c1c1c] px-6 text-sm font-black text-white transition hover:-translate-y-0.5 hover:bg-black disabled:cursor-wait disabled:opacity-60">{status === 'submitting' ? <Loader2 className="mr-2 size-4 animate-spin" /> : <Send className="mr-2 size-4" />}{status === 'submitting' ? 'Registrando asistencia…' : 'Confirmar mi asistencia'}</button>
+              <button disabled={status === 'submitting'} className="inline-flex min-h-14 w-full items-center justify-center rounded-full bg-[#f9b000] px-6 text-sm font-black text-white transition hover:-translate-y-0.5 hover:bg-[#ffbe21] disabled:cursor-wait disabled:opacity-60">{status === 'submitting' ? <Loader2 className="mr-2 size-4 animate-spin" /> : <Send className="mr-2 size-4" />}{status === 'submitting' ? 'Registrando asistencia…' : 'Confirmar mi asistencia'}</button>
               </form>
             </div>
           </div>
