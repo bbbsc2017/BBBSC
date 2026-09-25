@@ -65,18 +65,18 @@ export default function TerminosCondiciones() {
     <DetailHero eyebrow="Legal" title="Términos y condiciones" description="Consulta las condiciones generales, las promociones Journey Begins y el tratamiento de tus datos." breadcrumbs={breadcrumbs} />
     <section className="py-16 sm:py-20">
       <Container className="max-w-6xl">
-        <div className="grid gap-10 lg:grid-cols-[17rem_minmax(0,1fr)] lg:gap-16">
-          <aside className="lg:sticky lg:top-24 lg:self-start">
+        <div className="grid gap-8 sm:gap-10 lg:grid-cols-[17rem_minmax(0,1fr)] lg:gap-16">
+          <aside className="animate-[fadeInUp_0.5s_ease-out_both] lg:sticky lg:top-24 lg:self-start">
             <p className="mb-3 text-[10px] font-black uppercase tracking-[.2em] text-white/45">Navega por sección</p>
-            <nav className="flex gap-2 overflow-x-auto pb-2 lg:flex-col lg:overflow-visible" aria-label="Secciones legales">
-              {tabs.map(({ id, title, subtitle, Icon }) => <button key={id} type="button" onClick={() => setActiveTab(id)} className={`group flex min-w-[14rem] items-center gap-3 rounded-2xl px-4 py-3 text-left transition lg:min-w-0 ${activeTab === id ? 'bg-[#f9b000] text-white shadow-lg shadow-[#f9b000]/15' : 'text-white/55 hover:bg-white/[.06] hover:text-white'}`}>
+            <nav className="-mx-1 flex snap-x gap-2 overflow-x-auto px-1 pb-3 lg:mx-0 lg:flex-col lg:overflow-visible lg:px-0" aria-label="Secciones legales">
+              {tabs.map(({ id, title, subtitle, Icon }) => <button key={id} type="button" onClick={() => setActiveTab(id)} className={`group flex min-w-[15.5rem] snap-start items-center gap-3 rounded-2xl px-4 py-3 text-left transition lg:min-w-0 ${activeTab === id ? 'bg-[#f9b000] text-white shadow-lg shadow-[#f9b000]/15' : 'text-white/55 hover:bg-white/[.06] hover:text-white'}`}>
                 <span className={`flex size-9 shrink-0 items-center justify-center rounded-xl ${activeTab === id ? 'bg-white/15' : 'bg-white/[.07] text-[#f9b000]'}`}><Icon className="size-4" /></span>
                 <span className="min-w-0 flex-1"><span className="block text-sm font-black leading-5">{title}</span><span className={`mt-0.5 block text-xs ${activeTab === id ? 'text-white/75' : 'text-white/40'}`}>{subtitle}</span></span>
                 <ChevronRight className={`size-4 shrink-0 transition ${activeTab === id ? 'translate-x-0.5' : 'opacity-0 group-hover:opacity-100'}`} />
               </button>)}
             </nav>
           </aside>
-          <div className="rounded-[2rem] border border-white/10 bg-white/[.035] p-6 backdrop-blur-sm sm:p-10">
+          <div key={activeTab} className="animate-[fadeInUp_0.55s_ease-out_both] rounded-[1.5rem] border border-white/10 bg-white/[.035] p-5 backdrop-blur-sm sm:rounded-[2rem] sm:p-10">
             {activeTab === 'general' && <GeneralTerms />}
             {activeTab === 'bucaramanga' && <PromotionTerms mode="bucaramanga" />}
             {activeTab === 'ibague' && <PromotionTerms mode="ibague" />}

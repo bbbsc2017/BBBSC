@@ -150,12 +150,12 @@ export default function JourneyBeginsBucaramanga() {
 
     <section className="relative isolate overflow-hidden pb-16 pt-8 sm:pb-24 sm:pt-12">
       <Container>
-        <div className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-[#1c1c1c] shadow-2xl shadow-black/35">
+        <div className="relative animate-[fadeIn_0.5s_ease-out_both] overflow-hidden rounded-[1.5rem] border border-white/10 bg-[#1c1c1c] shadow-2xl shadow-black/35 sm:rounded-[2rem]">
           <img src={eventImage} alt="Participantes colombianos disfrutando una experiencia internacional" className="absolute inset-0 size-full object-cover object-center" fetchPriority="high" />
           <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(28,28,28,.94)_0%,rgba(28,28,28,.76)_45%,rgba(28,28,28,.32)_100%)]" />
           <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-[#1c1c1c] via-[#1c1c1c]/65 to-transparent" />
-          <div className="relative flex min-h-[590px] flex-col justify-end px-6 py-9 sm:min-h-[620px] sm:px-12 sm:py-12 lg:px-16">
-            <div className="max-w-2xl">
+          <div className="relative flex min-h-[520px] flex-col justify-end px-5 py-8 sm:min-h-[620px] sm:px-12 sm:py-12 lg:px-16">
+            <div className="max-w-2xl animate-[fadeInUp_0.6s_ease-out_0.12s_both]">
               <p className="inline-flex items-center gap-2 rounded-full border border-brand/45 bg-transparent px-4 py-2 text-[10px] font-black uppercase tracking-[.2em] text-brand backdrop-blur-sm"><Sparkles className="size-3.5" /> Invitación exclusiva · Bucaramanga</p>
               <p className="mt-6 text-xs font-black uppercase tracking-[.25em] text-white/55">Summer Work & Travel USA · Season 2027</p>
               <h1 className="mt-4 text-balance text-5xl font-black leading-[.9] tracking-[-.065em] text-white sm:text-7xl">Journey<br /><span className="text-brand">Begins.</span></h1>
@@ -172,9 +172,9 @@ export default function JourneyBeginsBucaramanga() {
         <div className="border-y border-white/10 py-8 sm:py-10">
           <p className="text-center text-[10px] font-black uppercase tracking-[.22em] text-brand">Requisitos principales</p>
           <div className="mt-7 grid gap-7 sm:grid-cols-3 sm:gap-10">
-            <div className="flex gap-4"><span className="flex size-10 shrink-0 items-center justify-center rounded-full border border-brand/30 text-brand"><Users className="size-4" /></span><div><p className="font-black text-white">Ser estudiante</p><p className="mt-1 text-sm leading-6 text-white/55">Estar matriculado en una institución de educación superior.</p></div></div>
-            <div className="flex gap-4"><span className="flex size-10 shrink-0 items-center justify-center rounded-full border border-brand/30 text-brand"><Plane className="size-4" /></span><div><p className="font-black text-white">Inglés conversacional</p><p className="mt-1 text-sm leading-6 text-white/55">Tener el nivel necesario para comunicarte en tu trabajo y día a día.</p></div></div>
-            <div className="flex gap-4"><span className="flex size-10 shrink-0 items-center justify-center rounded-full border border-brand/30 text-brand"><CalendarDays className="size-4" /></span><div><p className="font-black text-white">Disponibilidad de verano</p><p className="mt-1 text-sm leading-6 text-white/55">Contar con el tiempo para vivir tu experiencia en Estados Unidos.</p></div></div>
+            <div className="flex animate-[fadeInUp_0.5s_ease-out_0.05s_both] gap-4 transition-transform duration-300 hover:-translate-y-1"><span className="flex size-10 shrink-0 items-center justify-center rounded-full border border-brand/30 text-brand"><Users className="size-4" /></span><div><p className="font-black text-white">Ser estudiante</p><p className="mt-1 text-sm leading-6 text-white/55">Estar matriculado en una institución de educación superior.</p></div></div>
+            <div className="flex animate-[fadeInUp_0.5s_ease-out_0.12s_both] gap-4 transition-transform duration-300 hover:-translate-y-1"><span className="flex size-10 shrink-0 items-center justify-center rounded-full border border-brand/30 text-brand"><Plane className="size-4" /></span><div><p className="font-black text-white">Inglés conversacional</p><p className="mt-1 text-sm leading-6 text-white/55">Tener el nivel necesario para comunicarte en tu trabajo y día a día.</p></div></div>
+            <div className="flex animate-[fadeInUp_0.5s_ease-out_0.2s_both] gap-4 transition-transform duration-300 hover:-translate-y-1"><span className="flex size-10 shrink-0 items-center justify-center rounded-full border border-brand/30 text-brand"><CalendarDays className="size-4" /></span><div><p className="font-black text-white">Disponibilidad de verano</p><p className="mt-1 text-sm leading-6 text-white/55">Contar con el tiempo para vivir tu experiencia en Estados Unidos.</p></div></div>
           </div>
         </div>
       </Container>
@@ -183,7 +183,7 @@ export default function JourneyBeginsBucaramanga() {
     <section className="pb-20 pt-4 sm:pb-32 sm:pt-10">
       <Container>
         <div className="grid items-center gap-12 lg:grid-cols-[.9fr_1.1fr] lg:gap-20">
-          <div>
+          <div className="animate-[fadeInUp_0.6s_ease-out_both]">
             <p className="text-xs font-black uppercase tracking-[.22em] text-brand">Una inauguración para recordar</p>
             <h2 className="mt-5 max-w-xl text-balance text-4xl font-black tracking-[-.055em] text-white sm:text-5xl">No vienes a escuchar la aventura. Vienes a sentir que ya comenzó.</h2>
             <p className="mt-6 max-w-xl text-pretty text-lg leading-8 text-white/65">Una tarde para celebrar, comer rico, recibir sorpresas y conocer a quienes podrían compartir contigo una de las experiencias más memorables de tu vida universitaria.</p>
@@ -193,7 +193,7 @@ export default function JourneyBeginsBucaramanga() {
               <div className="flex gap-4"><span className="flex size-11 shrink-0 items-center justify-center rounded-full bg-brand/15 text-brand"><Gift className="size-5" /></span><div><h3 className="font-black text-white">Un motivo extra para invitar</h3><p className="mt-1 text-sm leading-6 text-white/55">Recibes USD 50 de descuento cuando tu invitado nuevo se inscribe durante el evento y cumple los requisitos del programa.</p></div></div>
             </div>
           </div>
-          <div className="relative mx-auto w-full max-w-xl lg:max-w-none">
+          <div className="relative mx-auto w-full max-w-xl animate-[fadeInUp_0.65s_ease-out_0.12s_both] lg:max-w-none">
             <div aria-hidden="true" className="absolute -inset-10 rounded-full bg-brand/15 blur-3xl" />
             <img src={summerImage} alt="Jóvenes disfrutando una experiencia de verano" loading="lazy" className="relative aspect-[4/3] w-full rounded-[2.5rem] object-cover shadow-2xl shadow-black/35" />
             <div className="absolute -bottom-5 left-5 max-w-[13rem] rounded-2xl border border-white/15 bg-[#1c1c1c]/75 p-4 backdrop-blur-md sm:left-8"><Camera className="size-5 text-brand" /><p className="mt-3 text-sm font-black text-white">Historias que comienzan juntas.</p></div>
@@ -211,7 +211,7 @@ export default function JourneyBeginsBucaramanga() {
       <Container>
         <div className="px-1 py-4 sm:px-0 sm:py-8">
           <div className="grid items-start gap-10 lg:grid-cols-[.82fr_1.18fr] lg:gap-16">
-            <div className="pt-2 lg:pt-8">
+            <div className="animate-[fadeInUp_0.6s_ease-out_both] pt-2 lg:pt-8">
               <p className="text-xs font-black uppercase tracking-[.22em] text-[#f9b000]">Registro de asistentes</p>
               <h2 className="mt-5 max-w-md text-balance text-4xl font-black leading-[.94] tracking-[-.055em] text-white sm:text-5xl">La pregunta no es si vas. Es con quién empiezas.</h2>
               <p className="mt-6 max-w-md text-pretty leading-7 text-white/65">Registra tu asistencia y la de las personas que quieres llevar contigo. Cada registro se gestiona de forma independiente para que podamos acompañarlos mejor.</p>
@@ -223,7 +223,7 @@ export default function JourneyBeginsBucaramanga() {
               </div>
             </div>
 
-            <div className="rounded-[2rem] border border-white/10 bg-[#2b2b2b] p-5 shadow-2xl shadow-black/20 sm:p-8">
+            <div className="animate-[fadeInUp_0.65s_ease-out_0.1s_both] rounded-[1.5rem] border border-white/10 bg-[#2b2b2b] p-5 shadow-2xl shadow-black/20 sm:rounded-[2rem] sm:p-8">
               <p className="text-[10px] font-black uppercase tracking-[.22em] text-white/60">Journey Begins Bucaramanga</p>
               <h3 className="mt-2 text-3xl font-black tracking-[-.045em] text-white">Reserva tu lugar.</h3>
               <p className="mt-2 text-sm leading-6 text-white/70">Completa tus datos y añade a tus invitados si vienes acompañado.</p>
