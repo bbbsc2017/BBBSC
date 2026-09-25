@@ -48,16 +48,16 @@ function AttendeeFields({
     <fieldset className={`${isParticipant ? '' : 'border-t border-black/15 pt-6'} ${isParticipant ? '' : 'mt-2'}`}>
       <div className="mb-5 flex items-start justify-between gap-4">
         <div>
-          <p className="text-[10px] font-black uppercase tracking-[.22em] text-black/55">{isParticipant ? 'Tu registro' : `Invitado ${index}`}</p>
-          <h3 className="mt-1 text-lg font-black text-[#1c1c1c]">{isParticipant ? 'Datos del participante' : 'Datos de tu acompañante'}</h3>
+          <p className="text-[10px] font-black uppercase tracking-[.22em] text-white/60">{isParticipant ? 'Tu registro' : `Invitado ${index}`}</p>
+          <h3 className="mt-1 text-lg font-black text-white">{isParticipant ? 'Datos del participante' : 'Datos de tu acompañante'}</h3>
         </div>
-        {onRemove && <button type="button" onClick={onRemove} className="inline-flex size-10 items-center justify-center rounded-full border border-black/15 text-[#1c1c1c]/65 transition hover:border-red-700/50 hover:bg-red-50 hover:text-red-700" aria-label={`Eliminar invitado ${index}`}><Trash2 className="size-4" /></button>}
+        {onRemove && <button type="button" onClick={onRemove} className="inline-flex size-10 items-center justify-center rounded-full border border-white/20 text-white/75 transition hover:border-red-300/60 hover:bg-red-50/15 hover:text-white" aria-label={`Eliminar invitado ${index}`}><Trash2 className="size-4" /></button>}
       </div>
       <div className="grid gap-4 sm:grid-cols-2">
-        <label className="text-sm font-bold text-[#1c1c1c]">Nombre <span className="text-black/55">*</span><input required className={inputClass} autoComplete="given-name" value={attendee.firstName} onChange={(event) => onChange('firstName', event.target.value)} placeholder="Nombre" /></label>
-        <label className="text-sm font-bold text-[#1c1c1c]">Apellidos <span className="text-black/55">*</span><input required className={inputClass} autoComplete="family-name" value={attendee.lastName} onChange={(event) => onChange('lastName', event.target.value)} placeholder="Apellidos" /></label>
-        <label className="text-sm font-bold text-[#1c1c1c]">Correo electrónico <span className="text-black/55">*</span><input required className={inputClass} type="email" autoComplete="email" value={attendee.email} onChange={(event) => onChange('email', event.target.value)} placeholder="correo@ejemplo.com" /></label>
-        <label className="text-sm font-bold text-[#1c1c1c]">Teléfono <span className="text-black/55">*</span><input required className={inputClass} type="tel" autoComplete="tel" value={attendee.phone} onChange={(event) => onChange('phone', event.target.value)} placeholder="312 380 8387" /></label>
+        <label className="text-sm font-bold text-white">Nombre <span className="text-white/60">*</span><input required className={inputClass} autoComplete="given-name" value={attendee.firstName} onChange={(event) => onChange('firstName', event.target.value)} placeholder="Nombre" /></label>
+        <label className="text-sm font-bold text-white">Apellidos <span className="text-white/60">*</span><input required className={inputClass} autoComplete="family-name" value={attendee.lastName} onChange={(event) => onChange('lastName', event.target.value)} placeholder="Apellidos" /></label>
+        <label className="text-sm font-bold text-white">Correo electrónico <span className="text-white/60">*</span><input required className={inputClass} type="email" autoComplete="email" value={attendee.email} onChange={(event) => onChange('email', event.target.value)} placeholder="correo@ejemplo.com" /></label>
+        <label className="text-sm font-bold text-white">Teléfono <span className="text-white/60">*</span><input required className={inputClass} type="tel" autoComplete="tel" value={attendee.phone} onChange={(event) => onChange('phone', event.target.value)} placeholder="312 380 8387" /></label>
       </div>
     </fieldset>
   )
@@ -158,12 +158,25 @@ export default function JourneyBeginsBucaramanga() {
           <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-[#1c1c1c] via-[#1c1c1c]/65 to-transparent" />
           <div className="relative flex min-h-[590px] flex-col justify-end px-6 py-9 sm:min-h-[620px] sm:px-12 sm:py-12 lg:px-16">
             <div className="max-w-2xl">
-              <p className="inline-flex items-center gap-2 rounded-full border border-brand/35 bg-brand/10 px-4 py-2 text-[10px] font-black uppercase tracking-[.2em] text-brand backdrop-blur-md"><Sparkles className="size-3.5" /> Invitación exclusiva · Bucaramanga</p>
+              <p className="inline-flex items-center gap-2 rounded-full border border-brand/45 bg-transparent px-4 py-2 text-[10px] font-black uppercase tracking-[.2em] text-brand backdrop-blur-sm"><Sparkles className="size-3.5" /> Invitación exclusiva · Bucaramanga</p>
               <p className="mt-6 text-xs font-black uppercase tracking-[.25em] text-white/55">Summer Work & Travel USA · Season 2027</p>
               <h1 className="mt-4 text-balance text-5xl font-black leading-[.9] tracking-[-.065em] text-white sm:text-7xl">Journey<br /><span className="text-brand">Begins.</span></h1>
               <p className="mt-6 max-w-xl text-pretty text-base font-medium leading-7 text-white/75 sm:text-lg">El primer capítulo de tu aventura Summer Work &amp; Travel USA 2027 empieza aquí. Ven a celebrar y conectar con quienes vivirán esta historia contigo.</p>
               <a href="#registro" className="mt-8 inline-flex min-h-12 items-center justify-center rounded-full bg-brand px-6 text-sm font-black text-white transition hover:-translate-y-0.5 hover:bg-brand-400">Registrar mi asistencia <ArrowRight className="ml-2 size-4" /></a>
             </div>
+          </div>
+        </div>
+      </Container>
+    </section>
+
+    <section className="pb-16 sm:pb-24">
+      <Container>
+        <div className="border-y border-white/10 py-8 sm:py-10">
+          <p className="text-center text-[10px] font-black uppercase tracking-[.22em] text-brand">Requisitos principales</p>
+          <div className="mt-7 grid gap-7 sm:grid-cols-3 sm:gap-10">
+            <div className="flex gap-4"><span className="flex size-10 shrink-0 items-center justify-center rounded-full border border-brand/30 text-brand"><Users className="size-4" /></span><div><p className="font-black text-white">Ser estudiante</p><p className="mt-1 text-sm leading-6 text-white/55">Estar matriculado en una institución de educación superior.</p></div></div>
+            <div className="flex gap-4"><span className="flex size-10 shrink-0 items-center justify-center rounded-full border border-brand/30 text-brand"><Plane className="size-4" /></span><div><p className="font-black text-white">Inglés conversacional</p><p className="mt-1 text-sm leading-6 text-white/55">Tener el nivel necesario para comunicarte en tu trabajo y día a día.</p></div></div>
+            <div className="flex gap-4"><span className="flex size-10 shrink-0 items-center justify-center rounded-full border border-brand/30 text-brand"><CalendarDays className="size-4" /></span><div><p className="font-black text-white">Disponibilidad de verano</p><p className="mt-1 text-sm leading-6 text-white/55">Contar con el tiempo para vivir tu experiencia en Estados Unidos.</p></div></div>
           </div>
         </div>
       </Container>
@@ -184,7 +197,7 @@ export default function JourneyBeginsBucaramanga() {
           </div>
           <div className="relative mx-auto w-full max-w-xl lg:max-w-none">
             <div aria-hidden="true" className="absolute -inset-10 rounded-full bg-brand/15 blur-3xl" />
-            <img src={summerImage} alt="Jóvenes disfrutando una experiencia de verano" loading="lazy" className="relative aspect-[4/3] w-full rounded-[2.5rem] object-cover shadow-2xl shadow-black/35" />
+            <img src={summerImage} alt="Jóvenes disfrutando una experiencia de verano" loading="lazy" className="relative aspect-[4/3] w-full rounded-[2.5rem] object-cover brightness-110 saturate-110 shadow-2xl shadow-black/35" />
             <div className="absolute -bottom-5 left-5 max-w-[13rem] rounded-2xl border border-white/15 bg-[#1c1c1c]/75 p-4 backdrop-blur-md sm:left-8"><Camera className="size-5 text-brand" /><p className="mt-3 text-sm font-black text-white">Historias que comienzan juntas.</p></div>
           </div>
         </div>
@@ -198,9 +211,9 @@ export default function JourneyBeginsBucaramanga() {
 
     <section id="registro" className="scroll-mt-20 pb-24 sm:pb-36">
       <Container>
-        <div className="relative isolate overflow-hidden rounded-[2.5rem] bg-[#151515] px-6 py-10 sm:px-10 sm:py-14 lg:px-14">
-          <img src={storyImage} alt="Una participante preparando su aventura internacional" loading="lazy" className="absolute inset-0 -z-20 size-full object-cover opacity-[.14]" />
-          <div className="absolute inset-0 -z-10 bg-gradient-to-r from-[#151515] via-[#151515]/90 to-[#151515]/65" />
+        <div className="relative isolate overflow-hidden rounded-[2.5rem] border border-white/10 bg-white/[.025] px-6 py-10 sm:px-10 sm:py-14 lg:px-14">
+          <img src={storyImage} alt="Una participante preparando su aventura internacional" loading="lazy" className="absolute inset-0 -z-20 size-full object-cover opacity-[.23] brightness-125 saturate-110" />
+          <div className="absolute inset-0 -z-10 bg-gradient-to-r from-[#1c1c1c]/65 via-[#1c1c1c]/35 to-transparent" />
           <div aria-hidden="true" className="absolute -left-24 bottom-0 -z-10 size-72 rounded-full bg-brand/20 blur-3xl" />
           <div className="grid items-start gap-10 lg:grid-cols-[.82fr_1.18fr] lg:gap-16">
             <div className="pt-2 lg:pt-8">
@@ -211,10 +224,10 @@ export default function JourneyBeginsBucaramanga() {
               <div className="mt-10 flex items-center gap-3 text-sm text-white/60"><ShieldCheck className="size-5 text-brand" /> Tus datos están protegidos.</div>
             </div>
 
-            <div className="rounded-[2rem] bg-brand p-5 shadow-2xl shadow-black/30 sm:p-8">
-              <p className="text-[10px] font-black uppercase tracking-[.22em] text-black/55">Journey Begins Bucaramanga</p>
-              <h3 className="mt-2 text-3xl font-black tracking-[-.045em] text-[#1c1c1c]">Reserva tu lugar.</h3>
-              <p className="mt-2 text-sm leading-6 text-black/65">Completa tus datos y añade a tus invitados si vienes acompañado.</p>
+            <div className="rounded-[2rem] border border-white/20 bg-white/[.15] p-5 shadow-2xl shadow-black/20 backdrop-blur-xl sm:p-8">
+              <p className="text-[10px] font-black uppercase tracking-[.22em] text-white/60">Journey Begins Bucaramanga</p>
+              <h3 className="mt-2 text-3xl font-black tracking-[-.045em] text-white">Reserva tu lugar.</h3>
+              <p className="mt-2 text-sm leading-6 text-white/70">Completa tus datos y añade a tus invitados si vienes acompañado.</p>
               <form className="mt-7 space-y-5" onSubmit={handleSubmit}>
               <AttendeeFields attendee={participant} index={0} onChange={updateParticipant} />
               <div ref={guestSectionRef} className="space-y-4">
@@ -223,9 +236,9 @@ export default function JourneyBeginsBucaramanga() {
                 {guests.length >= 8 && <p className="text-center text-xs text-black/55">Puedes registrar hasta ocho invitados en un mismo envío.</p>}
               </div>
 
-              <label className="flex cursor-pointer items-start gap-3 text-sm leading-6 text-black/70">
-                <input type="checkbox" required checked={dataConsent} onChange={(event) => { setDataConsent(event.target.checked); setStatus('idle') }} className="mt-0.5 size-5 shrink-0 accent-[#1c1c1c]" />
-                <span>Autorizo a BBB Student Center a recolectar y tratar mis datos personales para gestionar mi asistencia al evento, contactarme sobre Summer Work &amp; Travel USA 2027 y compartir información relacionada, de acuerdo con la <a href="/terminos-y-condiciones" target="_blank" rel="noreferrer" className="font-bold text-[#1c1c1c] underline underline-offset-2">política de tratamiento de datos</a>.</span>
+              <label className="flex cursor-pointer items-start gap-3 text-sm leading-6 text-white/75">
+                <input type="checkbox" required checked={dataConsent} onChange={(event) => { setDataConsent(event.target.checked); setStatus('idle') }} className="mt-0.5 size-5 shrink-0 accent-brand" />
+                <span>Autorizo a BBB Student Center a recolectar y tratar mis datos personales para gestionar mi asistencia al evento, contactarme sobre Summer Work &amp; Travel USA 2027 y compartir información relacionada, de acuerdo con la <a href="/terminos-y-condiciones" target="_blank" rel="noreferrer" className="font-bold text-white underline underline-offset-2">política de tratamiento de datos</a>.</span>
               </label>
               <RecaptchaNotice />
               {status === 'error' && <p role="alert" className="rounded-xl border border-red-900/25 bg-red-900/10 px-4 py-3 text-sm font-medium text-red-900">{error}</p>}
@@ -234,6 +247,12 @@ export default function JourneyBeginsBucaramanga() {
             </div>
           </div>
         </div>
+      </Container>
+    </section>
+
+    <section className="pb-16 sm:pb-24">
+      <Container>
+        <p className="mx-auto max-w-4xl text-center text-xs leading-6 text-white/45">Al registrarte manifiestas tu interés en participar en Summer Work &amp; Travel USA 2027. La asistencia a Journey Begins no constituye la inscripción al programa ni garantiza una vacante; los requisitos, costos, fechas, condiciones del sponsor y disponibilidad aplican según el proceso vigente. Consulta los <a href="/terminos-y-condiciones" target="_blank" rel="noreferrer" className="font-bold text-white/70 underline underline-offset-2 transition hover:text-brand">términos y condiciones</a> antes de continuar.</p>
       </Container>
     </section>
 
