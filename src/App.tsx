@@ -19,6 +19,7 @@ const HojaDeVidaSwt = lazy(() => import('./pages/HojaDeVidaSwt'))
 const HojaDeVidaTraineeAndInternship = lazy(() => import('./pages/HojaDeVidaTraineeAndInternship'))
 const ReportaVuelo = lazy(() => import('./pages/ReportaVuelo'))
 const Hunters = lazy(() => import('./pages/Hunters'))
+const JourneyBeginsBucaramanga = lazy(() => import('./pages/JourneyBeginsBucaramanga'))
 const BlogIndex = lazy(() => import('./pages/BlogIndex'))
 const BlogPost = lazy(() => import('./pages/BlogPost'))
 const TerminosCondiciones = lazy(() => import('./pages/TerminosCondiciones'))
@@ -81,6 +82,7 @@ function App() {
           <Route path="reporte-vuelo-ida" element={<ReportaVuelo direction="ida" />} />
           <Route path="reporte-vuelo-regreso" element={<ReportaVuelo direction="regreso" />} />
           <Route path="hunters" element={<Hunters />} />
+          <Route path="journey-begins-bucaramanga" element={<JourneyBeginsBucaramanga />} />
           <Route path="contacto" element={<ContactRedirect />} />
           <Route path="blog" element={<BlogIndex />} />
           <Route path="blog/:slug" element={<BlogPost />} />
