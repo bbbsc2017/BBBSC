@@ -25,6 +25,7 @@ type Attendee = { firstName: string; lastName: string; email: string; phone: str
 type FormStatus = 'idle' | 'submitting' | 'success' | 'error'
 
 const eventImage = 'https://d25ltszcjeom5i.cloudfront.net/206553/aoztnyskdh/journey-begins-participantes-colombianos.png'
+const storyImage = 'https://d25ltszcjeom5i.cloudfront.net/206553/jwklpqfmxt/b36aa274-d08e-4951-b6df-9fde086a0b0a.png'
 const emptyAttendee = (): Attendee => ({ firstName: '', lastName: '', email: '', phone: '' })
 
 function AttendeeFields({
@@ -188,30 +189,44 @@ export default function JourneyBeginsBucaramanga() {
       </Container>
     </section>
 
-    <section id="registro" className="scroll-mt-20 pb-20 sm:pb-28">
-      <Container className="max-w-5xl">
-        <div className="rounded-[2rem] border border-white/10 bg-white/[0.035] p-5 shadow-2xl shadow-black/20 backdrop-blur-sm sm:p-9 lg:p-11">
-          <div className="grid gap-6 border-b border-white/10 pb-8 lg:grid-cols-[1fr_auto] lg:items-end">
-            <div><p className="text-xs font-black uppercase tracking-[.22em] text-brand">Registro de asistentes</p><h2 className="mt-3 text-balance text-3xl font-black tracking-[-.045em] text-white sm:text-4xl">Haz que el comienzo cuente.</h2><p className="mt-3 max-w-2xl text-sm leading-6 text-white/60">Registra tus datos y los de cada persona que te acompañará. Cada asistente recibirá su propio registro.</p></div>
-            <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-black/20 px-4 py-2 text-xs font-bold text-white/65"><ShieldCheck className="size-4 text-brand" /> Datos protegidos</span>
-          </div>
-
-          <form className="mt-8 space-y-5" onSubmit={handleSubmit}>
-            <AttendeeFields attendee={participant} index={0} onChange={updateParticipant} />
-            <div ref={guestSectionRef} className="space-y-4">
-              {guests.map((guest, index) => <AttendeeFields key={index} attendee={guest} index={index + 1} onChange={(key, value) => updateGuest(index, key, value)} onRemove={() => setGuests((current) => current.filter((_, guestIndex) => guestIndex !== index))} />)}
-              <button type="button" onClick={addGuest} disabled={guests.length >= 8} className="flex min-h-14 w-full items-center justify-center gap-2 rounded-2xl border border-dashed border-brand/45 bg-brand/[0.04] px-5 text-sm font-black text-brand transition hover:border-brand hover:bg-brand/10 disabled:cursor-not-allowed disabled:opacity-50"><Plus className="size-4" /> {guests.length ? 'Agregar otro invitado' : 'Agregar un invitado'}</button>
-              {guests.length >= 8 && <p className="text-center text-xs text-white/45">Puedes registrar hasta ocho invitados en un mismo envío.</p>}
+    <section id="registro" className="scroll-mt-20 pb-20 pt-4 sm:pb-32 sm:pt-10">
+      <Container>
+        <div className="grid items-start gap-8 lg:grid-cols-[minmax(0,.8fr)_minmax(0,1.15fr)] lg:gap-14">
+          <aside className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.035] shadow-2xl shadow-black/20 backdrop-blur-sm lg:sticky lg:top-24">
+            <div className="relative h-64 overflow-hidden sm:h-72 lg:h-64"><img src={storyImage} alt="Participante preparándose para su viaje internacional" loading="lazy" className="size-full object-cover object-center" /><div className="absolute inset-0 bg-gradient-to-t from-[#1c1c1c] via-[#1c1c1c]/20 to-transparent" /><span className="absolute bottom-5 left-6 rounded-full border border-white/15 bg-black/25 px-3 py-1.5 text-[10px] font-black uppercase tracking-[.18em] text-white backdrop-blur-md">Tu crew cambia todo</span></div>
+            <div className="p-6 sm:p-8">
+              <p className="text-[10px] font-black uppercase tracking-[.22em] text-brand">Summer Work &amp; Travel 2027</p>
+              <h2 className="mt-3 text-balance text-3xl font-black leading-[.95] tracking-[-.05em] text-white">La pregunta no es si vas. Es con quién empiezas.</h2>
+              <p className="mt-5 text-sm leading-7 text-white/65">Registra a las personas que te acompañarán en Journey Begins. Cada una recibirá un contacto independiente y sabrá que fue invitada por ti.</p>
+              <div className="mt-7 grid gap-3">
+                <div className="group flex gap-4 rounded-2xl bg-brand p-4 text-white transition duration-300 hover:-translate-y-1"><span className="flex size-10 shrink-0 items-center justify-center rounded-xl border border-white/25"><Gift className="size-5" /></span><div><p className="text-sm font-black">Un beneficio para compartir</p><p className="mt-1 text-xs leading-5 text-white/85">Si tu invitado se inscribe durante el evento, recibes USD 50 de descuento.</p></div></div>
+                <div className="flex gap-4 rounded-2xl bg-black/20 p-4"><span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-brand/12 text-brand"><Sparkles className="size-5" /></span><div><p className="text-sm font-black text-white">Conoce tu programa</p><p className="mt-1 text-xs leading-5 text-white/60">Descubre requisitos, oportunidades y los siguientes pasos para viajar.</p><a href="/work-and-travel-usa" className="mt-3 inline-flex items-center gap-1 text-xs font-black text-brand transition hover:text-white">Ver Summer Work &amp; Travel <ArrowRight className="size-3.5" /></a></div></div>
+              </div>
+              <div className="mt-7 flex flex-wrap gap-2 text-[11px] font-bold text-white/70"><span className="rounded-full border border-white/10 bg-white/[.04] px-3 py-2">Bucaramanga</span><span className="rounded-full border border-white/10 bg-white/[.04] px-3 py-2">Colorworking</span><span className="rounded-full border border-white/10 bg-white/[.04] px-3 py-2">4:00 p.m.</span></div>
             </div>
+          </aside>
 
-            <label className="flex cursor-pointer items-start gap-3 rounded-2xl border border-brand/20 bg-brand/[0.05] p-5 text-sm leading-6 text-white/75">
-              <input type="checkbox" required checked={dataConsent} onChange={(event) => { setDataConsent(event.target.checked); setStatus('idle') }} className="mt-0.5 size-5 shrink-0 accent-brand" />
-              <span>Autorizo a BBB Student Center a recolectar y tratar mis datos personales para gestionar mi asistencia al evento, contactarme sobre Summer Work &amp; Travel USA 2027 y compartir información relacionada, de acuerdo con la <a href="/terminos-y-condiciones" target="_blank" rel="noreferrer" className="font-bold text-brand underline underline-offset-2">política de tratamiento de datos</a>.</span>
-            </label>
-            <RecaptchaNotice />
-            {status === 'error' && <p role="alert" className="rounded-xl border border-red-400/25 bg-red-400/10 px-4 py-3 text-sm font-medium text-red-200">{error}</p>}
-            <button disabled={status === 'submitting'} className="inline-flex min-h-14 w-full items-center justify-center rounded-full bg-brand px-6 text-sm font-black text-white transition hover:-translate-y-0.5 hover:bg-brand-400 disabled:cursor-wait disabled:opacity-60">{status === 'submitting' ? <Loader2 className="mr-2 size-4 animate-spin" /> : <Send className="mr-2 size-4" />}{status === 'submitting' ? 'Registrando asistencia…' : 'Confirmar mi asistencia'}</button>
-          </form>
+          <div className="relative rounded-[2rem] border border-white/10 bg-white/[0.035] p-5 shadow-[0_24px_70px_-34px_rgba(0,0,0,0.8)] backdrop-blur-xl sm:p-8 lg:p-9">
+            <div aria-hidden="true" className="pointer-events-none absolute -right-16 -top-16 size-52 rounded-full bg-brand/15 blur-3xl" />
+            <div className="relative"><p className="text-[10px] font-black uppercase tracking-[.22em] text-brand">Registro de asistentes</p><h2 className="mt-3 text-balance text-3xl font-black tracking-[-.045em] text-white sm:text-4xl">Haz que el comienzo cuente.</h2><p className="mt-3 max-w-xl text-sm leading-6 text-white/60">Tus datos quedan en una tarjeta propia. Agrega a tus invitados solo si quieres compartir la experiencia.</p><span className="mt-5 inline-flex items-center gap-2 rounded-full border border-white/10 bg-black/20 px-4 py-2 text-xs font-bold text-white/65"><ShieldCheck className="size-4 text-brand" /> Datos protegidos</span></div>
+
+            <form className="relative mt-7 space-y-5" onSubmit={handleSubmit}>
+              <AttendeeFields attendee={participant} index={0} onChange={updateParticipant} />
+              <div ref={guestSectionRef} className="space-y-4">
+                {guests.map((guest, index) => <AttendeeFields key={index} attendee={guest} index={index + 1} onChange={(key, value) => updateGuest(index, key, value)} onRemove={() => setGuests((current) => current.filter((_, guestIndex) => guestIndex !== index))} />)}
+                <button type="button" onClick={addGuest} disabled={guests.length >= 8} className="flex min-h-14 w-full items-center justify-center gap-2 rounded-2xl border border-dashed border-brand/45 bg-brand/[0.04] px-5 text-sm font-black text-brand transition hover:border-brand hover:bg-brand/10 disabled:cursor-not-allowed disabled:opacity-50"><Plus className="size-4" /> {guests.length ? 'Agregar otro invitado' : 'Agregar un invitado'}</button>
+                {guests.length >= 8 && <p className="text-center text-xs text-white/45">Puedes registrar hasta ocho invitados en un mismo envío.</p>}
+              </div>
+
+              <label className="flex cursor-pointer items-start gap-3 rounded-2xl border border-brand/20 bg-brand/[0.05] p-5 text-sm leading-6 text-white/75">
+                <input type="checkbox" required checked={dataConsent} onChange={(event) => { setDataConsent(event.target.checked); setStatus('idle') }} className="mt-0.5 size-5 shrink-0 accent-brand" />
+                <span>Autorizo a BBB Student Center a recolectar y tratar mis datos personales para gestionar mi asistencia al evento, contactarme sobre Summer Work &amp; Travel USA 2027 y compartir información relacionada, de acuerdo con la <a href="/terminos-y-condiciones" target="_blank" rel="noreferrer" className="font-bold text-brand underline underline-offset-2">política de tratamiento de datos</a>.</span>
+              </label>
+              <RecaptchaNotice />
+              {status === 'error' && <p role="alert" className="rounded-xl border border-red-400/25 bg-red-400/10 px-4 py-3 text-sm font-medium text-red-200">{error}</p>}
+              <button disabled={status === 'submitting'} className="inline-flex min-h-14 w-full items-center justify-center rounded-full bg-brand px-6 text-sm font-black text-white transition hover:-translate-y-0.5 hover:bg-brand-400 disabled:cursor-wait disabled:opacity-60">{status === 'submitting' ? <Loader2 className="mr-2 size-4 animate-spin" /> : <Send className="mr-2 size-4" />}{status === 'submitting' ? 'Registrando asistencia…' : 'Confirmar mi asistencia'}</button>
+            </form>
+          </div>
         </div>
       </Container>
     </section>
