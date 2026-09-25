@@ -131,7 +131,7 @@ export default function JourneyBeginsBucaramanga() {
 
   if (status === 'success') {
     return <>
-      <Seo title="Registro confirmado · Journey Begins Bucaramanga" description="Registro confirmado para Journey Begins Bucaramanga." path="/journey-begins-bucaramanga" noIndex />
+      <Seo title="Registro confirmado · Journey Begins Bucaramanga" description="Registro confirmado para Journey Begins Bucaramanga." path="/landing/journey-begins-bucaramanga" noIndex />
       <section className="relative isolate min-h-[76vh] overflow-hidden py-24">
         <div className="absolute inset-0 -z-10 bg-ink-mesh" />
         <Container className="flex max-w-3xl flex-col items-center text-center">
@@ -149,7 +149,7 @@ export default function JourneyBeginsBucaramanga() {
   }
 
   return <>
-    <Seo title="Journey Begins Bucaramanga · Summer Work & Travel USA 2027" description="Registra tu asistencia a Journey Begins Bucaramanga, el comienzo de la aventura Summer Work & Travel USA 2027." path="/journey-begins-bucaramanga" image={eventImage} imageAlt="Participantes colombianos disfrutando una experiencia internacional" />
+    <Seo title="Journey Begins Bucaramanga · Summer Work & Travel USA 2027" description="Registra tu asistencia a Journey Begins Bucaramanga, el comienzo de la aventura Summer Work & Travel USA 2027." path="/landing/journey-begins-bucaramanga" image={eventImage} imageAlt="Participantes colombianos disfrutando una experiencia internacional" />
 
     <section className="relative isolate overflow-hidden pb-16 pt-8 sm:pb-24 sm:pt-12">
       <Container>

@@ -82,7 +82,8 @@ function App() {
           <Route path="reporte-vuelo-ida" element={<ReportaVuelo direction="ida" />} />
           <Route path="reporte-vuelo-regreso" element={<ReportaVuelo direction="regreso" />} />
           <Route path="hunters" element={<Hunters />} />
-          <Route path="journey-begins-bucaramanga" element={<JourneyBeginsBucaramanga />} />
+          <Route path="landing/journey-begins-bucaramanga" element={<JourneyBeginsBucaramanga />} />
+          <Route path="journey-begins-bucaramanga" element={<Navigate to="/landing/journey-begins-bucaramanga" replace />} />
           <Route path="contacto" element={<ContactRedirect />} />
           <Route path="blog" element={<BlogIndex />} />
           <Route path="blog/:slug" element={<BlogPost />} />
