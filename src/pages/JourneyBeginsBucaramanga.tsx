@@ -216,8 +216,8 @@ export default function JourneyBeginsBucaramanga() {
               <p className="text-xs font-black uppercase tracking-[.22em] text-[#f9b000]">Registro de asistentes</p>
               <h2 className="mt-5 max-w-md text-balance text-4xl font-black leading-[.94] tracking-[-.055em] text-white sm:text-5xl">La pregunta no es si vas. Es con quién empiezas.</h2>
               <p className="mt-6 max-w-md text-pretty leading-7 text-white/65">Registra tu asistencia y la de las personas que quieres llevar contigo. Cada registro se gestiona de forma independiente para que podamos acompañarlos mejor.</p>
-              <a href="/work-and-travel-usa" className="mt-8 inline-flex items-center gap-2 text-sm font-black text-[#f9b000] transition hover:text-white">Conoce Summer Work &amp; Travel USA <Plane className="size-4" /></a>
-              <div className="mt-10 flex items-start gap-3 text-sm text-white/60"><ShieldCheck className="mt-0.5 size-5 shrink-0 text-[#f9b000]" /><p>Tus datos están protegidos.<br /><span className="text-xs leading-5 text-white/45">El descuento de USD 50 aplica solo durante el evento si tu invitado es nuevo, se inscribe y cumple los requisitos del programa. No es acumulable con otras ofertas. <a href="/terminos-y-condiciones" target="_blank" rel="noreferrer" className="font-bold text-white/70 underline underline-offset-2 transition hover:text-[#f9b000]">Ver términos y condiciones</a>.</span></p></div>
+              <a href="/work-and-travel-usa" className="mt-8 inline-flex min-h-11 items-center gap-2 rounded-full border border-[#f9b000]/65 px-5 text-sm font-black text-[#f9b000] transition hover:border-[#f9b000] hover:bg-[#f9b000]/10 hover:text-white">Conoce Summer Work &amp; Travel USA <Plane className="size-4" /></a>
+              <div className="mt-10 flex items-start gap-3 text-sm text-white/60"><ShieldCheck className="mt-0.5 size-5 shrink-0 text-[#f9b000]" /><p>Tus datos están protegidos.</p></div>
             </div>
 
             <div className="rounded-[2rem] border border-white/10 bg-[#2b2b2b] p-5 shadow-2xl shadow-black/20 sm:p-8">
@@ -242,6 +242,15 @@ export default function JourneyBeginsBucaramanga() {
               </form>
             </div>
           </div>
+        </div>
+      </Container>
+    </section>
+
+    <section className="-mt-12 pb-16 sm:-mt-20 sm:pb-24">
+      <Container>
+        <div className="ml-auto max-w-xl border-t border-white/10 pt-6">
+          <p className="text-[10px] font-black uppercase tracking-[.2em] text-[#f9b000]">Condiciones de la promoción</p>
+          <p className="mt-3 text-xs leading-6 text-white/50">El descuento de USD 50 aplica solo durante el evento cuando el invitado es nuevo para BBB Student Center, se inscribe y cumple los requisitos del programa. No es acumulable con otras ofertas. Consulta los <a href="/terminos-y-condiciones" target="_blank" rel="noreferrer" className="font-bold text-white/75 underline underline-offset-2 transition hover:text-[#f9b000]">términos y condiciones completos</a>.</p>
         </div>
       </Container>
     </section>
