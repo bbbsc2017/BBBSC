@@ -149,7 +149,6 @@ export default function JourneyBeginsBucaramanga() {
     <Seo title="Journey Begins Bucaramanga · Summer Work & Travel USA 2027" description="Registra tu asistencia a Journey Begins Bucaramanga, el comienzo de la aventura Summer Work & Travel USA 2027." path="/journey-begins-bucaramanga" image={eventImage} imageAlt="Participantes colombianos disfrutando una experiencia internacional" />
 
     <section className="relative isolate overflow-hidden pb-16 pt-8 sm:pb-24 sm:pt-12">
-      <div className="absolute inset-0 -z-10 bg-[#1c1c1c]" />
       <Container>
         <div className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-[#1c1c1c] shadow-2xl shadow-black/35">
           <img src={eventImage} alt="Participantes colombianos disfrutando una experiencia internacional" className="absolute inset-0 size-full object-cover object-center" fetchPriority="high" />
