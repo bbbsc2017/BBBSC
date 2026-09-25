@@ -22,6 +22,7 @@ import { RecaptchaNotice } from '../components/ui/RecaptchaNotice'
 import { SubmittingOverlay } from '../components/ui/SubmittingOverlay'
 import heroDesktop from '../assets/journey/journey-begins-hero-desktop.png'
 import heroMobile from '../assets/journey/journey-begins-hero-mobile.png'
+import welcomeImage from '../assets/journey/journey-begins-welcome.png'
 import { apiCredentials, apiUrl } from '../lib/apiBase'
 import { executeRecaptcha } from '../lib/recaptcha'
 
@@ -29,7 +30,7 @@ type Attendee = { firstName: string; lastName: string; email: string; phone: str
 type FormStatus = 'idle' | 'submitting' | 'success' | 'error'
 
 const eventImage = heroDesktop
-const summerImage = 'https://images.unsplash.com/photo-1506869640319-fe1a24fd76dc?auto=format&fit=crop&w=1200&q=90'
+const summerImage = welcomeImage
 const emptyAttendee = (): Attendee => ({ firstName: '', lastName: '', email: '', phone: '' })
 
 function AttendeeFields({
@@ -152,7 +153,7 @@ export default function JourneyBeginsBucaramanga() {
 
     <section className="relative isolate overflow-hidden pb-16 pt-8 sm:pb-24 sm:pt-12">
       <Container>
-        <div className="relative animate-[fadeIn_0.5s_ease-out_both] overflow-hidden rounded-[1.5rem] border border-white/10 bg-[#1c1c1c] shadow-2xl shadow-black/35 sm:rounded-[2rem]">
+        <div className="relative animate-[fadeIn_0.5s_ease-out_both] overflow-hidden rounded-xl border border-white/10 bg-[#1c1c1c] shadow-2xl shadow-black/35 sm:rounded-[2rem]">
           <picture>
             <source media="(max-width: 639px)" srcSet={heroMobile} />
             <img src={eventImage} alt="Participantes colombianos disfrutando una experiencia internacional" className="absolute inset-0 size-full object-cover object-center" fetchPriority="high" />
@@ -200,8 +201,8 @@ export default function JourneyBeginsBucaramanga() {
           </div>
           <div className="relative mx-auto w-full max-w-xl animate-[fadeInUp_0.65s_ease-out_0.12s_both] lg:max-w-none">
             <div aria-hidden="true" className="absolute -inset-10 rounded-full bg-brand/15 blur-3xl" />
-            <img src={summerImage} alt="Jóvenes disfrutando una experiencia de verano" loading="lazy" className="relative aspect-[4/3] w-full rounded-[2.5rem] object-cover shadow-2xl shadow-black/35" />
-            <div className="absolute -bottom-5 left-5 max-w-[13rem] rounded-2xl border border-white/15 bg-[#1c1c1c]/75 p-4 backdrop-blur-md sm:left-8"><Camera className="size-5 text-brand" /><p className="mt-3 text-sm font-black text-white">Historias que comienzan juntas.</p></div>
+            <img src={summerImage} alt="Participantes de bienvenida para Summer Work & Travel" loading="lazy" className="relative aspect-[4/3] w-full rounded-2xl object-cover shadow-2xl shadow-black/35 sm:rounded-[2.5rem]" />
+            <div className="absolute -bottom-5 left-5 max-w-[13rem] rounded-xl border border-white/15 bg-[#1c1c1c]/75 p-4 backdrop-blur-md sm:left-8 sm:rounded-2xl"><Camera className="size-5 text-brand" /><p className="mt-3 text-sm font-black text-white">Historias que comienzan juntas.</p></div>
           </div>
         </div>
         <div className="mt-20 flex flex-col gap-8 border-y border-white/10 py-9 sm:mt-28 sm:flex-row sm:items-center sm:justify-between">
@@ -228,7 +229,7 @@ export default function JourneyBeginsBucaramanga() {
               </div>
             </div>
 
-            <div className="animate-[fadeInUp_0.65s_ease-out_0.1s_both] rounded-[1.5rem] border border-white/10 bg-[#2b2b2b] p-5 shadow-2xl shadow-black/20 sm:rounded-[2rem] sm:p-8">
+            <div className="animate-[fadeInUp_0.65s_ease-out_0.1s_both] rounded-xl border border-white/10 bg-[#2b2b2b] p-5 shadow-2xl shadow-black/20 sm:rounded-[2rem] sm:p-8">
               <p className="text-[10px] font-black uppercase tracking-[.22em] text-white/60">Journey Begins Bucaramanga</p>
               <h3 className="mt-2 text-3xl font-black tracking-[-.045em] text-white">Reserva tu lugar.</h3>
               <p className="mt-2 text-sm leading-6 text-white/70">Completa tus datos y añade a tus invitados si vienes acompañado.</p>
