@@ -192,7 +192,7 @@ export default function JourneyBeginsBucaramanga() {
             <div className="mt-9 space-y-6">
               <div className="flex gap-4"><span className="flex size-11 shrink-0 items-center justify-center rounded-full bg-brand/15 text-brand"><PartyPopper className="size-5" /></span><div><h3 className="font-black text-white">Una bienvenida que se siente</h3><p className="mt-1 text-sm leading-6 text-white/55">Sorpresas, regalos y una forma diferente de imaginar tu próximo verano.</p></div></div>
               <div className="flex gap-4"><span className="flex size-11 shrink-0 items-center justify-center rounded-full bg-brand/15 text-brand"><Users className="size-5" /></span><div><h3 className="font-black text-white">Mejor con tu gente</h3><p className="mt-1 text-sm leading-6 text-white/55">Invita a un amigo o familiar y hagan de esta historia algo que puedan compartir.</p></div></div>
-              <div className="flex gap-4"><span className="flex size-11 shrink-0 items-center justify-center rounded-full bg-brand/15 text-brand"><Gift className="size-5" /></span><div><h3 className="font-black text-white">Un motivo extra para invitar</h3><p className="mt-1 text-sm leading-6 text-white/55">Si tu invitado se inscribe durante el evento, recibes USD 50 de descuento en tu programa.</p></div></div>
+              <div className="flex gap-4"><span className="flex size-11 shrink-0 items-center justify-center rounded-full bg-brand/15 text-brand"><Gift className="size-5" /></span><div><h3 className="font-black text-white">Un motivo extra para invitar</h3><p className="mt-1 text-sm leading-6 text-white/55">Recibes USD 50 de descuento cuando tu invitado nuevo se inscribe durante el evento y cumple los requisitos del programa.</p></div></div>
             </div>
           </div>
           <div className="relative mx-auto w-full max-w-xl lg:max-w-none">
@@ -252,7 +252,7 @@ export default function JourneyBeginsBucaramanga() {
 
     <section className="pb-16 sm:pb-24">
       <Container>
-        <p className="mx-auto max-w-4xl text-center text-xs leading-6 text-white/45">Al registrarte manifiestas tu interés en participar en Summer Work &amp; Travel USA 2027. La asistencia a Journey Begins no constituye la inscripción al programa ni garantiza una vacante; los requisitos, costos, fechas, condiciones del sponsor y disponibilidad aplican según el proceso vigente. Consulta los <a href="/terminos-y-condiciones" target="_blank" rel="noreferrer" className="font-bold text-white/70 underline underline-offset-2 transition hover:text-brand">términos y condiciones</a> antes de continuar.</p>
+        <p className="mx-auto max-w-4xl text-center text-xs leading-6 text-white/45">Al registrarte manifiestas tu interés en participar en Summer Work &amp; Travel USA 2027. La asistencia a Journey Begins no constituye la inscripción al programa ni garantiza una vacante; los requisitos, costos, fechas, condiciones del sponsor y disponibilidad aplican según el proceso vigente. El descuento de USD 50 se otorga únicamente durante el evento de bienvenida cuando el invitado, que debe ser un participante nuevo sin registro previo en BBB Student Center, se inscribe y cumple los requisitos del programa. No es acumulable con otras ofertas. Consulta los <a href="/terminos-y-condiciones" target="_blank" rel="noreferrer" className="font-bold text-white/70 underline underline-offset-2 transition hover:text-brand">términos y condiciones</a> antes de continuar.</p>
       </Container>
     </section>
 
@@ -261,7 +261,7 @@ export default function JourneyBeginsBucaramanga() {
         <span className="flex size-12 items-center justify-center rounded-2xl bg-brand text-white"><Gift className="size-6" /></span>
         <p className="mt-6 text-xs font-black uppercase tracking-[.2em] text-brand">Una oportunidad para compartir</p>
         <h2 id="guest-prompt-title" className="mt-3 text-balance text-3xl font-black tracking-[-.045em] text-white">No puedes perder esta oportunidad.</h2>
-        <p className="mt-4 text-pretty leading-7 text-white/70">Trae a un amigo o familiar al evento. Si se inscribe, ganas <strong className="font-black text-brand">USD 50 de descuento</strong> en tu programa Summer Work &amp; Travel.</p>
+        <p className="mt-4 text-pretty leading-7 text-white/70">Trae a un amigo o familiar al evento. Recibes <strong className="font-black text-brand">USD 50 de descuento</strong> únicamente si es un participante nuevo, se inscribe durante el evento y cumple los requisitos del programa. No es acumulable con otras ofertas.</p>
         <div className="mt-8 grid gap-3 sm:grid-cols-2"><button type="button" onClick={focusGuestSection} className="min-h-12 rounded-full bg-brand px-5 text-sm font-black text-white transition hover:bg-brand-400">Agregar invitado</button><button type="button" onClick={() => { setGuestPromptOpen(false); void submitRegistration() }} className="min-h-12 rounded-full border border-white/20 px-5 text-sm font-bold text-white transition hover:border-white/40">Enviar sin invitado</button></div>
       </div>
     </div>}
