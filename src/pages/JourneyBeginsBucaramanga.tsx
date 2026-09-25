@@ -26,8 +26,8 @@ import { executeRecaptcha } from '../lib/recaptcha'
 type Attendee = { firstName: string; lastName: string; email: string; phone: string }
 type FormStatus = 'idle' | 'submitting' | 'success' | 'error'
 
-const eventImage = 'https://d25ltszcjeom5i.cloudfront.net/206553/aoztnyskdh/journey-begins-participantes-colombianos.png'
-const summerImage = 'https://images.unsplash.com/photo-1504150558240-0b4fd8946624?auto=format&fit=crop&w=1200&q=85'
+const eventImage = 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=1800&q=90'
+const summerImage = 'https://images.unsplash.com/photo-1506869640319-fe1a24fd76dc?auto=format&fit=crop&w=1200&q=90'
 const emptyAttendee = (): Attendee => ({ firstName: '', lastName: '', email: '', phone: '' })
 
 function AttendeeFields({
@@ -42,7 +42,7 @@ function AttendeeFields({
   onRemove?: () => void
 }) {
   const isParticipant = index === 0
-  const inputClass = 'mt-2 min-h-12 w-full rounded-xl border border-white bg-white px-4 text-sm font-medium text-[#1c1c1c] outline-none transition placeholder:text-black/40 focus:border-[#f9b000] focus:ring-2 focus:ring-[#f9b000]/45'
+  const inputClass = 'mt-2 min-h-12 w-full rounded-xl border border-white/10 bg-[#202020] px-4 text-sm font-medium text-white outline-none transition placeholder:text-white/35 focus:border-[#f9b000] focus:ring-2 focus:ring-[#f9b000]/30'
   return (
     <fieldset className={`${isParticipant ? '' : 'border-t border-black/15 pt-6'} ${isParticipant ? '' : 'mt-2'}`}>
       <div className="mb-5 flex items-start justify-between gap-4">
@@ -149,7 +149,7 @@ export default function JourneyBeginsBucaramanga() {
     <Seo title="Journey Begins Bucaramanga · Summer Work & Travel USA 2027" description="Registra tu asistencia a Journey Begins Bucaramanga, el comienzo de la aventura Summer Work & Travel USA 2027." path="/journey-begins-bucaramanga" image={eventImage} imageAlt="Participantes colombianos disfrutando una experiencia internacional" />
 
     <section className="relative isolate overflow-hidden pb-16 pt-8 sm:pb-24 sm:pt-12">
-      <div className="absolute inset-0 -z-10 bg-ink-mesh" />
+      <div className="absolute inset-0 -z-10 bg-[#1c1c1c]" />
       <Container>
         <div className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-[#1c1c1c] shadow-2xl shadow-black/35">
           <img src={eventImage} alt="Participantes colombianos disfrutando una experiencia internacional" className="absolute inset-0 size-full object-cover object-center" fetchPriority="high" />
@@ -196,7 +196,7 @@ export default function JourneyBeginsBucaramanga() {
           </div>
           <div className="relative mx-auto w-full max-w-xl lg:max-w-none">
             <div aria-hidden="true" className="absolute -inset-10 rounded-full bg-brand/15 blur-3xl" />
-            <img src={summerImage} alt="Jóvenes disfrutando una experiencia de verano" loading="lazy" className="relative aspect-[4/3] w-full rounded-[2.5rem] object-cover brightness-110 saturate-110 shadow-2xl shadow-black/35" />
+            <img src={summerImage} alt="Jóvenes disfrutando una experiencia de verano" loading="lazy" className="relative aspect-[4/3] w-full rounded-[2.5rem] object-cover shadow-2xl shadow-black/35" />
             <div className="absolute -bottom-5 left-5 max-w-[13rem] rounded-2xl border border-white/15 bg-[#1c1c1c]/75 p-4 backdrop-blur-md sm:left-8"><Camera className="size-5 text-brand" /><p className="mt-3 text-sm font-black text-white">Historias que comienzan juntas.</p></div>
           </div>
         </div>
@@ -217,7 +217,7 @@ export default function JourneyBeginsBucaramanga() {
               <h2 className="mt-5 max-w-md text-balance text-4xl font-black leading-[.94] tracking-[-.055em] text-white sm:text-5xl">La pregunta no es si vas. Es con quién empiezas.</h2>
               <p className="mt-6 max-w-md text-pretty leading-7 text-white/65">Registra tu asistencia y la de las personas que quieres llevar contigo. Cada registro se gestiona de forma independiente para que podamos acompañarlos mejor.</p>
               <a href="/work-and-travel-usa" className="mt-8 inline-flex items-center gap-2 text-sm font-black text-[#f9b000] transition hover:text-white">Conoce Summer Work &amp; Travel USA <Plane className="size-4" /></a>
-              <div className="mt-10 flex items-center gap-3 text-sm text-white/60"><ShieldCheck className="size-5 text-[#f9b000]" /> Tus datos están protegidos.</div>
+              <div className="mt-10 flex items-start gap-3 text-sm text-white/60"><ShieldCheck className="mt-0.5 size-5 shrink-0 text-[#f9b000]" /><p>Tus datos están protegidos.<br /><span className="text-xs leading-5 text-white/45">El descuento de USD 50 aplica solo durante el evento si tu invitado es nuevo, se inscribe y cumple los requisitos del programa. No es acumulable con otras ofertas. <a href="/terminos-y-condiciones" target="_blank" rel="noreferrer" className="font-bold text-white/70 underline underline-offset-2 transition hover:text-[#f9b000]">Ver términos y condiciones</a>.</span></p></div>
             </div>
 
             <div className="rounded-[2rem] border border-white/10 bg-[#2b2b2b] p-5 shadow-2xl shadow-black/20 sm:p-8">
@@ -243,12 +243,6 @@ export default function JourneyBeginsBucaramanga() {
             </div>
           </div>
         </div>
-      </Container>
-    </section>
-
-    <section className="pb-16 sm:pb-24">
-      <Container>
-        <p className="mx-auto max-w-4xl text-center text-xs leading-6 text-white/45">Al registrarte manifiestas tu interés en participar en Summer Work &amp; Travel USA 2027. La asistencia a Journey Begins no constituye la inscripción al programa ni garantiza una vacante; los requisitos, costos, fechas, condiciones del sponsor y disponibilidad aplican según el proceso vigente. El descuento de USD 50 se otorga únicamente durante el evento de bienvenida cuando el invitado, que debe ser un participante nuevo sin registro previo en BBB Student Center, se inscribe y cumple los requisitos del programa. No es acumulable con otras ofertas. Consulta los <a href="/terminos-y-condiciones" target="_blank" rel="noreferrer" className="font-bold text-white/70 underline underline-offset-2 transition hover:text-brand">términos y condiciones</a> antes de continuar.</p>
       </Container>
     </section>
 
