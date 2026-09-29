@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from 'react'
-import { CheckCircle2, LockKeyhole, Send } from 'lucide-react'
+import { CheckCircle2, Heart, LockKeyhole, PlaneTakeoff, Send } from 'lucide-react'
 import { Seo } from '../components/Seo'
 import { ProgramHero } from '../components/ui/ProgramHero'
 import { Container } from '../components/ui/Container'
@@ -15,7 +15,10 @@ import airportFlightHero from '../assets/travel/airport-flight-report-hero.png'
 
 type Direction = 'ida' | 'regreso'
 
-const copy: Record<Direction, { title: string; eyebrow: string; description: string; fechaLabel: string; numeroLabel: string; path: string; recaptchaAction: string; context: string; checklist: string[] }> = {
+const copy: Record<Direction, {
+  title: string; eyebrow: string; description: string; fechaLabel: string; numeroLabel: string; path: string; recaptchaAction: string; context: string; checklist: string[]
+  side: { icon: typeof PlaneTakeoff; eyebrow: string; title: string; body: string; cta?: { label: string; to: string } }
+}> = {
   ida: {
     title: 'Reporta tu vuelo de ida',
     eyebrow: 'Reporte de vuelos',
@@ -26,6 +29,12 @@ const copy: Record<Direction, { title: string; eyebrow: string; description: str
     recaptchaAction: 'reporte_vuelo_ida',
     context: 'Tu salida internacional',
     checklist: ['Ten a la mano tu itinerario', 'Adjunta el documento en PDF', 'Verifica la fecha y el número de vuelo'],
+    side: {
+      icon: PlaneTakeoff,
+      eyebrow: '¡Ya casi!',
+      title: 'Estás a un solo paso de vivir la mejor experiencia de tu vida',
+      body: 'Reporta tus vuelos y prepara tus maletas, porque nos vamos. Con este registro tu proceso queda al día y listo para que tu salida sea lo más tranquila posible.',
+    },
   },
   regreso: {
     title: 'Reporta tu vuelo de regreso',
@@ -37,6 +46,13 @@ const copy: Record<Direction, { title: string; eyebrow: string; description: str
     recaptchaAction: 'reporte_vuelo_regreso',
     context: 'Tu regreso a Colombia',
     checklist: ['Ten a la mano tu itinerario', 'Adjunta el documento en PDF', 'Verifica la fecha y el número de vuelo'],
+    side: {
+      icon: Heart,
+      eyebrow: '¡Lo lograste!',
+      title: 'Gracias por vivir esta experiencia',
+      body: 'Nos alegra que hayas hecho nuevos amigos, creado recuerdos que te van a acompañar toda la vida y crecido más de lo que imaginabas. ¿Y por qué quedarnos hasta aquí? Vuelve a vivirla el próximo año y regresa con aún más energía.',
+      cta: { label: 'Quiero vivirlo de nuevo', to: '/work-and-travel-usa/inscripcion' },
+    },
   },
 }
 
@@ -125,8 +141,9 @@ export default function ReportaVuelo({ direction }: { direction: Direction }) {
       />
 
       <section id="formulario-reporte" className="scroll-mt-24 py-8 sm:py-12">
-        <Container className="max-w-3xl">
-          <form onSubmit={handleSubmit} className="rounded-3xl border border-white/10 bg-ink-800 p-5 shadow-2xl shadow-black/20 sm:p-8">
+        <Container className="max-w-6xl">
+          <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1.1fr_0.9fr] lg:items-start lg:gap-8">
+          <form onSubmit={handleSubmit} className="order-2 rounded-3xl border border-white/10 bg-ink-800 p-5 shadow-2xl shadow-black/20 sm:p-8 lg:order-1">
             <div className="flex flex-col gap-6">
               <div>
                 <h2 className="text-sm font-bold uppercase tracking-wider text-brand">Datos personales</h2>
@@ -179,6 +196,21 @@ export default function ReportaVuelo({ direction }: { direction: Direction }) {
               </button>
             </div>
           </form>
+
+          <aside className="order-1 flex flex-col gap-5 overflow-hidden rounded-3xl border border-white/10 bg-ink-mesh p-6 sm:p-8 lg:sticky lg:top-24 lg:order-2">
+            <span className="flex size-12 items-center justify-center rounded-2xl bg-brand text-white">
+              <info.side.icon className="size-6" />
+            </span>
+            <div>
+              <p className="text-xs font-bold uppercase tracking-widest text-brand">{info.side.eyebrow}</p>
+              <h2 className="mt-2 text-2xl font-extrabold leading-tight text-white sm:text-3xl">{info.side.title}</h2>
+            </div>
+            <p className="text-sm leading-relaxed text-white/70">{info.side.body}</p>
+            {info.side.cta && (
+              <CTAButton to={info.side.cta.to} className="w-full sm:w-fit">{info.side.cta.label}</CTAButton>
+            )}
+          </aside>
+          </div>
         </Container>
       </section>
       <SubmittingOverlay show={status === 'submitting'} label="Enviando tu reporte…" />
