@@ -32,4 +32,4 @@ Estas rutas no se incluyen en Git. En producción deben vivir en directorios com
 
 ## Producción
 
-El proceso se ejecuta con PM2 y Nginx/aaPanel publica la SPA, redirige `/api/` al servidor y sirve el sitemap dinámico. Consulta [`../deploy/DEPLOY.md`](../deploy/DEPLOY.md) para la instalación, los secretos de GitHub, la reversión automática y la migración segura.
+Los detalles de despliegue e infraestructura se mantienen fuera del repositorio (documentación interna privada).
