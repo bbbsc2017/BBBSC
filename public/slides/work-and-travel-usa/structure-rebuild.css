@@ -184,6 +184,82 @@ body{display:grid;place-items:center;font-family:Poppins,Arial,sans-serif;color:
 @keyframes bbb-discount-settle{0%,70%,100%{transform:scale(1);filter:none}12%{transform:scale(1.025);filter:brightness(1.08)}22%{transform:scale(1)}}
 @media(prefers-reduced-motion:reduce){.slide *{animation:none!important}}
 
+/* ==========================================================================
+   Coherencia en PC: (1) toda pieza entra con la misma gramatica y su enfasis
+   arranca DESPUES de la entrada; (2) el resaltado de tarjetas usa contorno
+   (el borde/fondo con !important anulaba la animacion); (3) el proceso (slide 13)
+   sincroniza viajero, pasos y numeros; (4) esquinas redondeadas; (5) cuadros
+   ajustados a su contenido. Va antes de los bloques de celular, que lo sobrescriben.
+   ========================================================================== */
+@keyframes bbb-fade-in-m{from{opacity:0}to{opacity:1}}
+@keyframes bbb-hl-d{0%,20%,100%{outline-color:transparent;transform:translateY(0)}7%,14%{outline-color:rgba(249,176,0,.9);transform:translateY(-.65cqh)}}
+@keyframes bbb-hl-doc-d{0%,6%,26%,100%{outline-color:transparent;transform:translateY(0)}10%,18%{outline-color:rgba(249,176,0,.9);transform:translateY(-.5cqh)}}
+@keyframes bbb-step-relay-d{0%,6%,26%,100%{transform:translateY(0)}10%,18%{transform:translateY(-.55cqh)}}
+@keyframes bbb-hl-arrive-d{0%,72%,100%{outline-color:transparent;transform:translateY(0)}80%{outline-color:rgba(249,176,0,.9);transform:translateY(-.65cqh)}}
+@keyframes bbb-hl-depart-d{0%,16%,100%{outline-color:transparent}8%{outline-color:rgba(249,176,0,.9)}}
+@keyframes bbb-step-badge{0%,6%{transform:scale(1);box-shadow:0 0 0 0 rgba(249,176,0,0)}10%,18%{transform:scale(1.16);box-shadow:0 0 0 .55cqh rgba(249,176,0,.25)}26%,100%{transform:scale(1);box-shadow:0 0 0 0 rgba(249,176,0,0)}}
+
+/* (1) Entradas que faltaban */
+.slide.active .kicker{animation:bbb-label-in .46s cubic-bezier(.16,1,.3,1) both!important}
+.slide.active .program-name{animation:bbb-title-in .68s cubic-bezier(.16,1,.3,1) .06s both!important}
+.slide.active .program-promise{animation:bbb-copy-in .5s cubic-bezier(.16,1,.3,1) .22s both!important}
+.slide.active .footer-stamp{animation:bbb-copy-in .5s cubic-bezier(.16,1,.3,1) .3s both!important}
+.slide.active .cta-row{animation:bbb-copy-in .5s cubic-bezier(.16,1,.3,1) .34s both!important}
+.slide.active .fineprint{animation:bbb-copy-in .5s cubic-bezier(.16,1,.3,1) .5s both!important}
+
+/* (1)+(2) Tarjetas con relevo: primero entran, luego se resaltan por turnos */
+:is(#slide-03 .stat,#slide-04 .value,#slide-08 .benefit,#slide-14 .doc,#slide-15 .payment-stats>div,#slide-05 .route-card){outline:2px solid transparent;outline-offset:-2px}
+#slide-03.active .stat:nth-child(1){animation:bbb-object-in .56s cubic-bezier(.16,1,.3,1) 0.0s both,bbb-hl-d 7.2s ease-in-out 0.9s infinite!important}
+#slide-03.active .stat:nth-child(2){animation:bbb-object-in .56s cubic-bezier(.16,1,.3,1) 0.1s both,bbb-hl-d 7.2s ease-in-out 3.3s infinite!important}
+#slide-03.active .stat:nth-child(3){animation:bbb-object-in .56s cubic-bezier(.16,1,.3,1) 0.2s both,bbb-hl-d 7.2s ease-in-out 5.7s infinite!important}
+#slide-04.active .value:nth-child(1){animation:bbb-object-in .56s cubic-bezier(.16,1,.3,1) 0.0s both,bbb-hl-d 8s ease-in-out 0.9s infinite!important}
+#slide-04.active .value:nth-child(2){animation:bbb-object-in .56s cubic-bezier(.16,1,.3,1) 0.1s both,bbb-hl-d 8s ease-in-out 2.9s infinite!important}
+#slide-04.active .value:nth-child(3){animation:bbb-object-in .56s cubic-bezier(.16,1,.3,1) 0.2s both,bbb-hl-d 8s ease-in-out 4.9s infinite!important}
+#slide-04.active .value:nth-child(4){animation:bbb-object-in .56s cubic-bezier(.16,1,.3,1) 0.3s both,bbb-hl-d 8s ease-in-out 6.9s infinite!important}
+#slide-08.active .benefit:nth-child(1){animation:bbb-object-in .56s cubic-bezier(.16,1,.3,1) 0.0s both,bbb-hl-d 8s ease-in-out 0.9s infinite!important}
+#slide-08.active .benefit:nth-child(2){animation:bbb-object-in .56s cubic-bezier(.16,1,.3,1) 0.1s both,bbb-hl-d 8s ease-in-out 2.9s infinite!important}
+#slide-08.active .benefit:nth-child(3){animation:bbb-object-in .56s cubic-bezier(.16,1,.3,1) 0.2s both,bbb-hl-d 8s ease-in-out 4.9s infinite!important}
+#slide-08.active .benefit:nth-child(4){animation:bbb-object-in .56s cubic-bezier(.16,1,.3,1) 0.3s both,bbb-hl-d 8s ease-in-out 6.9s infinite!important}
+#slide-05.active .route-card:first-child{animation:bbb-object-in .56s cubic-bezier(.16,1,.3,1) 0s both,bbb-hl-depart-d 5.2s ease-in-out 1s infinite!important}
+#slide-05.active .route-card:last-child{animation:bbb-object-in .56s cubic-bezier(.16,1,.3,1) .2s both,bbb-hl-arrive-d 5.2s ease-in-out 1s infinite!important}
+#slide-14.active .doc{animation-name:bbb-hl-doc-d!important}
+#slide-15.active .payment-stats>div{animation-name:bbb-hl-d!important}
+
+/* (3) Slide 13: el viajero (6s, 0.8s de retraso, recorrido lineal) llega al centro de cada paso en 1.67s + 0.9s*n; cada paso y su numero se activan justo entonces */
+#slide-13.active .step:nth-child(1){animation:bbb-fade-in-m .5s ease-out 0.2s both,bbb-step-relay-d 6s ease-in-out 1.19s infinite!important}
+#slide-13.active .step:nth-child(1)::before{animation:bbb-step-badge 6s ease-in-out 1.19s infinite!important}
+#slide-13.active .step:nth-child(2){animation:bbb-fade-in-m .5s ease-out 0.32s both,bbb-step-relay-d 6s ease-in-out 2.09s infinite!important}
+#slide-13.active .step:nth-child(2)::before{animation:bbb-step-badge 6s ease-in-out 2.09s infinite!important}
+#slide-13.active .step:nth-child(3){animation:bbb-fade-in-m .5s ease-out 0.44s both,bbb-step-relay-d 6s ease-in-out 2.99s infinite!important}
+#slide-13.active .step:nth-child(3)::before{animation:bbb-step-badge 6s ease-in-out 2.99s infinite!important}
+#slide-13.active .step:nth-child(4){animation:bbb-fade-in-m .5s ease-out 0.56s both,bbb-step-relay-d 6s ease-in-out 3.89s infinite!important}
+#slide-13.active .step:nth-child(4)::before{animation:bbb-step-badge 6s ease-in-out 3.89s infinite!important}
+#slide-13.active .step:nth-child(5){animation:bbb-fade-in-m .5s ease-out 0.68s both,bbb-step-relay-d 6s ease-in-out 4.79s infinite!important}
+#slide-13.active .step:nth-child(5)::before{animation:bbb-step-badge 6s ease-in-out 4.79s infinite!important}
+
+/* (4) Esquinas redondeadas */
+.profile-item{border-radius:1.4cqw!important}
+.fineprint{border-radius:1cqw!important}
+#slide-15 .investment-total,.discount-explainer,.quote{position:relative!important;border-left:0!important}
+#slide-15 .investment-total{padding:1.15cqh 0 1.15cqh 1.9cqw!important}
+.discount-explainer{padding:.95cqh 0 0 1.4cqw!important}
+.quote{padding-left:2.1cqw!important}
+#slide-15 .investment-total::before,.discount-explainer::before,.quote::before{content:"";position:absolute;left:0;top:.6cqh;bottom:.6cqh;width:.35cqw;border-radius:.3cqw;background:var(--bbb-yellow)}
+.quote::before{width:.45cqw}
+.payment-stats>div{border:1px solid rgba(249,176,0,.48)!important;border-radius:1.2cqw!important}
+.timebar{border:0!important;background:none!important;border-radius:0!important;overflow:visible!important;gap:1.4cqw!important}
+.time,.time:last-child{border:1px solid var(--bbb-line)!important;border-radius:2.1cqw!important}
+.time:not(.active-time){background:var(--bbb-panel)!important}
+.active-time{border-color:var(--bbb-yellow)!important}
+.trust-item{padding:1.3cqh 1.4cqw!important;border:1px solid var(--bbb-line)!important;border-radius:1.4cqw!important;background:var(--bbb-panel)!important}
+.trust-list{gap:1.1cqh!important}
+
+/* (5) Cuadros ajustados a su contenido */
+#slide-05 .route{align-items:stretch!important}
+#slide-05 .route-card{min-height:0!important;display:flex!important;flex-direction:column!important;justify-content:center!important}
+#slide-13 .process{min-height:0!important}
+#slide-13 .step{min-height:0!important}
+
 /* When a 16:9 stage is displayed in a narrow/tall window, content contracts as a scene — it never becomes a scrolling page. */
 @container (max-height: 500px){
   .slide{gap:1.55cqh!important;padding:6.2cqh 7.5cqw 7.4cqh!important}
@@ -432,7 +508,7 @@ body{display:grid;place-items:center;font-family:Poppins,Arial,sans-serif;color:
   /* Relevos entre tarjetas: el borde/fondo animados de PC quedan anulados por !important, asi que en celular el resaltado usa contorno + elevacion. */
   :is(#slide-03 .stat,#slide-04 .value,#slide-08 .benefit,#slide-14 .doc,#slide-15 .payment-stats>div,#slide-05 .route-card){outline:2px solid transparent;outline-offset:-2px}
   @keyframes bbb-hl-m{0%,20%,100%{outline-color:transparent;transform:translateY(0)}7%,14%{outline-color:rgba(249,176,0,.9);transform:translateY(-4px)}}
-  @keyframes bbb-hl-doc-m{0%,72%,100%{outline-color:transparent;transform:translateY(0)}8%,16%{outline-color:rgba(249,176,0,.9);transform:translateY(-4px)}}
+  @keyframes bbb-hl-doc-m{0%,6%,26%,100%{outline-color:transparent;transform:translateY(0)}10%,18%{outline-color:rgba(249,176,0,.9);transform:translateY(-4px)}}
   @keyframes bbb-hl-arrive-m{0%,72%,100%{outline-color:transparent;transform:translateY(0)}80%{outline-color:rgba(249,176,0,.9);transform:translateY(-4px)}}
   @keyframes bbb-hl-depart-m{0%,16%,100%{outline-color:transparent}8%{outline-color:rgba(249,176,0,.9)}}
   #slide-03.active .stat,#slide-04.active .value,#slide-08.active .benefit,#slide-15.active .payment-stats>div{animation-name:bbb-hl-m!important}
@@ -526,4 +602,10 @@ body{display:grid;place-items:center;font-family:Poppins,Arial,sans-serif;color:
   #slide-13 .step::before{left:-19px!important}
   #slide-13 .step::after{left:0!important;border-radius:2px}
   @keyframes bbb-tl-row{0%,6%{background-color:rgba(249,176,0,0)}10%,17%{background-color:rgba(249,176,0,.12)}24%,100%{background-color:rgba(249,176,0,0)}}
+}
+
+/* Calendario en celular: la ultima tarjeta conserva su borde completo. */
+@media (max-width:850px) and (max-aspect-ratio:1/1){
+  .time:last-child{border-bottom:1px solid var(--bbb-line)!important}
+  .active-time:last-child{border-bottom-color:var(--bbb-yellow)!important}
 }
