@@ -451,3 +451,43 @@ body{display:grid;place-items:center;font-family:Poppins,Arial,sans-serif;color:
 @media (max-width:850px) and (max-aspect-ratio:1/1) and (prefers-reduced-motion:reduce){
   #slide-13 .step,#slide-13 .step::before,#slide-13 .step::after,.time{animation:none!important}
 }
+
+/* ==========================================================================
+   Coherencia de animaciones en celular: todo elemento entra con la misma
+   gramatica (sube y aparece, escalonado) y DESPUES empieza su animacion de
+   enfasis. Antes la de enfasis reemplazaba a la de entrada y las tarjetas
+   aparecian de golpe; algunas slides no tenian entrada.
+   ========================================================================== */
+@media (max-width:850px) and (max-aspect-ratio:1/1){
+  @keyframes bbb-fade-in-m{from{opacity:0}to{opacity:1}}
+  #slide-03.active .stat:nth-child(1){animation:bbb-object-in-m .56s cubic-bezier(.16,1,.3,1) 0.0s both,bbb-hl-m 7.2s ease-in-out 0.9s infinite!important}
+  #slide-03.active .stat:nth-child(2){animation:bbb-object-in-m .56s cubic-bezier(.16,1,.3,1) 0.1s both,bbb-hl-m 7.2s ease-in-out 3.3s infinite!important}
+  #slide-03.active .stat:nth-child(3){animation:bbb-object-in-m .56s cubic-bezier(.16,1,.3,1) 0.2s both,bbb-hl-m 7.2s ease-in-out 5.7s infinite!important}
+  #slide-04.active .value:nth-child(1){animation:bbb-object-in-m .56s cubic-bezier(.16,1,.3,1) 0.0s both,bbb-hl-m 8s ease-in-out 0.9s infinite!important}
+  #slide-04.active .value:nth-child(2){animation:bbb-object-in-m .56s cubic-bezier(.16,1,.3,1) 0.1s both,bbb-hl-m 8s ease-in-out 2.9s infinite!important}
+  #slide-04.active .value:nth-child(3){animation:bbb-object-in-m .56s cubic-bezier(.16,1,.3,1) 0.2s both,bbb-hl-m 8s ease-in-out 4.9s infinite!important}
+  #slide-04.active .value:nth-child(4){animation:bbb-object-in-m .56s cubic-bezier(.16,1,.3,1) 0.3s both,bbb-hl-m 8s ease-in-out 6.9s infinite!important}
+  #slide-08.active .benefit:nth-child(1){animation:bbb-object-in-m .56s cubic-bezier(.16,1,.3,1) 0.0s both,bbb-hl-m 8s ease-in-out 0.9s infinite!important}
+  #slide-08.active .benefit:nth-child(2){animation:bbb-object-in-m .56s cubic-bezier(.16,1,.3,1) 0.1s both,bbb-hl-m 8s ease-in-out 2.9s infinite!important}
+  #slide-08.active .benefit:nth-child(3){animation:bbb-object-in-m .56s cubic-bezier(.16,1,.3,1) 0.2s both,bbb-hl-m 8s ease-in-out 4.9s infinite!important}
+  #slide-08.active .benefit:nth-child(4){animation:bbb-object-in-m .56s cubic-bezier(.16,1,.3,1) 0.3s both,bbb-hl-m 8s ease-in-out 6.9s infinite!important}
+  #slide-11.active .time:nth-child(1){animation:bbb-object-in-m .56s cubic-bezier(.16,1,.3,1) 0.0s both,bbb-tl-time 7s ease-in-out 0.9s infinite!important}
+  #slide-11.active .time:nth-child(2){animation:bbb-object-in-m .56s cubic-bezier(.16,1,.3,1) 0.1s both,bbb-tl-time 7s ease-in-out 2.3s infinite!important}
+  #slide-11.active .time:nth-child(3){animation:bbb-object-in-m .56s cubic-bezier(.16,1,.3,1) 0.2s both,bbb-tl-time 7s ease-in-out 3.7s infinite!important}
+  #slide-05.active .route-card:first-child{animation:bbb-object-in-m .56s cubic-bezier(.16,1,.3,1) 0s both,bbb-hl-depart-m 5.2s ease-in-out 1s infinite!important}
+  #slide-05.active .route-card:last-child{animation:bbb-object-in-m .56s cubic-bezier(.16,1,.3,1) .2s both,bbb-hl-arrive-m 5.2s ease-in-out 1s infinite!important}
+  #slide-13.active .step:nth-child(1){animation:bbb-fade-in-m .5s ease-out 0.2s both,bbb-tl-row 7s ease-in-out 0.0s infinite!important}
+  #slide-13.active .step:nth-child(2){animation:bbb-fade-in-m .5s ease-out 0.32s both,bbb-tl-row 7s ease-in-out 0.9s infinite!important}
+  #slide-13.active .step:nth-child(3){animation:bbb-fade-in-m .5s ease-out 0.44s both,bbb-tl-row 7s ease-in-out 1.8s infinite!important}
+  #slide-13.active .step:nth-child(4){animation:bbb-fade-in-m .5s ease-out 0.56s both,bbb-tl-row 7s ease-in-out 2.7s infinite!important}
+  #slide-13.active .step:nth-child(5){animation:bbb-fade-in-m .5s ease-out 0.68s both,bbb-tl-row 7s ease-in-out 3.6s infinite!important}
+
+  /* Entradas que faltaban o iban de lado */
+  #slide-15.active .investment-total,#slide-15.active .payment-plan,#slide-18.active .program-qr{animation-name:bbb-object-in-m!important}
+  .slide.active .kicker{animation:bbb-label-in .42s cubic-bezier(.16,1,.3,1) both!important}
+  .slide.active .program-name{animation:bbb-title-in .68s cubic-bezier(.16,1,.3,1) .06s both!important}
+  .slide.active .program-promise{animation:bbb-copy-in .5s cubic-bezier(.16,1,.3,1) .22s both!important}
+  .slide.active .footer-stamp{animation:bbb-copy-in .5s cubic-bezier(.16,1,.3,1) .3s both!important}
+  .slide.active .cta-row{animation:bbb-copy-in .5s cubic-bezier(.16,1,.3,1) .34s both!important}
+  .slide.active .fineprint{animation:bbb-copy-in .5s cubic-bezier(.16,1,.3,1) .5s both!important}
+}
