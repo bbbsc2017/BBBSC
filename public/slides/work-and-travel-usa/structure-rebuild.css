@@ -206,3 +206,176 @@ body{display:grid;place-items:center;font-family:Poppins,Arial,sans-serif;color:
   #slide-18 .lead{max-width:42cqw!important}
   .process{min-height:23cqh!important}.step{padding:4.25cqh 1cqw 1.2cqh!important}.step::before{top:-2.35cqh!important;width:4.7cqh!important;height:4.7cqh!important}#slide-13 .process{margin-top:1.25cqh!important}
 }
+
+/* ==========================================================================
+   Celular / pantalla vertical (<=850px de ancho y mas alta que ancha).
+   En PC el escenario 16:9 no cambia: todo lo de abajo vive dentro de estas
+   media queries. Aqui el deck ocupa toda la pantalla, las composiciones se
+   apilan en una columna, cada slide se desplaza hacia abajo si su contenido
+   no cabe, y los textos usan tamaños legibles en px. Las animaciones de
+   entrada y de enfasis se conservan; solo las que viajaban en horizontal
+   (ruta y proceso) pasan a recorrer el eje vertical.
+   ========================================================================== */
+@media (max-width:850px) and (max-aspect-ratio:1/1){
+  html,body{height:100dvh}
+  body{display:block!important}
+  .deck{width:100dvw!important;height:100dvh!important;aspect-ratio:auto!important}
+
+  .slide{
+    display:flex!important;flex-direction:column!important;justify-content:flex-start!important;
+    gap:18px!important;padding:84px 20px 104px!important;
+    overflow-x:hidden!important;overflow-y:auto!important;overscroll-behavior:contain;
+    -webkit-overflow-scrolling:touch;scrollbar-width:none;touch-action:pan-y;
+  }
+  .slide::-webkit-scrollbar{display:none}
+  /* Dos separadores flexibles centran el contenido corto y se colapsan cuando desborda. */
+  .slide::before,.slide::after{
+    display:block!important;content:""!important;position:static!important;inset:auto!important;
+    flex:1 1 0!important;min-height:0!important;height:0!important;margin:0!important;
+    background:none!important;mask-image:none!important;opacity:1!important;pointer-events:none!important;animation:none!important;
+  }
+  .slide>div:not(.logo):not(.photo-shade){width:100%}
+  /* Nada se comprime para caber: si el contenido no cabe, la diapositiva se desplaza. */
+  .slide>*{flex-shrink:0!important}
+  /* Degradado inferior: da fondo a los controles y sugiere que hay más contenido. */
+  .deck::after{content:"";position:absolute;left:0;right:0;bottom:0;height:96px;background:linear-gradient(to bottom,rgba(28,28,28,0),rgba(28,28,28,.94) 70%);pointer-events:none;z-index:15}
+
+  /* Foto de fondo fija a la pantalla: no se corta cuando la diapositiva se desplaza. */
+  .photo,.photo-shade{position:fixed!important;inset:0!important;width:100%!important;height:100%!important}
+  .photo-shade,.photo-slide .photo-shade{background:linear-gradient(180deg,rgba(28,28,28,.84) 0%,rgba(28,28,28,.9) 55%,rgba(28,28,28,.96) 100%)!important}
+
+  .logo{top:20px!important;right:20px!important;width:48px!important;height:48px!important;min-width:48px;min-height:48px;padding:10px!important;border-radius:14px!important}
+
+  /* Tipografia */
+  .eyebrow{max-width:calc(100% - 64px);margin:0 0 12px!important;font-size:12px!important;letter-spacing:.13em!important;line-height:1.35!important}
+  .display{max-width:100%!important;font-size:clamp(30px,8.7vw,46px)!important;line-height:1.03!important;letter-spacing:-.045em!important}
+  .lead{max-width:100%!important;margin:16px 0 0!important;font-size:16px!important;line-height:1.5!important}
+  .accent-rule{width:64px!important;margin:18px 0!important}
+  .outcomes{margin-top:20px!important;gap:8px!important}
+  .outcomes span{padding:9px 14px!important;font-size:14px!important}
+  .kicker{font-size:12px!important;padding:9px 14px!important}
+  .program-name{max-width:100%!important;margin-top:18px!important;font-size:clamp(44px,14.5vw,68px)!important}
+  .program-promise{max-width:100%!important;margin-top:18px!important;font-size:19px!important;line-height:1.35!important}
+  .title-layout .footer-stamp{position:static!important;display:block;margin:0!important;font-size:13px!important}
+
+  /* Pie de pagina y numeracion */
+  .fineprint{position:static!important;left:auto!important;right:auto!important;bottom:auto!important;margin:0!important;padding:12px 14px!important;border-left-width:4px!important;border-radius:0 12px 12px 0!important;font-size:13px!important;line-height:1.45!important}
+  .slide-number,.screen-help{display:none!important}
+
+  /* Controles tactiles: barra compacta inferior con el contador */
+  .controls{
+    display:flex!important;position:absolute!important;left:50%!important;right:auto!important;top:auto!important;bottom:calc(14px + env(safe-area-inset-bottom,0px))!important;
+    transform:translateX(-50%)!important;gap:6px!important;padding:5px!important;border-radius:999px!important;z-index:20!important;
+  }
+  .controls button{min-width:48px;min-height:44px;font-size:18px!important;padding:0 14px!important}
+  .counter{min-width:64px!important;font-size:13px!important}
+  .progress{height:4px!important}
+  .notes{left:12px!important;right:12px!important;bottom:76px!important;max-width:none!important}
+
+  /* Tarjetas */
+  .stat,.value,.experience,.benefit,.req,.route-card,.payment,.column,.doc{min-height:0!important;padding:20px!important;border-radius:20px!important}
+  .stat-row,.three-grid,.requirements,.values,.benefits,.included,.doc-list,.route,.profile,.work-layout,.visa-layout,.money,.trust,.timebar,.process{grid-template-columns:minmax(0,1fr)!important;gap:14px!important}
+  .stat b{font-size:46px!important}
+  .stat span{max-width:none!important;margin-top:10px!important;font-size:16px!important}
+  .value,.experience,.benefit{justify-content:flex-start!important}
+  .value .symbol{margin-bottom:10px!important;font-size:26px!important}
+  .feature-icon{width:32px!important;height:32px!important;margin:0 0 12px!important}
+  .value strong,.experience b,.benefit strong,.req b,.payment b,.column h3,.doc{font-size:20px!important}
+  .value p,.experience p,.benefit span,.req p,.payment li,.column li,.route-card span,.time p,.step p{margin-top:8px!important;font-size:15px!important}
+  .req{justify-content:flex-start!important}
+  .req .number{margin-bottom:10px;font-size:54px!important}
+
+  /* Slide 05: la ruta baja en vertical y el viajero recorre el eje Y */
+  .route-card strong{font-size:20px!important}
+  .route-line{width:0!important;height:44px!important;justify-self:center!important;border-top:0!important;border-left:2px dashed var(--bbb-yellow)!important;margin:0!important}
+  @keyframes bbb-traveler-v{0%{top:0;opacity:0}8%{opacity:1}75%{top:100%;opacity:1}86%,100%{top:100%;opacity:0}}
+  #slide-05 .route-line::after{top:0!important;width:12px!important;height:12px!important;box-shadow:0 0 0 5px rgba(249,176,0,.22)!important}
+  #slide-05.active .route-line::after{animation-name:bbb-traveler-v!important}
+
+  /* Slide 09 */
+  #slide-09 .profile-list{grid-template-columns:minmax(0,1fr)!important;grid-template-rows:none!important;gap:8px!important}
+  #slide-09 .profile-item,.profile-item{padding:14px 14px 14px 16px!important;border-left-width:4px!important;font-size:16px!important;gap:12px!important}
+  #slide-09 .profile-item::before{display:block!important;min-width:30px;font-size:14px}
+  #slide-09 .profile-panel,.profile-panel{min-height:0!important;padding:24px!important;border-radius:20px!important}
+  #slide-09 .profile-panel b,.profile-panel b{font-size:44px!important}
+  .profile-panel .mini-label{font-size:12px!important}
+
+  /* Slide 11: calendario en columna */
+  .time{min-height:0!important;padding:20px!important;border-right:0!important;border-bottom:1px solid var(--bbb-line)!important}
+  .time:last-child{border-bottom:0!important}
+  .time strong{font-size:24px!important}
+  .time .when{font-size:13px!important}
+
+  /* Slide 12: trabajo */
+  .work-layout .lead{max-width:100%!important}
+  .sectors{gap:8px!important}
+  .sector{padding:9px 13px!important;font-size:15px!important;gap:8px!important}
+  .sector img{width:22px!important;height:22px!important}
+  .data-poster{min-height:230px!important;padding:22px!important;border-radius:20px!important}
+  .city-data .data-content>div,#slide-12 .city-data .data-content>div{font-size:46px!important}
+  .city-data .data-content>span{max-width:100%!important;font-size:15px!important;line-height:1.35!important}
+
+  /* Slide 13: proceso como linea de tiempo vertical */
+  #slide-13 .process,.process{min-height:0!important;margin-top:4px!important;gap:6px!important}
+  #slide-13 .step,.step{min-height:0!important;padding:14px 8px 14px 52px!important;border-top:0!important;border-left:2px solid var(--bbb-yellow)!important;margin-left:20px}
+  #slide-13 .step p,.step p{max-width:none!important}
+  .step b{font-size:20px!important}
+  .step::before{top:10px!important;left:-21px!important;width:40px!important;height:40px!important;font-size:15px!important}
+  .step::after{display:none!important}
+  @keyframes bbb-process-run-v{0%,7%{top:0;opacity:0}12%{opacity:1}82%{top:calc(100% - 14px);opacity:1}90%,100%{top:calc(100% - 14px);opacity:0}}
+  #slide-13 .process::after{top:0!important;left:13px!important;width:14px!important;height:14px!important}
+  #slide-13.active .process::after{animation-name:bbb-process-run-v!important}
+
+  /* Slide 14 */
+  .visa-card{min-height:230px!important;border-radius:20px!important}
+  .visa-card-copy{padding:22px!important}
+  .visa-card-copy strong{font-size:26px!important}
+  .doc{min-height:0!important;padding:16px 18px!important}
+
+  /* Slide 15: inversion */
+  #slide-15 .investment-board{grid-template-columns:minmax(0,1fr)!important;gap:18px!important;min-height:0!important}
+  #slide-15 .investment-total{padding:6px 0 6px 18px!important;border-left-width:4px!important}
+  #slide-15 .investment-label{font-size:12px!important}
+  #slide-15 .price,.price{font-size:clamp(50px,15.5vw,72px)!important}
+  #slide-15 .price-meta,.price-meta{margin-top:14px!important;font-size:16px!important}
+  #slide-15 .price-subtitle{font-size:14px!important}
+  #slide-15 .payment-plan{padding:20px!important;border-radius:20px!important;gap:16px!important}
+  #slide-15 .payment-plan header{gap:12px!important}
+  .payment-plan header>span{width:42px!important;height:42px!important}
+  .payment-plan header p{font-size:12px!important}
+  .payment-plan header strong{font-size:18px!important}
+  #slide-15 .payment-stats{grid-template-columns:minmax(0,1fr)!important;gap:10px!important}
+  .payment-stats>div{padding:12px 14px!important}
+  .payment-stats b{font-size:28px!important}
+  .payment-stats span{font-size:14px!important}
+  .discount-explainer{padding:2px 0 0 12px!important;font-size:15px!important}
+
+  /* Slides 16 y 17 */
+  .column ul{gap:10px!important}
+  .quote{padding-left:18px!important;border-left-width:5px!important;font-size:clamp(23px,6.6vw,30px)!important;line-height:1.15!important}
+  .trust{align-items:stretch!important}
+  .trust-item{padding:12px 0!important;font-size:16px!important}
+
+  /* Slide 18: CTA + QR dentro del flujo */
+  .cta-row{margin-top:22px!important;gap:14px!important}
+  #slide-18 .cta{padding:15px 24px!important;font-size:16px!important}
+  #slide-18 .cta-note{max-width:none!important;font-size:14px!important}
+  #slide-18 .lead{max-width:100%!important}
+  #slide-18 .program-qr{
+    position:static!important;right:auto!important;bottom:auto!important;width:100%!important;
+    grid-template-columns:112px minmax(0,1fr)!important;gap:16px!important;padding:12px!important;border-radius:20px!important;
+  }
+  #slide-18 .program-qr img,.program-qr img{width:112px!important;height:112px!important;padding:6px!important;border-radius:12px!important}
+  .program-qr strong{font-size:20px!important}
+  .program-qr span{font-size:14px!important}
+}
+
+/* Telefonos grandes / tabletas verticales: dos columnas donde el texto es corto. */
+@media (min-width:560px) and (max-width:850px) and (max-aspect-ratio:1/1){
+  .slide{padding:96px 40px 112px!important}
+  .logo{right:40px!important}
+  .values,.benefits,.included,.doc-list,.payment-stats,#slide-15 .payment-stats{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .stat-row{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+  .display{font-size:clamp(40px,6.4vw,54px)!important}
+  .lead{font-size:18px!important}
+}
