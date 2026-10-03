@@ -491,3 +491,39 @@ body{display:grid;place-items:center;font-family:Poppins,Arial,sans-serif;color:
   .slide.active .cta-row{animation:bbb-copy-in .5s cubic-bezier(.16,1,.3,1) .34s both!important}
   .slide.active .fineprint{animation:bbb-copy-in .5s cubic-bezier(.16,1,.3,1) .5s both!important}
 }
+
+/* ==========================================================================
+   Esquinas redondeadas en celular: ningun bloque con fondo o borde queda recto.
+   Las barras laterales de acento pasan a ser una barra redondeada propia.
+   ========================================================================== */
+@media (max-width:850px) and (max-aspect-ratio:1/1){
+  .profile-item,.fineprint{border-radius:14px!important}
+
+  /* Barras de acento redondeadas (sin borde izquierdo recto) */
+  #slide-15 .investment-total,.discount-explainer,.quote{position:relative!important;border-left:0!important;border-radius:0!important}
+  #slide-15 .investment-total{padding:4px 0 4px 22px!important}
+  .discount-explainer{padding:2px 0 2px 18px!important}
+  .quote{padding-left:22px!important}
+  #slide-15 .investment-total::before,.discount-explainer::before,.quote::before{content:"";position:absolute;left:0;top:4px;bottom:4px;width:4px;border-radius:4px;background:var(--bbb-yellow)}
+  .quote::before{width:5px}
+
+  /* Tarjetas de pago */
+  .payment-stats>div{border:1px solid rgba(249,176,0,.48)!important;border-radius:14px!important}
+
+  /* Slide 11: tres tarjetas redondeadas en vez de una barra con divisores */
+  .timebar{border:0!important;background:none!important;border-radius:0!important;overflow:visible!important;gap:10px!important}
+  .time{border:1px solid var(--bbb-line)!important;border-radius:20px!important}
+  .time:not(.active-time){background:var(--bbb-panel)!important}
+  .active-time{border-color:var(--bbb-yellow)!important}
+
+  /* Slide 17: filas como tarjetas */
+  .trust-list{gap:10px!important}
+  .trust-item{padding:14px 16px!important;border:1px solid var(--bbb-line)!important;border-radius:16px!important;background:var(--bbb-panel)!important}
+
+  /* Slide 13: riel continuo propio; cada paso es una tarjeta redondeada */
+  #slide-13 .process::before{display:block!important;content:""!important;position:absolute!important;left:20px;top:14px;bottom:14px;width:2px;border-radius:2px;background:var(--bbb-yellow)!important;animation:none!important}
+  #slide-13 .step{border-left:0!important;border-radius:14px!important}
+  #slide-13 .step::before{left:-19px!important}
+  #slide-13 .step::after{left:0!important;border-radius:2px}
+  @keyframes bbb-tl-row{0%,6%{background-color:rgba(249,176,0,0)}10%,17%{background-color:rgba(249,176,0,.12)}24%,100%{background-color:rgba(249,176,0,0)}}
+}
